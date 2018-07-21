@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1010034922725",
+    "firebase_url": "https://amicer-d193a.firebaseio.com",
+    "project_id": "amicer-d193a",
+    "storage_bucket": "amicer-d193a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1010034922725:android:b40b9ae19395acfd",
+        "android_client_info": {
+          "package_name": "com.example.xandi.amicer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1010034922725-0sv9iori9ihvguo1l70cc1l02s3n0q4b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.xandi.amicer",
+            "certificate_hash": "07f0cd2ec005fff02a07de845f8870cbe56d36a6"
+          }
+        },
+        {
+          "client_id": "1010034922725-bv173cgmcah8lsrv33lgsl1al1veojal.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6NNDLmDUZWriI5a-BLNcGK5POSKgpFU4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1010034922725-bv173cgmcah8lsrv33lgsl1al1veojal.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
