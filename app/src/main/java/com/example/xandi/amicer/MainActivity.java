@@ -18,6 +18,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -105,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         nameTextView.setText(user.getDisplayName());
         emailTextView.setText(user.getEmail());
         idTextView.setText(user.getUid());
-        //Glide.with(this).load(user.getPhotoUrl()).into(photoImageView);
+        Glide.with(this).load(user.getPhotoUrl()).into(photoImageView);
     }
 
     @Override
