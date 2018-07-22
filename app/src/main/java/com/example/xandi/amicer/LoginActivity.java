@@ -15,7 +15,6 @@ import com.facebook.FacebookException;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
@@ -50,11 +49,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        progressBar = findViewById(R.id.progressBar);
 
         callbackManager = CallbackManager.Factory.create();
 
-        loginButton = (LoginButton) findViewById(R.id.loginButton);
+        loginButton = findViewById(R.id.loginButton);
 
         loginButton.setReadPermissions(Arrays.asList("email"));
 
@@ -85,7 +84,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
-        signInButton = (SignInButton) findViewById(R.id.signInButton);
+        signInButton = findViewById(R.id.signInButton);
 
         signInButton.setSize(SignInButton.SIZE_WIDE);
 
@@ -111,7 +110,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             }
         };
 
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        progressBar = findViewById(R.id.progressBar);
     }
 
     private void handleFacebookAccessToken(AccessToken accessToken) {

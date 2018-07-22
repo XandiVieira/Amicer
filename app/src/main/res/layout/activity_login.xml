@@ -15,7 +15,8 @@
         android:layout_marginTop="35dp"
         android:text="Amicer"
         android:textColor="@color/common_google_signin_btn_text_dark_focused"
-        android:textSize="30sp" />
+        android:textSize="30sp"
+        app:fontFamily="@font/quattrocento" />
 
     <TextView
         android:id="@+id/textView4"
@@ -26,7 +27,8 @@
         android:text="Encontre pessoas  incríveis e com os  mesmos interesses  que você!"
         android:textAllCaps="false"
         android:textColor="@android:color/background_dark"
-        android:textSize="30sp" />
+        android:textSize="30sp"
+        app:fontFamily="@font/quattrocento" />
 
 
     <com.facebook.login.widget.LoginButton
@@ -53,6 +55,7 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:visibility="gone"
+        android:indeterminateTint="@color/colorAccent"
         />
 
 </RelativeLayout>
