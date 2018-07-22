@@ -13,16 +13,27 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="35dp"
-        android:text="Amicer"
+        android:text="AMICER"
         android:textColor="@color/common_google_signin_btn_text_dark_focused"
         android:textSize="30sp"
         app:fontFamily="@font/quattrocento" />
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="108dp"
+        android:layout_height="94dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="89dp"
+        android:src="@drawable/logograndeeditado" />
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="273dp"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="154dp"
         android:gravity="center"
         android:text="Encontre pessoas  incríveis e com os  mesmos interesses  que você!"
         android:textAllCaps="false"
@@ -52,10 +63,9 @@
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:visibility="gone"
+        android:layout_centerVertical="true"
         android:indeterminateTint="@color/colorAccent"
-        />
+        android:visibility="gone" />
 
 </RelativeLayout>
