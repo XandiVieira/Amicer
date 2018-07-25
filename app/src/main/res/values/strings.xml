@@ -8,4 +8,12 @@
     <string name="revoke">Revoke</string>
     <string name="not_close_session">No se pudo cerrar sesión</string>
     <string name="not_revoke">No se pudo revocar el acceso</string>
+    <string name="title_activity_tab_perfil">TabPerfil</string>
+    <string name="tab_text_1">PERFIL</string>
+    <string name="tab_text_2">HOME</string>
+    <string name="tab_text_3">GRUPOS</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_tab_home">TabHome</string>
+    <string name="title_activity_tab_grupos">TabGrupos</string>
 </resources>
