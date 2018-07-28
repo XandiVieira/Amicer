@@ -16,7 +16,18 @@
         app:menu="@menu/menu_tab_grupos"
         app:itemBackground="@color/colorPrimary"
         app:itemIconTint="@color/white"
-        app:itemTextColor="@color/black">
+        app:itemTextColor="@color/black"
+        android:id="@+id/navGrupos">
     </android.support.design.widget.BottomNavigationView>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_above="@id/navGrupos"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:id="@+id/frameGrupos">
+    </FrameLayout>
 
 </RelativeLayout>

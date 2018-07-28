@@ -8,14 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class EditGroupFragment extends Fragment {
+public class GroupsSeeFragment extends Fragment {
 
-    public EditGroupFragment() {
+    public GroupsSeeFragment() {
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_edit_group, container, false);
+        return inflater.inflate(R.layout.fragment_see_groups, container, false);
     }
 }

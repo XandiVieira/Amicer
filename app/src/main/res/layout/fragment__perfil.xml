@@ -61,8 +61,18 @@
         app:menu="@menu/menu_tab_perfil"
         app:itemBackground="@color/colorAccent"
         app:itemIconTint="@color/black"
-        app:itemTextColor="@color/white">
-
+        app:itemTextColor="@color/white"
+        android:id="@+id/navPerfil">
     </android.support.design.widget.BottomNavigationView>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_above="@id/navPerfil"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:id="@+id/framePerfil">
+    </FrameLayout>
 
 </RelativeLayout>

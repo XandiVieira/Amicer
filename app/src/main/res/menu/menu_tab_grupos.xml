@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.xandi.amicer.TabGrupos">
 
-    <item android:title="Grupos" android:id="@+id/grupos" android:icon="@drawable/baseline_chat_black_18dp"/>
-    <item android:title="Criar" android:id="@+id/criar" android:icon="@drawable/baseline_add_circle_black_18dp"/>
-    <item android:title="Configurações" android:id="@+id/configuracoes" android:icon="@drawable/baseline_settings_black_18dp"/>
+    <item android:title="Grupos" android:id="@+id/item_grupos" android:icon="@drawable/baseline_chat_black_18dp"/>
+    <item android:title="Criar" android:id="@+id/item_criar" android:icon="@drawable/baseline_add_circle_black_18dp"/>
+    <item android:title="Configurações" android:id="@+id/item_config" android:icon="@drawable/baseline_settings_black_18dp"/>
 </menu>

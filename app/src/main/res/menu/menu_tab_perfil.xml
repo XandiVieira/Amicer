@@ -3,6 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.xandi.amicer.TabPerfil">
 
-    <item android:title="Editar" android:id="@+id/editar" android:icon="@drawable/baseline_edit_black_18dp"/>
-    <item android:title="Configurações" android:id="@+id/configuracoes" android:icon="@drawable/baseline_settings_black_18dp"/>
+    <item android:title="Editar" android:id="@+id/item_editar" android:icon="@drawable/baseline_edit_black_18dp"/>
+    <item android:title="Configurações" android:id="@+id/item_config_perfil" android:icon="@drawable/baseline_settings_black_18dp"/>
 </menu>
