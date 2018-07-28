@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
      * may be best to switch to a
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
-    private SectionsPagerAdapter mSectionsPagerAdapter;
+    private SectionPagerAdapter mSectionsPagerAdapter;
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        mSectionsPagerAdapter = new SectionPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
@@ -185,55 +185,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-
-
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-          switch (position){
-              case 0:
-                  TabPerfil tabPerfil = new TabPerfil();
-                  return tabPerfil;
-              case 1:
-                  TabHome tabHome = new TabHome();
-                  return tabHome;
-              case 2:
-                  TabGrupos tabGrupos = new TabGrupos();
-                  return tabGrupos;
-              default:
-                  return null;
-          }
-        }
-
-        @Override
-        public int getCount() {
-            // Show 3 total pages.
-            return 3;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position){
-            switch (position){
-                case 0:
-                    return "PERFIL";
-                case 1:
-                    return "HOME";
-                case 2:
-                    return "GRUPOS";
-            }
-            return null;
-        }
     }
 
 }
