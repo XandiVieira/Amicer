@@ -1,6 +1,7 @@
 package com.example.xandi.amicer;
 
-import android.content.Intent;
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,16 +17,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
-public class TabPerfil extends Fragment {
+public class TabPerfil extends Fragment implements GoogleApiClient.OnConnectionFailedListener {
 
     private ImageView photoImageView;
     private TextView nameTextView;
@@ -43,6 +48,14 @@ public class TabPerfil extends Fragment {
     private EditProfileFragment editProfileFragment;
     private ConfigProfileFragment configGroupFragment;
 
+    private Context mContext;
+
+    @Override
+    public void onAttach(final Activity activity) {
+        super.onAttach(activity);
+        mContext = activity;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -50,18 +63,57 @@ public class TabPerfil extends Fragment {
 
         editProfileFragment = new EditProfileFragment();
         configGroupFragment = new ConfigProfileFragment();
+        photoImageView = rootView.findViewById(R.id.photoImageView);
+        nameTextView = rootView.findViewById(R.id.nameTextView);
+        emailTextView = rootView.findViewById(R.id.emailTextView);
+        idTextView = rootView.findViewById(R.id.idTextView);
 
-        setFragment(editProfileFragment);
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+
+        googleApiClient = new GoogleApiClient.Builder(mContext)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+
+        setFragment(configGroupFragment);
 
         return rootView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        firebaseAuth.addAuthStateListener(firebaseAuthListener);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        if (firebaseAuthListener != null) {
+            firebaseAuth.removeAuthStateListener(firebaseAuthListener);
+        }
     }
 
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mPerfilNav = (BottomNavigationView) view.findViewById(R.id.navPerfil);
-        mFramePerfil = (FrameLayout) view.findViewById(R.id.framePerfil);
+        mPerfilNav = view.findViewById(R.id.navPerfil);
+        mFramePerfil = view.findViewById(R.id.framePerfil);
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    setUserData(user);
+                }
+            }
+        };
 
         mPerfilNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -86,11 +138,11 @@ public class TabPerfil extends Fragment {
 
     private void setFragment(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.frameHome, fragment);
+        fragmentTransaction.replace(R.id.framePerfil, fragment);
         fragmentTransaction.commit();
     }
 
-    public void logOut(View view) {
+    public void logOut() {
         firebaseAuth.signOut();
         LoginManager.getInstance().logOut();
 
@@ -104,7 +156,7 @@ public class TabPerfil extends Fragment {
         });
     }
 
-    public void revoke(View view) {
+    public void revoke() {
         firebaseAuth.signOut();
 
         Auth.GoogleSignInApi.revokeAccess(googleApiClient).setResultCallback(new ResultCallback<Status>() {
@@ -118,4 +170,15 @@ public class TabPerfil extends Fragment {
     }
 
 
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    private void setUserData(FirebaseUser user) {
+        nameTextView.setText(user.getDisplayName());
+        emailTextView.setText(user.getEmail());
+        idTextView.setText(user.getUid());
+        Glide.with(getApplicationContext()).load(user.getPhotoUrl()).into(photoImageView);
+    }
 }
