@@ -32,7 +32,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
-    private GoogleApiClient googleApiClient;
+    //private GoogleApiClient googleApiClient;
 
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener firebaseAuthListener;
@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private SectionPagerAdapter mSectionsPagerAdapter;
 
     private ViewPager mViewPager;
+    private TabLayout tabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,18 +54,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(mViewPager);
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-
-        googleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -80,62 +74,17 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         };
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        firebaseAuth.addAuthStateListener(firebaseAuthListener);
-    }
-
     private void goLogInScreen() {
         Intent intent = new Intent(this, LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 
-    public void logOut(View view) {
-        firebaseAuth.signOut();
-        LoginManager.getInstance().logOut();
 
-        Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(new ResultCallback<Status>() {
-            @Override
-            public void onResult(@NonNull Status status) {
-                if (status.isSuccess()) {
-                    goLogInScreen();
-                } else {
-                    Toast.makeText(getApplicationContext(), R.string.log_out, Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
-
-    public void revoke(View view) {
-        firebaseAuth.signOut();
-
-        Auth.GoogleSignInApi.revokeAccess(googleApiClient).setResultCallback(new ResultCallback<Status>() {
-            @Override
-            public void onResult(@NonNull Status status) {
-                if (status.isSuccess()) {
-                    goLogInScreen();
-                } else {
-                    Toast.makeText(getApplicationContext(), R.string.not_revoke, Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        if (firebaseAuthListener != null) {
-            firebaseAuth.removeAuthStateListener(firebaseAuthListener);
-        }
     }
 
     @Override

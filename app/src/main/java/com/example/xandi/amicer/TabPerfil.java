@@ -2,16 +2,19 @@ package com.example.xandi.amicer;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.support.v4.app.Fragment;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -49,6 +52,7 @@ public class TabPerfil extends Fragment implements GoogleApiClient.OnConnectionF
     private ConfigProfileFragment configGroupFragment;
 
     private Context mContext;
+    private Button button2;
 
     @Override
     public void onAttach(final Activity activity) {
@@ -56,10 +60,12 @@ public class TabPerfil extends Fragment implements GoogleApiClient.OnConnectionF
         mContext = activity;
     }
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment__perfil, container, false);
+        View rootView = inflater.inflate(R.layout.tab_perfil, container, false);
 
         editProfileFragment = new EditProfileFragment();
         configGroupFragment = new ConfigProfileFragment();
@@ -67,14 +73,26 @@ public class TabPerfil extends Fragment implements GoogleApiClient.OnConnectionF
         nameTextView = rootView.findViewById(R.id.nameTextView);
         emailTextView = rootView.findViewById(R.id.emailTextView);
         idTextView = rootView.findViewById(R.id.idTextView);
+        button2 = rootView.findViewById(R.id.button2);
 
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                firebaseAuth.signOut();
+                LoginManager.getInstance().logOut();
 
-        googleApiClient = new GoogleApiClient.Builder(mContext)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
+                Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(@NonNull Status status) {
+                        if (status.isSuccess()) {
+                            goLogInScreen();
+                        } else {
+                            Toast.makeText(getApplicationContext(), R.string.log_out, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        });
 
         setFragment(configGroupFragment);
 
@@ -86,6 +104,48 @@ public class TabPerfil extends Fragment implements GoogleApiClient.OnConnectionF
         super.onStart();
 
         firebaseAuth.addAuthStateListener(firebaseAuthListener);
+    }
+
+    private void goLogInScreen() {
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
+    public void logOut(View view) {
+        firebaseAuth.signOut();
+        LoginManager.getInstance().logOut();
+
+        Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(new ResultCallback<Status>() {
+            @Override
+            public void onResult(@NonNull Status status) {
+                if (status.isSuccess()) {
+                    goLogInScreen();
+                } else {
+                    Toast.makeText(getApplicationContext(), R.string.log_out, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    public void revoke(View view) {
+        firebaseAuth.signOut();
+
+        Auth.GoogleSignInApi.revokeAccess(googleApiClient).setResultCallback(new ResultCallback<Status>() {
+            @Override
+            public void onResult(@NonNull Status status) {
+                if (status.isSuccess()) {
+                    goLogInScreen();
+                } else {
+                    Toast.makeText(getApplicationContext(), R.string.not_revoke, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
 
     @Override
@@ -103,6 +163,15 @@ public class TabPerfil extends Fragment implements GoogleApiClient.OnConnectionF
 
         mPerfilNav = view.findViewById(R.id.navPerfil);
         mFramePerfil = view.findViewById(R.id.framePerfil);
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+
+        if(googleApiClient == null){
+        googleApiClient = new GoogleApiClient.Builder(getApplicationContext())
+                .enableAutoManage(getActivity(), this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();}
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -111,9 +180,12 @@ public class TabPerfil extends Fragment implements GoogleApiClient.OnConnectionF
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     setUserData(user);
+                } else {
+                    goLogInScreen();
                 }
             }
         };
+
 
         mPerfilNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -156,24 +228,6 @@ public class TabPerfil extends Fragment implements GoogleApiClient.OnConnectionF
         });
     }
 
-    public void revoke() {
-        firebaseAuth.signOut();
-
-        Auth.GoogleSignInApi.revokeAccess(googleApiClient).setResultCallback(new ResultCallback<Status>() {
-            @Override
-            public void onResult(@NonNull Status status) {
-                if (!status.isSuccess()) {
-                    Toast.makeText(getApplicationContext(), R.string.not_revoke, Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
-
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
 
     private void setUserData(FirebaseUser user) {
         nameTextView.setText(user.getDisplayName());
