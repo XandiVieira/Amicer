@@ -1,5 +1,6 @@
 package com.example.xandi.amicer;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -29,6 +30,8 @@ public class CreateGroupFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getApplicationContext(), "Teste", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getActivity(), InsideGroup.class);
+                startActivity(intent);
             }
         });
         return rootView;

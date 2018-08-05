@@ -16,4 +16,6 @@
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="title_activity_tab_home">TabHome</string>
     <string name="title_activity_tab_grupos">TabGrupos</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="send_button_label">Send</string>
 </resources>
