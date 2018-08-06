@@ -4,11 +4,15 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -69,6 +73,8 @@ public class InsideGroup extends AppCompatActivity {
     private FirebaseStorage mFirebaseStorage;
     private StorageReference mChatPhotoStorageReference;
     private FirebaseRemoteConfig mFirebaseRemoteConfig;
+    private Toolbar toolbar;
+    private ActionBar actionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,14 +83,25 @@ public class InsideGroup extends AppCompatActivity {
 
         mUsername = ANONYMOUS;
 
+        Bundle bundleUid = getIntent().getExtras();
+        bundleUid.getString("uid");
+        String uid = bundleUid.getString("uid");
+
+        Bundle bundleNome = getIntent().getExtras();
+        bundleUid.getString("nome");
+        String nome = bundleUid.getString("nome");
+
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle(nome);
+
         //Initialize Firebase Components
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseStorage = FirebaseStorage.getInstance();
         mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
-        Bundle bundle = getIntent().getExtras();
-        bundle.getString("uid");
-        String uid = bundle.getString("uid");
 
         mMessagesDatabaseReference = mFirebaseDatabase.getReference().child("/group/"+uid).child("messages");
         mChatPhotoStorageReference = mFirebaseStorage.getReference().child("chat_photos");
@@ -177,6 +194,28 @@ public class InsideGroup extends AppCompatActivity {
         defaultConfigMap.put(FRIENDLY_MSG_LENGTH_KEY, DEFAULT_MSG_LENGTH_LIMIT);
         mFirebaseRemoteConfig.setDefaults(defaultConfigMap);
         fecthConfig();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_grupo, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+        if(id==R.id.menuConfig){
+            // Intent intent = new Intent(this, InsideGroup.class);
+            // startActivity(intent);
+        }
+
+        if(id==R.id.menuInfos){
+            // Intent intent = new Intent(this, InsideGroup.class);
+            // startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -295,5 +334,9 @@ public class InsideGroup extends AppCompatActivity {
         mMessageEditText.setFilters(new InputFilter[]{new InputFilter.LengthFilter((int) friendly_msg_length)});
         Log.d(TAG, FRIENDLY_MSG_LENGTH_KEY + " = " + friendly_msg_length);
     };
+
+    public boolean onCreateMenuOptions(Menu menu){
+        return super.onCreateOptionsMenu(menu);
+    }
 
 }

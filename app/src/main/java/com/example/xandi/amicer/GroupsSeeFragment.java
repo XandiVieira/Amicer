@@ -43,7 +43,7 @@ public class GroupsSeeFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_see_groups, container, false);
 
         meusGrupos = rootView.findViewById(R.id.meusGrupos);
@@ -57,6 +57,7 @@ public class GroupsSeeFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(getActivity(), InsideGroup.class);
                 intent.putExtra("uid", groupList.get(i).getUid());
+                intent.putExtra("nome", groupList.get(i).getNome());
                 startActivity(intent);
             }
         });

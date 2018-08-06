@@ -55,7 +55,7 @@ public class CreateGroupFragment extends Fragment {
 
         firebaseAuth = FirebaseAuth.getInstance();
         user = firebaseAuth.getCurrentUser();
-        
+
         startFirebase();
 
         button3.setOnClickListener(new View.OnClickListener() {
@@ -74,6 +74,7 @@ public class CreateGroupFragment extends Fragment {
                 limparCampos();
                 Intent intent = new Intent(getActivity(), InsideGroup.class);
                 intent.putExtra("uid", grupo.getUid());
+                intent.putExtra("nome", grupo.getNome());
                 startActivity(intent);
             }
         });
