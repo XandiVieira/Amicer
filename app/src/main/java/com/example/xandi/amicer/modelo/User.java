@@ -1,0 +1,93 @@
+package com.example.xandi.amicer.modelo;
+
+import android.media.Image;
+
+import java.util.List;
+
+public class User {
+
+    private String uid;
+    private String nome;
+    private String email;
+    private String idade;
+    private List<String> interessesList;
+    private Image fotoPerfil;
+    private String frase;
+    private String descricao;
+    private List<Group> gruposList;
+
+    public User(){
+    }
+
+    public String getIdade() {
+        return idade;
+    }
+
+    public void setIdade(String idade) {
+        this.idade = idade;
+    }
+
+    public List<String> getInteressesList() {
+        return interessesList;
+    }
+
+    public void setInteressesList(List<String> interessesList) {
+        this.interessesList = interessesList;
+    }
+
+    public Image getFotoPerfil() {
+        return fotoPerfil;
+    }
+
+    public void setFotoPerfil(Image fotoPerfil) {
+        this.fotoPerfil = fotoPerfil;
+    }
+
+    public String getFrase() {
+        return frase;
+    }
+
+    public void setFrase(String frase) {
+        this.frase = frase;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public List<Group> getGruposList() {
+        return gruposList;
+    }
+
+    public void setGruposList(List<Group> gruposList) {
+        this.gruposList = gruposList;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+}

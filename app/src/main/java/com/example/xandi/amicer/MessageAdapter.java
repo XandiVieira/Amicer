@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.xandi.amicer.modelo.Message;
 
 import java.util.List;
 

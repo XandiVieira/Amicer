@@ -53,14 +53,13 @@ public class TabPerfil extends Fragment implements GoogleApiClient.OnConnectionF
 
     private Context mContext;
     private Button button2;
+    private FirebaseUser user;
 
     @Override
     public void onAttach(final Activity activity) {
         super.onAttach(activity);
         mContext = activity;
     }
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -177,7 +176,7 @@ public class TabPerfil extends Fragment implements GoogleApiClient.OnConnectionF
         firebaseAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
+                user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     setUserData(user);
                 } else {
@@ -235,4 +234,5 @@ public class TabPerfil extends Fragment implements GoogleApiClient.OnConnectionF
         idTextView.setText(user.getUid());
         Glide.with(getApplicationContext()).load(user.getPhotoUrl()).into(photoImageView);
     }
+
 }

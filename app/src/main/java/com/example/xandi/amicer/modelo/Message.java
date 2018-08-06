@@ -1,4 +1,4 @@
-package com.example.xandi.amicer;
+package com.example.xandi.amicer.modelo;
 
 public class Message {
 
