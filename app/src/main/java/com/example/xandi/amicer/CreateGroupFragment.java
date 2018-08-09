@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.example.xandi.amicer.modelo.Attendee;
 import com.example.xandi.amicer.modelo.Group;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,7 +33,7 @@ public class CreateGroupFragment extends Fragment {
     private EditText editNomeGrupo, editDescrGrupo, editInteresses;
     private TextView participantes;
     private FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference mGroupsDatabaseRef;
+    private DatabaseReference mGroupsDatabaseRef, mAttendeeDatabaseRef;
     private Button btCriarGrupo;
     private FirebaseAuth firebaseAuth;
     private FirebaseUser fbUser;
@@ -79,6 +80,7 @@ public class CreateGroupFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Group grupo = new Group();
+                Attendee attendee = new Attendee();
                 List<String> listaInteresses = new ArrayList<>();
                 listaInteresses.add(editInteresses.getText().toString());
                 grupo.setUid(UUID.randomUUID().toString());
@@ -87,8 +89,11 @@ public class CreateGroupFragment extends Fragment {
                 grupo.setInteresses(listaInteresses);
                 grupo.setNome(editNomeGrupo.getText().toString());
                 grupo.setNumParticipante(numParticpantes);
+                attendee.setUserUID(fbUser.getUid());
+                attendee.setGroupUID(grupo.getUid());
 
                 mGroupsDatabaseRef.child("group").child(grupo.getUid()).setValue(grupo);
+                mAttendeeDatabaseRef.child("attendee").child(grupo.getUid()).setValue(attendee);
                 limparCampos();
                 Intent intent = new Intent(getActivity(), InsideGroup.class);
                 intent.putExtra("uid", grupo.getUid());
@@ -109,5 +114,6 @@ public class CreateGroupFragment extends Fragment {
         FirebaseApp.initializeApp(getActivity());
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mGroupsDatabaseRef = mFirebaseDatabase.getReference();
+        mAttendeeDatabaseRef =mFirebaseDatabase.getReference();
     }
 }
