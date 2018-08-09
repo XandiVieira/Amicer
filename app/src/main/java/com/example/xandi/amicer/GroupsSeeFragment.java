@@ -12,8 +12,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.SeekBar;
 
 import com.example.xandi.amicer.modelo.Group;
+import com.example.xandi.amicer.modelo.User;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -29,12 +31,10 @@ import java.util.List;
 public class GroupsSeeFragment extends Fragment {
 
     private ArrayList<Group> groupList = new ArrayList<Group>();
-    private ArrayAdapter<Group> arrayAdapter;
 
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDatabaseReference;
     private FirebaseAuth mFirebaseAuth;
-    private FirebaseUser user;
     private ListView meusGrupos;
     private ArrayAdapter adapter;
 
@@ -48,7 +48,7 @@ public class GroupsSeeFragment extends Fragment {
 
         meusGrupos = rootView.findViewById(R.id.meusGrupos);
         mFirebaseAuth = FirebaseAuth.getInstance();
-        user = mFirebaseAuth.getCurrentUser();
+        FirebaseUser fbUser = mFirebaseAuth.getCurrentUser();
         startFirebase();
         eventoDatabase();
 
@@ -67,7 +67,6 @@ public class GroupsSeeFragment extends Fragment {
 
     private void startFirebase() {
         FirebaseApp.initializeApp(getActivity());
-        FirebaseApp.initializeApp(getActivity());
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mFirebaseDatabase.getReference();
     }
@@ -79,7 +78,7 @@ public class GroupsSeeFragment extends Fragment {
                 groupList.clear();
                 for (DataSnapshot objSnapshot : dataSnapshot.getChildren()){
                     Group group = objSnapshot.getValue(Group.class);
-                    groupList.add(group);
+                        groupList.add(group);
                 }
                 if (getActivity() != null) {
                     adapter = new GroupAdatper(getActivity(), groupList);

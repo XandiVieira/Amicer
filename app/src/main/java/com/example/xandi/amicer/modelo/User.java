@@ -1,6 +1,7 @@
 package com.example.xandi.amicer.modelo;
 
 import android.media.Image;
+import android.net.Uri;
 
 import java.util.List;
 
@@ -11,10 +12,9 @@ public class User {
     private String email;
     private String idade;
     private List<String> interessesList;
-    private Image fotoPerfil;
+    private Uri fotoPerfil;
     private String frase;
     private String descricao;
-    private List<Group> gruposList;
 
     public User(){
     }
@@ -35,11 +35,11 @@ public class User {
         this.interessesList = interessesList;
     }
 
-    public Image getFotoPerfil() {
+    public Uri getFotoPerfil() {
         return fotoPerfil;
     }
 
-    public void setFotoPerfil(Image fotoPerfil) {
+    public void setFotoPerfil(Uri fotoPerfil) {
         this.fotoPerfil = fotoPerfil;
     }
 
@@ -57,14 +57,6 @@ public class User {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
-    }
-
-    public List<Group> getGruposList() {
-        return gruposList;
-    }
-
-    public void setGruposList(List<Group> gruposList) {
-        this.gruposList = gruposList;
     }
 
     public String getUid() {

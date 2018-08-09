@@ -10,11 +10,22 @@ public class Group {
     private int numParticipante;
     private List<String> interesses;
     private String criadorGrupo;
+    private String userUID;
+    private List<User> integrantes;
 
-    public void Group(String nome, String descricao, List<String> interesses){
+    public void Group(String nome, String descricao, List<String> interesses, List<User> integrantes){
         this.nome = nome;
         this.descricao = descricao;
         this.interesses = interesses;
+        this.integrantes = integrantes;
+    }
+
+    public String getUserUID() {
+        return userUID;
+    }
+
+    public void setUserUID(String userUID) {
+        this.userUID = userUID;
     }
 
     public String getUid() {
@@ -63,6 +74,14 @@ public class Group {
 
     public void setCriadorGrupo(String criadorGrupo) {
         this.criadorGrupo = criadorGrupo;
+    }
+
+    public List<User> getIntegrantes() {
+        return integrantes;
+    }
+
+    public void setIntegrantes(List<User> integrantes) {
+        this.integrantes = integrantes;
     }
 
     @Override

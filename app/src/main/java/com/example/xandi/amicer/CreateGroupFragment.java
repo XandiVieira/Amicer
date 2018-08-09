@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.example.xandi.amicer.modelo.Group;
 import com.google.firebase.FirebaseApp;
@@ -24,22 +24,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
-
 public class CreateGroupFragment extends Fragment {
 
     public CreateGroupFragment() {
     }
 
-    private EditText editNomeGrupo;
-    private EditText editDescrGrupo;
-    private EditText editInteresses;
-    private SeekBar seekBar;
+    private EditText editNomeGrupo, editDescrGrupo, editInteresses;
+    private TextView participantes;
     private FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference mGroupsDatabaseReference;
-    private Button button3;
+    private DatabaseReference mGroupsDatabaseRef;
+    private Button btCriarGrupo;
     private FirebaseAuth firebaseAuth;
-    private FirebaseUser user;
+    private FirebaseUser fbUser;
+
+    private int numParticpantes = 2;
 
     @Nullable
     @Override
@@ -47,30 +45,50 @@ public class CreateGroupFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_create_group, container, false);
 
+        participantes = (TextView) rootView.findViewById(R.id.progresso);
         editNomeGrupo = (EditText) rootView.findViewById(R.id.editNomeGrupo);
         editDescrGrupo = (EditText) rootView.findViewById(R.id.editDescrGrupo);
         editInteresses = (EditText) rootView.findViewById(R.id.editInteresses);
-        seekBar = (SeekBar) rootView.findViewById(R.id.seekBar);
-        button3 = (Button) rootView.findViewById(R.id.button3);
+        btCriarGrupo = (Button) rootView.findViewById(R.id.button3);
+        SeekBar seekBar = (SeekBar) rootView.findViewById(R.id.seekBar);
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                participantes.setText(""+(1+2));
+                numParticpantes = (i+2);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
 
         firebaseAuth = FirebaseAuth.getInstance();
-        user = firebaseAuth.getCurrentUser();
+        fbUser = firebaseAuth.getCurrentUser();
 
         startFirebase();
 
-        button3.setOnClickListener(new View.OnClickListener() {
+        btCriarGrupo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Group grupo = new Group();
                 List<String> listaInteresses = new ArrayList<>();
                 listaInteresses.add(editInteresses.getText().toString());
                 grupo.setUid(UUID.randomUUID().toString());
-                grupo.setCriadorGrupo(user.getDisplayName());
+                grupo.setCriadorGrupo(fbUser.getDisplayName());
                 grupo.setDescricao(editDescrGrupo.getText().toString());
                 grupo.setInteresses(listaInteresses);
                 grupo.setNome(editNomeGrupo.getText().toString());
-                grupo.setNumParticipante(5);
-                mGroupsDatabaseReference.child("group").child(grupo.getUid()).setValue(grupo);
+                grupo.setNumParticipante(numParticpantes);
+
+                mGroupsDatabaseRef.child("group").child(grupo.getUid()).setValue(grupo);
                 limparCampos();
                 Intent intent = new Intent(getActivity(), InsideGroup.class);
                 intent.putExtra("uid", grupo.getUid());
@@ -90,6 +108,6 @@ public class CreateGroupFragment extends Fragment {
     private void startFirebase() {
         FirebaseApp.initializeApp(getActivity());
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mGroupsDatabaseReference = mFirebaseDatabase.getReference();
+        mGroupsDatabaseRef = mFirebaseDatabase.getReference();
     }
 }
