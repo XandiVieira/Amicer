@@ -56,7 +56,7 @@ public class CreateGroupFragment extends Fragment {
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                participantes.setText(""+(1+2));
+                participantes.setText(""+(i+2));
                 numParticpantes = (i+2);
             }
 
