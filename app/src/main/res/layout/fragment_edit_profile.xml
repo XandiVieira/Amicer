@@ -1,12 +1,198 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/txtNomeGrupo"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/layoutImage"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TabEditProfile"
-        android:textSize="30dp"/>
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true">
+
+        <TextView
+            android:id="@+id/nameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/photoImageView"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginStart="116dp"
+            android:layout_marginLeft="116dp"
+            android:layout_marginTop="13dp"
+            android:text="Nome"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:id="@+id/photoImageView"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="54dp"
+            android:layout_marginLeft="54dp"
+            android:layout_marginTop="15dp"
+            android:background="#ffffff" />
+
+        <Button
+            android:id="@+id/btUpdate"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignTop="@+id/photoImageView"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="-2dp"
+            android:layout_marginEnd="19dp"
+            android:layout_marginRight="19dp"
+            android:text="Salvar" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="73dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/txtFrasePerfil"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10px"
+            android:text="Frase de Perfil"
+            android:textSize="20dp"
+            app:fontFamily="@font/quattrocento" />
+
+        <EditText
+            android:id="@+id/editFrasePerfil"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5px"
+            android:ems="10"
+            android:hint="Frase de Perfil"
+            android:inputType="textMultiLine" />
+
+        <TextView
+            android:id="@+id/txtDescricao"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10px"
+            android:text="Descrição"
+            android:textSize="20dp"
+            app:fontFamily="@font/quattrocento" />
+
+        <EditText
+            android:id="@+id/editDescricao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5px"
+            android:ems="10"
+            android:hint="Descrição"
+            android:inputType="textMultiLine" />
+
+        <TextView
+            android:id="@+id/txtInteresses"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10px"
+            android:text="Interesses"
+            android:textSize="20dp"
+            app:fontFamily="@font/quattrocento" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/editInteresse1"
+                    android:layout_width="175dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15px"
+                    android:ems="10"
+                    android:hint="1. "
+                    android:inputType="textPersonName" />
+
+                <EditText
+                    android:id="@+id/editInteresse2"
+                    android:layout_width="175dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15px"
+                    android:ems="10"
+                    android:hint="2. "
+                    android:inputType="textPersonName" />
+
+                <EditText
+                    android:id="@+id/editInteresse3"
+                    android:layout_width="175dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15px"
+                    android:ems="10"
+                    android:hint="3. "
+                    android:inputType="textPersonName" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/editInteresse4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15px"
+                    android:ems="10"
+                    android:hint="4. "
+                    android:inputType="textPersonName" />
+
+                <EditText
+                    android:id="@+id/editInteresse5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15px"
+                    android:ems="10"
+                    android:hint="5. "
+                    android:inputType="textPersonName" />
+
+                <EditText
+                    android:id="@+id/editInteresse6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15px"
+                    android:ems="10"
+                    android:hint="6. "
+                    android:inputType="textPersonName" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btLogout"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="logOut"
+            android:text="@string/log_out" />
+
+    </LinearLayout>
 
 </RelativeLayout>

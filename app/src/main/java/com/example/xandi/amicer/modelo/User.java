@@ -10,7 +10,7 @@ public class User {
     private String uid;
     private String nome;
     private String email;
-    private String idade;
+    private int idade;
     private List<String> interessesList;
     private Uri fotoPerfil;
     private String frase;
@@ -19,11 +19,11 @@ public class User {
     public User(){
     }
 
-    public String getIdade() {
+    public int getIdade() {
         return idade;
     }
 
-    public void setIdade(String idade) {
+    public void setIdade(int idade) {
         this.idade = idade;
     }
 
