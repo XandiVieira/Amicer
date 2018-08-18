@@ -27,6 +27,7 @@ public class MessageAdapter extends ArrayAdapter<Message> {
         ImageView photoImageView = (ImageView) convertView.findViewById(R.id.photoImageView);
         TextView messageTextView = (TextView) convertView.findViewById(R.id.messageTextView);
         TextView authorTextView = (TextView) convertView.findViewById(R.id.nameTextView);
+        TextView timeTextView = (TextView) convertView.findViewById(R.id.timeTextView);
 
         Message message = getItem(position);
 
@@ -41,8 +42,10 @@ public class MessageAdapter extends ArrayAdapter<Message> {
             messageTextView.setVisibility(View.VISIBLE);
             photoImageView.setVisibility(View.GONE);
             messageTextView.setText(message.getText());
+            timeTextView.setText(message.getTime());
         }
         authorTextView.setText(message.getName());
+
 
         return convertView;
     }

@@ -57,7 +57,7 @@ public class EditProfileFragment extends Fragment implements GoogleApiClient.OnC
     private Button btLogout;
     private Button btUpdate;
     private FirebaseUser fbUser;
-    private User user;
+    public User user;
 
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mUserDatabaseRef;

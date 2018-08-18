@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
+import android.text.format.Time;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,8 +40,12 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,7 +79,7 @@ public class InsideGroup extends AppCompatActivity {
     private StorageReference mChatPhotoStorageReference;
     private FirebaseRemoteConfig mFirebaseRemoteConfig;
     private Toolbar toolbar;
-    private ActionBar actionBar;
+    //private ActionBar actionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,11 +96,15 @@ public class InsideGroup extends AppCompatActivity {
         bundleUid.getString("nome");
         String nome = bundleUid.getString("nome");
 
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        actionBar = getSupportActionBar();
+        toolbar = findViewById(R.id.toolbarId);
+        //setSupportActionBar(toolbar);
+        toolbar.setTitle(nome);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
+        //toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
+        /*actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setTitle(nome);
+        actionBar.setTitle(nome);*/
+        //actionBar.setIcon(R.drawable.ic_arrow_back);
 
         //Initialize Firebase Components
         mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -158,7 +167,16 @@ public class InsideGroup extends AppCompatActivity {
         mSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Message friendlyMessage = new Message(mMessageEditText.getText().toString(), mUsername, null);
+                SimpleDateFormat dateFormat_hora = new SimpleDateFormat("HH:mm:ss");
+
+                Date data = new Date();
+
+                Calendar  cal = Calendar.getInstance();
+                cal.setTime(data);
+                Date data_atual = cal.getTime();
+
+                String hora_atual = dateFormat_hora.format(data_atual);
+                Message friendlyMessage = new Message(mMessageEditText.getText().toString(), mUsername, null, hora_atual);
                 mMessagesDatabaseReference.push().setValue(friendlyMessage);
                 // Clear input box
                 mMessageEditText.setText("");
@@ -238,7 +256,17 @@ public class InsideGroup extends AppCompatActivity {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         Task<Uri> downloadUrl = photoRef.getDownloadUrl();
-                        Message friendlyMessage = new Message(null, mUsername, downloadUrl.toString());
+                        // OU
+                        SimpleDateFormat dateFormat_hora = new SimpleDateFormat("HH:mm:ss");
+
+                        Date data = new Date();
+
+                        Calendar  cal = Calendar.getInstance();
+                        cal.setTime(data);
+                        Date data_atual = cal.getTime();
+
+                        String hora_atual = dateFormat_hora.format(data_atual);
+                        Message friendlyMessage = new Message(null, mUsername, downloadUrl.toString(), hora_atual);
                         mMessagesDatabaseReference.push().setValue(friendlyMessage);
                     }
                 });
