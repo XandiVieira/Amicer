@@ -31,7 +31,7 @@
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:inputType="text"
-        android:text="CookNow" />
+        android:hint="CookNow" />
 
     <TextView
         android:id="@+id/txtDescrGrupo"
@@ -64,7 +64,7 @@
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:inputType="text"
-        android:text="Grupos para compartilhar receitas" />
+        android:hint="Grupos para compartilhar receitas" />
 
     <TextView
         android:id="@+id/txtNumParticipantes"
@@ -134,7 +134,7 @@
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:inputType="text"
-        android:text="Cozinhar" />
+        android:hint="Cozinhar" />
 
     <Button
         android:id="@+id/button3"

@@ -2,6 +2,7 @@ package com.example.xandi.amicer.modelo;
 
 public class Message {
 
+    private String userUid;
     private String text;
     private String name;
     private String photoUrl;
@@ -10,11 +11,20 @@ public class Message {
     public Message() {
     }
 
-    public Message(String text, String name, String photoUrl, String time) {
+    public Message(String text, String name, String photoUrl, String time, String userUid) {
         this.text = text;
         this.name = name;
         this.photoUrl = photoUrl;
         this.time = time;
+        this.userUid = userUid;
+    }
+
+    public String getUserUid() {
+        return userUid;
+    }
+
+    public void setUserUid(String userUid) {
+        this.userUid = userUid;
     }
 
     public String getText() {

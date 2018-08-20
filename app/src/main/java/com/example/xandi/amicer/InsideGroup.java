@@ -4,13 +4,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
-import android.text.format.Time;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,20 +32,19 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class InsideGroup extends AppCompatActivity {
@@ -79,7 +76,9 @@ public class InsideGroup extends AppCompatActivity {
     private StorageReference mChatPhotoStorageReference;
     private FirebaseRemoteConfig mFirebaseRemoteConfig;
     private Toolbar toolbar;
-    //private ActionBar actionBar;
+    private String userUid;
+
+    private ValueEventListener valueEventListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,8 +92,13 @@ public class InsideGroup extends AppCompatActivity {
         String uid = bundleUid.getString("uid");
 
         Bundle bundleNome = getIntent().getExtras();
-        bundleUid.getString("nome");
+        bundleNome.getString("nome");
         String nome = bundleUid.getString("nome");
+
+        Bundle bundleUserUid = getIntent().getExtras();
+        bundleUserUid.getString("userUid");
+        userUid = bundleUserUid.getString("userUid");
+
 
         toolbar = findViewById(R.id.toolbarId);
         //setSupportActionBar(toolbar);
@@ -123,8 +127,8 @@ public class InsideGroup extends AppCompatActivity {
         mSendButton = (Button) findViewById(R.id.sendButton);
 
         // Initialize message ListView and its adapter
-        List<Message> friendlyMessages = new ArrayList<>();
-        mMessageAdapter = new MessageAdapter(this, R.layout.item_message, friendlyMessages);
+        ArrayList<Message> mensagens = new ArrayList<>();
+        mMessageAdapter = new MessageAdapter(InsideGroup.this, mensagens, userUid);
         mMessageListView.setAdapter(mMessageAdapter);
 
         // Initialize progress bar
@@ -176,8 +180,8 @@ public class InsideGroup extends AppCompatActivity {
                 Date data_atual = cal.getTime();
 
                 String hora_atual = dateFormat_hora.format(data_atual);
-                Message friendlyMessage = new Message(mMessageEditText.getText().toString(), mUsername, null, hora_atual);
-                mMessagesDatabaseReference.push().setValue(friendlyMessage);
+                Message message = new Message(mMessageEditText.getText().toString(), mUsername, null, hora_atual, userUid);
+                mMessagesDatabaseReference.push().setValue(message);
                 // Clear input box
                 mMessageEditText.setText("");
             }
@@ -266,8 +270,8 @@ public class InsideGroup extends AppCompatActivity {
                         Date data_atual = cal.getTime();
 
                         String hora_atual = dateFormat_hora.format(data_atual);
-                        Message friendlyMessage = new Message(null, mUsername, downloadUrl.toString(), hora_atual);
-                        mMessagesDatabaseReference.push().setValue(friendlyMessage);
+                        Message message = new Message(null, mUsername, downloadUrl.toString(), hora_atual, userUid);
+                        mMessagesDatabaseReference.push().setValue(message);
                     }
                 });
             }
@@ -313,8 +317,8 @@ public class InsideGroup extends AppCompatActivity {
             mChildEventListener = new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    Message friendlyMessage = dataSnapshot.getValue(Message.class);
-                    mMessageAdapter.add(friendlyMessage);
+                    Message message = dataSnapshot.getValue(Message.class);
+                    mMessageAdapter.add(message);
                 }
 
                 @Override

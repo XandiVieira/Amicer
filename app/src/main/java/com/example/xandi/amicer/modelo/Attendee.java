@@ -1,17 +1,19 @@
 package com.example.xandi.amicer.modelo;
 
+import java.util.List;
+
 public class Attendee {
 
     public Attendee(){}
 
-    private String userUID;
+    private List<String> userUID;
     private String groupUID;
 
-    public String getUserUID() {
+    public List<String> getUserUID() {
         return userUID;
     }
 
-    public void setUserUID(String userUID) {
+    public void setUserUID(List<String> userUID) {
         this.userUID = userUID;
     }
 

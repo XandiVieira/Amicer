@@ -89,7 +89,12 @@ public class CreateGroupFragment extends Fragment {
                 grupo.setInteresses(listaInteresses);
                 grupo.setNome(editNomeGrupo.getText().toString());
                 grupo.setNumParticipante(numParticpantes);
-                attendee.setUserUID(fbUser.getUid());
+                List<String> list = new ArrayList<>();
+                if ( attendee.getUserUID() != null) {
+                    list = attendee.getUserUID();
+                }
+                list.add(fbUser.getUid());
+                attendee.setUserUID(list);
                 attendee.setGroupUID(grupo.getUid());
 
                 mGroupsDatabaseRef.child("group").child(grupo.getUid()).setValue(grupo);
@@ -98,6 +103,7 @@ public class CreateGroupFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), InsideGroup.class);
                 intent.putExtra("uid", grupo.getUid());
                 intent.putExtra("nome", grupo.getNome());
+                intent.putExtra("userUid", fbUser.getUid());
                 startActivity(intent);
             }
         });

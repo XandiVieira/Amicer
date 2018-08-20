@@ -1,22 +1,16 @@
 package com.example.xandi.amicer;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.support.v4.app.Fragment;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,17 +45,10 @@ public class EditProfileFragment extends Fragment implements GoogleApiClient.OnC
     private EditText editDescr;
     private EditText editFrase;
     private EditText editInteresse1, editInteresse2, editInteresse3, editInteresse4, editInteresse5, editInteresse6;
-
-    private ConfigProfileFragment configGroupFragment;
-
-    private Button btLogout;
-    private Button btUpdate;
     private FirebaseUser fbUser;
     public User user;
 
-    private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mUserDatabaseRef;
-    private TabPerfil tabPerfil;
 
     private GoogleApiClient googleApiClient;
 
@@ -70,12 +57,9 @@ public class EditProfileFragment extends Fragment implements GoogleApiClient.OnC
 
     private List<String> listaInteresses;
 
-    private Context mContext;
-
     @Override
     public void onAttach(final Activity activity) {
         super.onAttach(activity);
-        mContext = activity;
     }
 
     @Override
@@ -101,10 +85,9 @@ public class EditProfileFragment extends Fragment implements GoogleApiClient.OnC
 
         startFirebase();
 
-        configGroupFragment = new ConfigProfileFragment();
         photoImageView = rootView.findViewById(R.id.photoImageView);
         nameTextView = rootView.findViewById(R.id.nameTextView);
-        btLogout = rootView.findViewById(R.id.btLogout);
+        Button btLogout = rootView.findViewById(R.id.btLogout);
         editDescr = rootView.findViewById(R.id.editDescricao);
         editFrase = rootView.findViewById(R.id.editFrasePerfil);
         editInteresse1 = rootView.findViewById(R.id.editInteresse1);
@@ -113,7 +96,7 @@ public class EditProfileFragment extends Fragment implements GoogleApiClient.OnC
         editInteresse4 = rootView.findViewById(R.id.editInteresse4);
         editInteresse5 = rootView.findViewById(R.id.editInteresse5);
         editInteresse6 = rootView.findViewById(R.id.editInteresse6);
-        btUpdate = rootView.findViewById(R.id.btUpdate);
+        Button btUpdate = rootView.findViewById(R.id.btUpdate);
 
         btUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -226,7 +209,7 @@ public class EditProfileFragment extends Fragment implements GoogleApiClient.OnC
 
     private void startFirebase() {
         FirebaseApp.initializeApp(getActivity());
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
         mUserDatabaseRef = mFirebaseDatabase.getReference();
     }
 
@@ -235,22 +218,28 @@ public class EditProfileFragment extends Fragment implements GoogleApiClient.OnC
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 user = dataSnapshot.getValue(User.class);
-                //user.setInteressesList((String)dataSnapshot.child("interessesList").getValue());
 
-                if(user.getInteressesList()!=null && user.getInteressesList().size()>0)
-                editInteresse1.setText(user.getInteressesList().get(0));
-                if(user.getInteressesList()!=null && user.getInteressesList().size()>1)
-                editInteresse2.setText(user.getInteressesList().get(1));
-                if(user.getInteressesList()!=null && user.getInteressesList().size()>2)
-                editInteresse3.setText(user.getInteressesList().get(2));
-                if(user.getInteressesList()!=null && user.getInteressesList().size()>3)
-                editInteresse4.setText(user.getInteressesList().get(3));
-                if(user.getInteressesList()!=null && user.getInteressesList().size()>4)
-                editInteresse5.setText(user.getInteressesList().get(4));
-                if(user.getInteressesList()!=null && user.getInteressesList().size()>5)
-                editInteresse6.setText(user.getInteressesList().get(5));
-                editDescr.setText(user.getDescricao(), TextView.BufferType.EDITABLE);
-                editFrase.setText(user.getFrase(), TextView.BufferType.EDITABLE);
+                if(user == null){
+                    user = new User();
+                    user.setNome(fbUser.getDisplayName());
+                    user.setUid(fbUser.getUid());
+                    mUserDatabaseRef.child("user").child(fbUser.getUid()).setValue(user);
+                }else{
+                    if(user.getInteressesList()!=null && user.getInteressesList().size()>0)
+                        editInteresse1.setText(user.getInteressesList().get(0));
+                    if(user.getInteressesList()!=null && user.getInteressesList().size()>1)
+                        editInteresse2.setText(user.getInteressesList().get(1));
+                    if(user.getInteressesList()!=null && user.getInteressesList().size()>2)
+                        editInteresse3.setText(user.getInteressesList().get(2));
+                    if(user.getInteressesList()!=null && user.getInteressesList().size()>3)
+                        editInteresse4.setText(user.getInteressesList().get(3));
+                    if(user.getInteressesList()!=null && user.getInteressesList().size()>4)
+                        editInteresse5.setText(user.getInteressesList().get(4));
+                    if(user.getInteressesList()!=null && user.getInteressesList().size()>5)
+                        editInteresse6.setText(user.getInteressesList().get(5));
+                    editDescr.setText(user.getDescricao(), TextView.BufferType.EDITABLE);
+                    editFrase.setText(user.getFrase(), TextView.BufferType.EDITABLE);
+                }
             }
 
             @Override
@@ -267,11 +256,11 @@ public class EditProfileFragment extends Fragment implements GoogleApiClient.OnC
 
     private void updateProfile(){
         if(!editFrase.getText().toString().equals(""))
-        user.setFrase(editFrase.getText().toString());
+            user.setFrase(editFrase.getText().toString());
         if(!editDescr.getText().toString().equals(""))
-        user.setDescricao(editDescr.getText().toString());
+            user.setDescricao(editDescr.getText().toString());
         //user.setFotoPerfil();
-        user.setInteressesList(listaInteresses);
+
 
         if(!editInteresse1.getText().toString().equals(""))
             listaInteresses.add(editInteresse1.getText().toString());
@@ -286,7 +275,10 @@ public class EditProfileFragment extends Fragment implements GoogleApiClient.OnC
         if(!editInteresse6.getText().toString().equals(""))
             listaInteresses.add(editInteresse6.getText().toString());
 
+        user.setInteressesList(listaInteresses);
+
         mUserDatabaseRef.child("user").child(user.getUid()).setValue(user);
         Toast.makeText(getApplicationContext(), "Perfil atualizado",Toast.LENGTH_SHORT).show();
+        listaInteresses.clear();
     }
 }

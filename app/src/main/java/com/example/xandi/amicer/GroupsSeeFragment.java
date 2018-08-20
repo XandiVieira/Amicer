@@ -2,6 +2,7 @@ package com.example.xandi.amicer;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -27,6 +28,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,9 +52,9 @@ public class GroupsSeeFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_see_groups, container, false);
 
         meusGrupos = rootView.findViewById(R.id.meusGrupos);
+        startFirebase();
         mFirebaseAuth = FirebaseAuth.getInstance();
         fbUser = mFirebaseAuth.getCurrentUser();
-        startFirebase();
         eventoDatabase();
 
         meusGrupos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -61,6 +63,7 @@ public class GroupsSeeFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), InsideGroup.class);
                 intent.putExtra("uid", groupList.get(i).getUid());
                 intent.putExtra("nome", groupList.get(i).getNome());
+                intent.putExtra("userUid", fbUser.getUid());
                 startActivity(intent);
             }
         });
@@ -103,7 +106,6 @@ public class GroupsSeeFragment extends Fragment {
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                //groupList.clear();
                 for (DataSnapshot snap : dataSnapshot.getChildren()){
                     String groupUID = snap.getKey();
                     mDatabaseReference.child("group").child(groupUID).addListenerForSingleValueEvent(new ValueEventListener() {
