@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="6dp"
         android:text="Nome do Grupo"
         android:textSize="20dp"
         app:fontFamily="@font/quattrocento" />
@@ -23,15 +23,15 @@
         android:layout_alignRight="@+id/txtNomeGrupo"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="44dp"
-        android:layout_marginEnd="-29dp"
-        android:layout_marginRight="-29dp"
+        android:layout_marginTop="39dp"
+        android:layout_marginEnd="-28dp"
+        android:layout_marginRight="-28dp"
         android:background="@color/white"
         android:ems="10"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        android:inputType="text"
-        android:hint="CookNow" />
+        android:hint="CookNow"
+        android:inputType="text" />
 
     <TextView
         android:id="@+id/txtDescrGrupo"
@@ -43,7 +43,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginStart="29dp"
         android:layout_marginLeft="29dp"
-        android:layout_marginTop="82dp"
+        android:layout_marginTop="80dp"
         android:text="Descrição"
         android:textSize="20dp"
         app:fontFamily="@font/quattrocento" />
@@ -56,15 +56,15 @@
         android:layout_alignRight="@+id/txtInteresses"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="117dp"
-        android:layout_marginEnd="-58dp"
+        android:layout_marginTop="112dp"
+        android:layout_marginEnd="-57dp"
         android:layout_marginRight="-37dp"
         android:background="@color/white"
         android:ems="10"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        android:inputType="text"
-        android:hint="Grupos para compartilhar receitas" />
+        android:hint="Grupos para compartilhar receitas"
+        android:inputType="text" />
 
     <TextView
         android:id="@+id/txtNumParticipantes"
@@ -74,7 +74,7 @@
         android:layout_alignRight="@+id/txtNomeGrupo"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="192dp"
+        android:layout_marginTop="188dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:text="Participantes"
@@ -101,52 +101,92 @@
         android:text="2"
         android:textSize="20sp" />
 
-    <TextView
-        android:id="@+id/txtInteresses"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/seekBar"
-        android:layout_alignLeft="@+id/txtNomeGrupo"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="26dp"
-        android:layout_marginLeft="34dp"
-        android:layout_marginTop="266dp"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:text="Interesses"
-        android:textSize="20dp"
-        app:fontFamily="@font/quattrocento" />
+        android:layout_marginBottom="192dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="40dp">
 
-    <EditText
-        android:id="@+id/editInteresses"
-        android:layout_width="200dp"
-        android:layout_height="65dp"
-        android:layout_alignEnd="@+id/txtInteresses"
-        android:layout_alignRight="@+id/txtInteresses"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="302dp"
-        android:layout_marginEnd="-57dp"
-        android:layout_marginRight="-57dp"
-        android:background="@color/white"
-        android:ems="10"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:inputType="text"
-        android:hint="Cozinhar" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/editInteresseGp1"
+                android:layout_width="175dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15px"
+                android:ems="10"
+                android:hint="1. "
+                android:inputType="textPersonName"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/editInteresseGp2"
+                android:layout_width="175dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15px"
+                android:ems="10"
+                android:hint="2. "
+                android:inputType="textPersonName"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/editInteresseGp3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15px"
+                android:ems="10"
+                android:hint="3. "
+                android:inputType="textPersonName"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/editInteresseGp4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15px"
+                android:ems="10"
+                android:hint="4. "
+                android:inputType="textPersonName"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/button3"
-        android:layout_width="80dp"
-        android:layout_height="50dp"
+        android:layout_width="70dp"
+        android:layout_height="35dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="143dp"
-        android:layout_marginLeft="143dp"
-        android:layout_marginTop="373dp"
+        android:layout_marginStart="161dp"
+        android:layout_marginLeft="161dp"
+        android:layout_marginTop="382dp"
         android:background="@color/colorPrimary"
         android:text="Criar" />
+
+    <TextView
+        android:id="@+id/interesses"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/progresso"
+        android:layout_centerHorizontal="true"
+        android:text="Interesses"
+        android:textSize="20dp"
+        app:fontFamily="@font/quattrocento"/>
 
 </RelativeLayout>

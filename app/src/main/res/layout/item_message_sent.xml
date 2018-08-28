@@ -33,7 +33,8 @@
         android:layout_marginLeft="5px"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:layout_marginTop="5px"
-        tools:text="Message" />
+        tools:text="Message"
+        android:textSize="15sp"/>
 
     <TextView
         android:id="@+id/timeTextView"

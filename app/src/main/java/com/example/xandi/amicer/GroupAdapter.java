@@ -17,12 +17,12 @@ import com.example.xandi.amicer.modelo.Group;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GroupAdatper extends ArrayAdapter {
+public class GroupAdapter extends ArrayAdapter {
 
     private final Context context;
     private final ArrayList<Group> elementos;
 
-    public GroupAdatper(@NonNull Context context, ArrayList<Group> elementos) {
+    public GroupAdapter(@NonNull Context context, ArrayList<Group> elementos) {
         super(context, R.layout.item_group, elementos);
         this.context = context;
         this.elementos = elementos;

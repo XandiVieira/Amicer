@@ -32,7 +32,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.google.firebase.storage.FirebaseStorage;
@@ -57,28 +56,20 @@ public class InsideGroup extends AppCompatActivity {
     public static final int RC_SIGN_IN = 1;
     private static final int RC_PHOTO_PICKER =  2;
 
-    private ListView mMessageListView;
     private MessageAdapter mMessageAdapter;
-    private ProgressBar mProgressBar;
-    private ImageButton mPhotoPickerButton;
     private EditText mMessageEditText;
     private Button mSendButton;
 
     private String mUsername;
 
     //fIREBASE Instance Variiables
-    private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mMessagesDatabaseReference;
     private ChildEventListener mChildEventListener;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
-    private FirebaseStorage mFirebaseStorage;
     private StorageReference mChatPhotoStorageReference;
     private FirebaseRemoteConfig mFirebaseRemoteConfig;
-    private Toolbar toolbar;
     private String userUid;
-
-    private ValueEventListener valueEventListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,31 +91,25 @@ public class InsideGroup extends AppCompatActivity {
         userUid = bundleUserUid.getString("userUid");
 
 
-        toolbar = findViewById(R.id.toolbarId);
-        //setSupportActionBar(toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbarId);
         toolbar.setTitle(nome);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
-        //toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
-        /*actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setTitle(nome);*/
-        //actionBar.setIcon(R.drawable.ic_arrow_back);
 
         //Initialize Firebase Components
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
         mFirebaseAuth = FirebaseAuth.getInstance();
-        mFirebaseStorage = FirebaseStorage.getInstance();
+        FirebaseStorage mFirebaseStorage = FirebaseStorage.getInstance();
         mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
 
         mMessagesDatabaseReference = mFirebaseDatabase.getReference().child("/group/"+uid).child("messages");
         mChatPhotoStorageReference = mFirebaseStorage.getReference().child("chat_photos");
 
         // Initialize references to views
-        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
-        mMessageListView = (ListView) findViewById(R.id.messageListView);
-        mPhotoPickerButton = (ImageButton) findViewById(R.id.photoPickerButton);
-        mMessageEditText = (EditText) findViewById(R.id.messageEditText);
-        mSendButton = (Button) findViewById(R.id.sendButton);
+        ProgressBar mProgressBar = findViewById(R.id.progressBar);
+        ListView mMessageListView = findViewById(R.id.messageListView);
+        ImageButton mPhotoPickerButton = findViewById(R.id.photoPickerButton);
+        mMessageEditText = findViewById(R.id.messageEditText);
+        mSendButton = findViewById(R.id.sendButton);
 
         // Initialize message ListView and its adapter
         ArrayList<Message> mensagens = new ArrayList<>();
@@ -365,7 +350,7 @@ public class InsideGroup extends AppCompatActivity {
 
         mMessageEditText.setFilters(new InputFilter[]{new InputFilter.LengthFilter((int) friendly_msg_length)});
         Log.d(TAG, FRIENDLY_MSG_LENGTH_KEY + " = " + friendly_msg_length);
-    };
+    }
 
     public boolean onCreateMenuOptions(Menu menu){
         return super.onCreateOptionsMenu(menu);

@@ -89,7 +89,8 @@
             android:layout_marginTop="5px"
             android:ems="10"
             android:hint="Frase de Perfil"
-            android:inputType="textMultiLine" />
+            android:inputType="textMultiLine"
+            android:textSize="16sp"/>
 
         <TextView
             android:id="@+id/txtDescricao"
@@ -107,7 +108,8 @@
             android:layout_marginTop="5px"
             android:ems="10"
             android:hint="Descrição"
-            android:inputType="textMultiLine" />
+            android:inputType="textMultiLine"
+            android:textSize="16sp"/>
 
         <TextView
             android:id="@+id/txtInteresses"
@@ -135,7 +137,8 @@
                     android:layout_marginTop="15px"
                     android:ems="10"
                     android:hint="1. "
-                    android:inputType="textPersonName" />
+                    android:inputType="textPersonName"
+                    android:textSize="16sp"/>
 
                 <EditText
                     android:id="@+id/editInteresse2"
@@ -144,7 +147,8 @@
                     android:layout_marginTop="15px"
                     android:ems="10"
                     android:hint="2. "
-                    android:inputType="textPersonName" />
+                    android:inputType="textPersonName"
+                    android:textSize="16sp"/>
 
                 <EditText
                     android:id="@+id/editInteresse3"
@@ -153,7 +157,8 @@
                     android:layout_marginTop="15px"
                     android:ems="10"
                     android:hint="3. "
-                    android:inputType="textPersonName" />
+                    android:inputType="textPersonName"
+                    android:textSize="16sp"/>
 
             </LinearLayout>
 
@@ -169,7 +174,8 @@
                     android:layout_marginTop="15px"
                     android:ems="10"
                     android:hint="4. "
-                    android:inputType="textPersonName" />
+                    android:inputType="textPersonName"
+                    android:textSize="16sp"/>
 
                 <EditText
                     android:id="@+id/editInteresse5"
@@ -178,7 +184,8 @@
                     android:layout_marginTop="15px"
                     android:ems="10"
                     android:hint="5. "
-                    android:inputType="textPersonName" />
+                    android:inputType="textPersonName"
+                    android:textSize="16sp"/>
 
                 <EditText
                     android:id="@+id/editInteresse6"
@@ -187,7 +194,8 @@
                     android:layout_marginTop="15px"
                     android:ems="10"
                     android:hint="6. "
-                    android:inputType="textPersonName" />
+                    android:inputType="textPersonName"
+                    android:textSize="16sp"/>
 
             </LinearLayout>
 

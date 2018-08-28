@@ -3,6 +3,7 @@ package com.example.xandi.amicer.modelo;
 import android.media.Image;
 import android.net.Uri;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class User {
@@ -12,11 +13,20 @@ public class User {
     private String email;
     private int idade;
     private List<String> interessesList;
+    private HashMap<String, Boolean> listGroups;
     private Uri fotoPerfil;
     private String frase;
     private String descricao;
 
     public User(){
+    }
+
+    public HashMap<String, Boolean> getListGroups() {
+        return listGroups;
+    }
+
+    public void setListGroups(HashMap<String, Boolean> listGroups) {
+        this.listGroups = listGroups;
     }
 
     public int getIdade() {
