@@ -28,12 +28,11 @@ import java.util.ArrayList;
 public class GroupsSeeFragment extends Fragment {
 
     private ArrayList<Group> groupList = new ArrayList<Group>();
-    private ArrayList<String> itensInteresse = new ArrayList<String>();
 
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDatabaseReference;
     private FirebaseAuth mFirebaseAuth;
-    private ListView meusGrupos;
+    private ListView listaGrupos;
     private ArrayAdapter adapter;
     private FirebaseUser fbUser;
 
@@ -46,13 +45,13 @@ public class GroupsSeeFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_see_groups, container, false);
         View itemView = inflater.inflate(R.layout.item_group, container, false);
 
-        meusGrupos = rootView.findViewById(R.id.meusGrupos);
+        listaGrupos = rootView.findViewById(R.id.listViewMeusGrupos);
         startFirebase();
         mFirebaseAuth = FirebaseAuth.getInstance();
         fbUser = mFirebaseAuth.getCurrentUser();
         eventoDatabase();
 
-        meusGrupos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listaGrupos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(getActivity(), InsideGroup.class);
@@ -86,17 +85,10 @@ public class GroupsSeeFragment extends Fragment {
                         public void onDataChange(DataSnapshot dataSnap) {
                             Group group = dataSnap.getValue(Group.class);
                             groupList.add(group);
-                            /*if(group.getInteresses()!=null) {
-                                for (int i = 0; i < group.getInteresses().size(); i++) {
-                                    itensInteresse.add(group.getInteresses().get(i));
-                                }
-                            }*/
+
                             if (getActivity() != null) {
-                                //adapter2 = new ItemAdapter(getActivity(), itensInteresse);
-                                //listInteressesGroup.setAdapter(adapter2);
                                 adapter = new GroupAdapter(getActivity(), groupList);
-                                meusGrupos.setAdapter(adapter);
-                                itensInteresse.clear();
+                                listaGrupos.setAdapter(adapter);
                             }
                         }
 

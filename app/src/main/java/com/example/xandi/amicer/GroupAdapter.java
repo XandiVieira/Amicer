@@ -37,12 +37,23 @@ public class GroupAdapter extends ArrayAdapter {
         TextView nomeGrupo = (TextView) rowView.findViewById(R.id.nameGroup);
         TextView creatorGroup = (TextView) rowView.findViewById(R.id.creatorGroup);
         TextView descrGroup = (TextView) rowView.findViewById(R.id.descrGroup);
-        //ListView interesses = (ListView) rowView.findViewById(R.id.interesses);
+        TextView interesse1 = (TextView) rowView.findViewById(R.id.interesse1);
+        TextView interesse2 = (TextView) rowView.findViewById(R.id.interesse2);
+        TextView interesse3 = (TextView) rowView.findViewById(R.id.interesse3);
+        TextView interesse4 = (TextView) rowView.findViewById(R.id.interesse4);
 
         nomeGrupo.setText(elementos.get(position).getNome());
         creatorGroup.setText(elementos.get(position).getCriadorGrupo());
         descrGroup.setText(elementos.get(position).getDescricao());
-        //interesses.setAdapter((ListAdapter) elementos.get(position).getInteresses());
+
+        if(elementos.get(position).getInteresses().size() > 0)
+        interesse1.setText(elementos.get(position).getInteresses().get(0));
+        if(elementos.get(position).getInteresses().size() > 1)
+        interesse2.setText(elementos.get(position).getInteresses().get(1));
+        if(elementos.get(position).getInteresses().size() > 2)
+        interesse3.setText(elementos.get(position).getInteresses().get(2));
+        if(elementos.get(position).getInteresses().size() > 3)
+        interesse4.setText(elementos.get(position).getInteresses().get(3));
 
         return rowView;
     }
