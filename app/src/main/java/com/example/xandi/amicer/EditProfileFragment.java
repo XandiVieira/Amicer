@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.xandi.amicer.modelo.Interesse;
 import com.example.xandi.amicer.modelo.User;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.Auth;
@@ -47,6 +48,7 @@ public class EditProfileFragment extends Fragment implements GoogleApiClient.OnC
     private EditText editInteresse1, editInteresse2, editInteresse3, editInteresse4, editInteresse5, editInteresse6;
     private FirebaseUser fbUser;
     public User user;
+    private Interesse interesse;
 
     private DatabaseReference mUserDatabaseRef;
 
@@ -55,7 +57,7 @@ public class EditProfileFragment extends Fragment implements GoogleApiClient.OnC
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener firebaseAuthListener;
 
-    private List<String> listaInteresses;
+    private List<Interesse> listaInteresses;
 
     @Override
     public void onAttach(final Activity activity) {
@@ -226,17 +228,17 @@ public class EditProfileFragment extends Fragment implements GoogleApiClient.OnC
                     mUserDatabaseRef.child("user").child(fbUser.getUid()).setValue(user);
                 }else{
                     if(user.getInteressesList()!=null && user.getInteressesList().size()>0)
-                        editInteresse1.setText(user.getInteressesList().get(0));
+                        editInteresse1.setText(user.getInteressesList().get(0).getNome());
                     if(user.getInteressesList()!=null && user.getInteressesList().size()>1)
-                        editInteresse2.setText(user.getInteressesList().get(1));
+                        editInteresse2.setText(user.getInteressesList().get(1).getNome());
                     if(user.getInteressesList()!=null && user.getInteressesList().size()>2)
-                        editInteresse3.setText(user.getInteressesList().get(2));
+                        editInteresse3.setText(user.getInteressesList().get(2).getNome());
                     if(user.getInteressesList()!=null && user.getInteressesList().size()>3)
-                        editInteresse4.setText(user.getInteressesList().get(3));
+                        editInteresse4.setText(user.getInteressesList().get(3).getNome());
                     if(user.getInteressesList()!=null && user.getInteressesList().size()>4)
-                        editInteresse5.setText(user.getInteressesList().get(4));
+                        editInteresse5.setText(user.getInteressesList().get(4).getNome());
                     if(user.getInteressesList()!=null && user.getInteressesList().size()>5)
-                        editInteresse6.setText(user.getInteressesList().get(5));
+                        editInteresse6.setText(user.getInteressesList().get(5).getNome());
                     editDescr.setText(user.getDescricao(), TextView.BufferType.EDITABLE);
                     editFrase.setText(user.getFrase(), TextView.BufferType.EDITABLE);
                 }
@@ -263,17 +265,23 @@ public class EditProfileFragment extends Fragment implements GoogleApiClient.OnC
 
 
         if(!editInteresse1.getText().toString().equals(""))
-            listaInteresses.add(editInteresse1.getText().toString());
+            interesse = new Interesse(editInteresse1.getText().toString());
+            listaInteresses.add(interesse);
         if(!editInteresse2.getText().toString().equals(""))
-            listaInteresses.add(editInteresse2.getText().toString());
+            interesse = new Interesse(editInteresse2.getText().toString());
+            listaInteresses.add(interesse);
         if(!editInteresse3.getText().toString().equals(""))
-            listaInteresses.add(editInteresse3.getText().toString());
+            interesse = new Interesse(editInteresse3.getText().toString());
+            listaInteresses.add(interesse);
         if(!editInteresse4.getText().toString().equals(""))
-            listaInteresses.add(editInteresse4.getText().toString());
+            interesse = new Interesse(editInteresse4.getText().toString());
+            listaInteresses.add(interesse);
         if(!editInteresse5.getText().toString().equals(""))
-            listaInteresses.add(editInteresse5.getText().toString());
+            interesse = new Interesse(editInteresse5.getText().toString());
+            listaInteresses.add(interesse);
         if(!editInteresse6.getText().toString().equals(""))
-            listaInteresses.add(editInteresse6.getText().toString());
+            interesse = new Interesse(editInteresse6.getText().toString());
+            listaInteresses.add(interesse);
 
         user.setInteressesList(listaInteresses);
 

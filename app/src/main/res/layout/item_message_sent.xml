@@ -6,7 +6,6 @@
     android:layout_marginLeft="@dimen/activity_horizontal_margin"
     android:layout_marginStart="@dimen/activity_horizontal_margin"
     android:orientation="vertical"
-    android:layout_gravity="right"
     android:background="@drawable/rounded_rect_bg2"
     android:layout_marginBottom="20dp">
 

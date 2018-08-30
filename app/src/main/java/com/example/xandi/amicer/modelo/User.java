@@ -12,7 +12,7 @@ public class User {
     private String nome;
     private String email;
     private int idade;
-    private List<String> interessesList;
+    private List<Interesse> interessesList;
     private HashMap<String, Boolean> listGroups;
     private Uri fotoPerfil;
     private String frase;
@@ -37,11 +37,11 @@ public class User {
         this.idade = idade;
     }
 
-    public List<String> getInteressesList() {
+    public List<Interesse> getInteressesList() {
         return interessesList;
     }
 
-    public void setInteressesList(List<String> interessesList) {
+    public void setInteressesList(List<Interesse> interessesList) {
         this.interessesList = interessesList;
     }
 

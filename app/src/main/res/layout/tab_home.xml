@@ -30,7 +30,7 @@
         android:id="@+id/frameHome">
 
         <TextView
-            android:id="@+id/txtNomeGrupo"
+            android:id="@+id/txtConfig"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="TabHome"
