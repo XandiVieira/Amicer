@@ -8,9 +8,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.xandi.amicer.modelo.Group;
@@ -23,6 +25,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.pchmn.materialchips.ChipsInput;
+import com.pchmn.materialchips.model.ChipInterface;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,9 +46,11 @@ public class CreateGroupFragment extends Fragment {
     private FirebaseAuth firebaseAuth;
     private FirebaseUser fbUser;
     private User user;
-    private List<String> listaInteresses;
-    private EditText editInteresseGp1, editInteresseGp2, editInteresseGp3, editInteresseGp4;
     private int numParticpantes = 2;
+    private List<List<Chip>> listaTags = new ArrayList<>();
+    private ChipsInput mChipsInput;
+    private List<String> listaCategorias;
+    private Spinner spinnerTags;
 
     @Nullable
     @Override
@@ -57,11 +63,8 @@ public class CreateGroupFragment extends Fragment {
         editDescrGrupo = (EditText) rootView.findViewById(R.id.editDescrGrupo);
         btCriarGrupo = (Button) rootView.findViewById(R.id.button3);
         SeekBar seekBar = (SeekBar) rootView.findViewById(R.id.seekBar);
-        listaInteresses = new ArrayList<>();
-        editInteresseGp1 = rootView.findViewById(R.id.editInteresseGp1);
-        editInteresseGp2 = rootView.findViewById(R.id.editInteresseGp2);
-        editInteresseGp3 = rootView.findViewById(R.id.editInteresseGp3);
-        editInteresseGp4 = rootView.findViewById(R.id.editInteresseGp4);
+        spinnerTags = (Spinner) rootView.findViewById(R.id.spinner1);
+        mChipsInput = (ChipsInput) rootView.findViewById(R.id.chipsInput1);
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -91,35 +94,32 @@ public class CreateGroupFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Group grupo = new Group();
-                listaInteresses = new ArrayList<>();
                 grupo.setUid(UUID.randomUUID().toString());
                 grupo.setCriadorGrupo(fbUser.getDisplayName());
                 grupo.setDescricao(editDescrGrupo.getText().toString());
-                grupo.setInteresses(listaInteresses);
+                //grupo.setInteresses(listaInteresses);
                 grupo.setNome(editNomeGrupo.getText().toString());
                 grupo.setNumParticipante(numParticpantes);
-                //attendee.setNome(fbUser.getDisplayName());
-                HashMap<String, Boolean> map;
+                HashMap<String, Boolean> map = new HashMap<>();
                 if(user.getListGroups()!=null){
                     map = user.getListGroups();
                     map.put(grupo.getUid(), true);
                     user.setListGroups(map);
                 }else{
-                    map = new HashMap<>();
-                    map = user.getListGroups();
+                    user.setListGroups(map);
+                    //map = user.getListGroups();
                     map.put(grupo.getUid(), true);
                 }
 
-                if(!editInteresseGp1.getText().toString().equals(""))
-                    listaInteresses.add(editInteresseGp1.getText().toString());
-                if(!editInteresseGp2.getText().toString().equals(""))
-                    listaInteresses.add(editInteresseGp2.getText().toString());
-                if(!editInteresseGp3.getText().toString().equals(""))
-                    listaInteresses.add(editInteresseGp3.getText().toString());
-                if(!editInteresseGp4.getText().toString().equals(""))
-                    listaInteresses.add(editInteresseGp4.getText().toString());
+                HashMap<String, List<Chip>> interesses = new HashMap<String, List<Chip>>();
 
-                grupo.setInteresses(listaInteresses);
+                    if(mChipsInput.equals("")) {
+                    }else {
+                        List<Chip> lista = (List<Chip>) mChipsInput.getSelectedChipList();
+                        interesses.put(spinnerTags.getSelectedItem().toString(), lista);
+                        if(!spinnerTags.getSelectedItem().equals("Selecione uma categoria"))
+                        grupo.setInteresses(interesses);
+                    }
 
                 mGroupsDatabaseRef.child("group").child(grupo.getUid()).setValue(grupo);
                 mUserDatabaseRef.child("user").child(fbUser.getUid()).child("listGroups").setValue(map);
@@ -131,16 +131,60 @@ public class CreateGroupFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+        mChipsInput.addChipsListener(new ChipsInput.ChipsListener() {
+                @Override
+                public void onChipAdded(ChipInterface chip, int newSize) {
+                    // get the list
+                    List<Chip> tagsSelected = (List<Chip>) mChipsInput.getSelectedChipList();
+                }
+
+                @Override
+                public void onChipRemoved(ChipInterface chip, int newSize) {
+                }
+
+                @Override
+                public void onTextChanged(CharSequence text) {
+                    if(text.length()>0){
+                        if(text.charAt(text.length()-1) == ' '){
+                            mChipsInput.addChip(text.toString(), null);
+                            text = "";
+                        }}
+                }
+            });
+
+        setSpinner();
+
         return rootView;
+    }
+
+    private void setSpinner() {
+
+        listaCategorias = new ArrayList<String>();
+
+        mUserDatabaseRef.child("categories").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                listaCategorias.add("Selecione uma categoria");
+                for (DataSnapshot snap : dataSnapshot.getChildren()){
+                    listaCategorias.add(snap.getKey());
+                }
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, listaCategorias);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinnerTags.setAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void limparCampos() {
         editNomeGrupo.setText("");
         editDescrGrupo.setText("");
-        editInteresseGp1.setText("");
-        editInteresseGp2.setText("");
-        editInteresseGp3.setText("");
-        editInteresseGp4.setText("");
+        mChipsInput.removeAllViews();
     }
 
     private void startFirebase() {

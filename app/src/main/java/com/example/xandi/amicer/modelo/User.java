@@ -3,6 +3,8 @@ package com.example.xandi.amicer.modelo;
 import android.media.Image;
 import android.net.Uri;
 
+import com.example.xandi.amicer.Chip;
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -12,7 +14,8 @@ public class User {
     private String nome;
     private String email;
     private int idade;
-    private List<Interesse> interessesList;
+    private List<List<Chip>> tags;
+    private List<String> categorias;
     private HashMap<String, Boolean> listGroups;
     private Uri fotoPerfil;
     private String frase;
@@ -37,12 +40,20 @@ public class User {
         this.idade = idade;
     }
 
-    public List<Interesse> getInteressesList() {
-        return interessesList;
+    public List<List<Chip>> getTags() {
+        return tags;
     }
 
-    public void setInteressesList(List<Interesse> interessesList) {
-        this.interessesList = interessesList;
+    public void setTags(List<List<Chip>> tags) {
+        this.tags = tags;
+    }
+
+    public List<String> getCategorias() {
+        return categorias;
+    }
+
+    public void setCategorias(List<String> categorias) {
+        this.categorias = categorias;
     }
 
     public Uri getFotoPerfil() {

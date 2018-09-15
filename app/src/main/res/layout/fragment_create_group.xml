@@ -113,78 +113,48 @@
         app:fontFamily="@font/quattrocento"/>
 
     <LinearLayout
-        android:id="@+id/editInteresses"
+        android:layout_below="@+id/interesses"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:orientation="horizontal"
-        android:layout_below="@+id/interesses">
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:id="@+id/interessesLayout">
+
+        <Spinner
+            android:layout_marginTop="3dp"
+            android:id="@+id/spinner1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white">
 
-            <EditText
-                android:id="@+id/editInteresseGp1"
-                android:layout_width="175dp"
+            <com.pchmn.materialchips.ChipsInput
+                android:id="@+id/chipsInput1"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15px"
-                android:ems="10"
-                android:hint="1. "
-                android:inputType="textPersonName"
-                android:textSize="16sp" />
-
-            <EditText
-                android:id="@+id/editInteresseGp2"
-                android:layout_width="175dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15px"
-                android:ems="10"
-                android:hint="2. "
-                android:inputType="textPersonName"
-                android:textSize="16sp" />
-
+                app:chip_backgroundColor="@color/colorAccent"
+                app:chip_deletable="true"
+                app:chip_detailed_deleteIconColor="@color/colorAccent"
+                app:chip_hasAvatarIcon="false"
+                app:hint="#"
+                app:textColor="@color/black" />
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <EditText
-                android:id="@+id/editInteresseGp3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15px"
-                android:ems="10"
-                android:hint="3. "
-                android:inputType="textPersonName"
-                android:textSize="16sp" />
-
-            <EditText
-                android:id="@+id/editInteresseGp4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15px"
-                android:ems="10"
-                android:hint="4. "
-                android:inputType="textPersonName"
-                android:textSize="16sp" />
-
-        </LinearLayout>
+        <Button
+            android:id="@+id/button3"
+            android:layout_gravity="center"
+            android:layout_below="@+id/interessesLayout"
+            android:layout_width="70dp"
+            android:layout_height="35dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="164dp"
+            android:background="@color/colorPrimary"
+            android:text="Criar" />
 
     </LinearLayout>
-
-    <Button
-        android:id="@+id/button3"
-        android:layout_below="@+id/editInteresses"
-        android:layout_width="70dp"
-        android:layout_height="35dp"
-        android:layout_centerHorizontal="true"
-        android:background="@color/colorPrimary"
-        android:text="Criar" />
-
-
 
 </RelativeLayout>

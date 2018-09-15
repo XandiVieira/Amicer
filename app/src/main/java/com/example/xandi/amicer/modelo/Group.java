@@ -1,5 +1,8 @@
 package com.example.xandi.amicer.modelo;
 
+import com.example.xandi.amicer.Chip;
+
+import java.util.HashMap;
 import java.util.List;
 
 public class Group {
@@ -8,14 +11,18 @@ public class Group {
     private String nome;
     private String descricao;
     private int numParticipante;
-    private List<String> interesses;
+    private HashMap<String, List<Chip>> interesses;
     private String criadorGrupo;
     private String userUID;
 
-    public void Group(String nome, String descricao, List<String> interesses){
+    public void Group(String nome, String descricao, HashMap<String, List<Chip>> interesses){
         this.nome = nome;
         this.descricao = descricao;
         this.interesses = interesses;
+    }
+
+    public HashMap<String, List<Chip>> getInteresses() {
+        return interesses;
     }
 
     public String getUserUID() {
@@ -58,20 +65,16 @@ public class Group {
         this.numParticipante = numParticipante;
     }
 
-    public List<String> getInteresses() {
-        return interesses;
-    }
-
-    public void setInteresses(List<String> interesses) {
-        this.interesses = interesses;
-    }
-
     public String getCriadorGrupo() {
         return criadorGrupo;
     }
 
     public void setCriadorGrupo(String criadorGrupo) {
         this.criadorGrupo = criadorGrupo;
+    }
+
+    public void setInteresses(HashMap<String, List<Chip>> interesses) {
+        this.interesses = interesses;
     }
 
     @Override

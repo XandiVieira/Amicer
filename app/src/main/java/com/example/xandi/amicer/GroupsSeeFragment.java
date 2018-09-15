@@ -43,7 +43,6 @@ public class GroupsSeeFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_see_groups, container, false);
-        View itemView = inflater.inflate(R.layout.item_group, container, false);
 
         listaGrupos = rootView.findViewById(R.id.listViewMeusGrupos);
         startFirebase();

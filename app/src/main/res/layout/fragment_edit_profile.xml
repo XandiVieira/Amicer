@@ -60,6 +60,14 @@
             android:text="Salvar" />
     </RelativeLayout>
 
+    <!--<ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">-->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -73,7 +81,7 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <TextView
+       <!--<TextView
             android:id="@+id/txtFrasePerfil"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -90,7 +98,7 @@
             android:ems="10"
             android:hint="Frase de Perfil"
             android:inputType="textMultiLine"
-            android:textSize="16sp"/>
+            android:textSize="16sp" />-->
 
         <TextView
             android:id="@+id/txtDescricao"
@@ -109,7 +117,7 @@
             android:ems="10"
             android:hint="Descrição"
             android:inputType="textMultiLine"
-            android:textSize="16sp"/>
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/txtInteresses"
@@ -120,87 +128,162 @@
             android:textSize="20dp"
             app:fontFamily="@font/quattrocento" />
 
+        <ScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <Spinner
+                android:layout_marginTop="3dp"
+                android:id="@+id/spinner1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white">
 
-                <EditText
-                    android:id="@+id/editInteresse1"
-                    android:layout_width="175dp"
+                <com.pchmn.materialchips.ChipsInput
+                    android:id="@+id/chipsInput1"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15px"
-                    android:ems="10"
-                    android:hint="1. "
-                    android:inputType="textPersonName"
-                    android:textSize="16sp"/>
-
-                <EditText
-                    android:id="@+id/editInteresse2"
-                    android:layout_width="175dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15px"
-                    android:ems="10"
-                    android:hint="2. "
-                    android:inputType="textPersonName"
-                    android:textSize="16sp"/>
-
-                <EditText
-                    android:id="@+id/editInteresse3"
-                    android:layout_width="175dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15px"
-                    android:ems="10"
-                    android:hint="3. "
-                    android:inputType="textPersonName"
-                    android:textSize="16sp"/>
+                    app:chip_backgroundColor="@color/colorAccent"
+                    app:chip_deletable="true"
+                    app:chip_detailed_deleteIconColor="@color/colorAccent"
+                    app:chip_hasAvatarIcon="false"
+                    app:hint="#"
+                    app:textColor="@color/black" />
 
             </LinearLayout>
 
+            <Spinner
+                android:layout_marginTop="3dp"
+                android:id="@+id/spinner2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white">
 
-                <EditText
-                    android:id="@+id/editInteresse4"
-                    android:layout_width="wrap_content"
+                <com.pchmn.materialchips.ChipsInput
+                    android:id="@+id/chipsInput2"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15px"
-                    android:ems="10"
-                    android:hint="4. "
-                    android:inputType="textPersonName"
-                    android:textSize="16sp"/>
+                    app:chip_backgroundColor="@color/colorPrimaryDark"
+                    app:chip_deletable="true"
+                    app:chip_detailed_deleteIconColor="@color/colorAccent"
+                    app:chip_hasAvatarIcon="false"
+                    app:hint="#"
+                    app:textColor="@color/black" />
+            </LinearLayout>
 
-                <EditText
-                    android:id="@+id/editInteresse5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15px"
-                    android:ems="10"
-                    android:hint="5. "
-                    android:inputType="textPersonName"
-                    android:textSize="16sp"/>
+            <Spinner
+                android:layout_marginTop="3dp"
+                android:id="@+id/spinner3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-                <EditText
-                    android:id="@+id/editInteresse6"
-                    android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white">
+
+                <com.pchmn.materialchips.ChipsInput
+                    android:id="@+id/chipsInput3"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15px"
-                    android:ems="10"
-                    android:hint="6. "
-                    android:inputType="textPersonName"
-                    android:textSize="16sp"/>
+                    app:chip_backgroundColor="@color/colorPrimaryDark"
+                    app:chip_deletable="true"
+                    app:chip_detailed_deleteIconColor="@color/colorAccent"
+                    app:chip_hasAvatarIcon="false"
+                    app:hint="#"
+                    app:textColor="@color/black" />
+            </LinearLayout>
+
+                <Spinner
+                    android:layout_marginTop="3dp"
+                    android:id="@+id/spinner4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white">
+
+            <com.pchmn.materialchips.ChipsInput
+                        android:id="@+id/chipsInput4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:chip_backgroundColor="@color/colorPrimaryDark"
+                        app:chip_deletable="true"
+                        app:chip_detailed_deleteIconColor="@color/colorAccent"
+                        app:chip_hasAvatarIcon="false"
+                        app:hint="#"
+                        app:textColor="@color/black" />
+            </LinearLayout>
+
+           <!-- <Spinner
+                android:layout_marginTop="3dp"
+                android:id="@+id/spinner5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white">
+
+            <com.pchmn.materialchips.ChipsInput
+                        android:id="@+id/chipsInput5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:chip_backgroundColor="@color/colorPrimaryDark"
+                        app:chip_deletable="true"
+                        app:chip_detailed_deleteIconColor="@color/colorAccent"
+                        app:chip_hasAvatarIcon="false"
+                        app:hint="#"
+                        app:textColor="@color/black" />
+            </LinearLayout>
+
+            <Spinner
+                android:layout_marginTop="3dp"
+                android:id="@+id/spinner6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white">
+
+            <com.pchmn.materialchips.ChipsInput
+                android:id="@+id/chipsInput6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:chip_backgroundColor="@color/colorPrimaryDark"
+                app:chip_deletable="true"
+                app:chip_detailed_deleteIconColor="@color/colorAccent"
+                app:chip_hasAvatarIcon="false"
+                app:hint="#"
+                app:textColor="@color/black"/>
+            </LinearLayout>-->
 
             </LinearLayout>
+
+        </ScrollView>
 
         </LinearLayout>
 
-    </LinearLayout>
+        </LinearLayout>
+
+    <!--</ScrollView>-->
 
 </RelativeLayout>

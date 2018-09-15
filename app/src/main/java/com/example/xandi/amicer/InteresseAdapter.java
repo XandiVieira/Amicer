@@ -37,7 +37,11 @@ public class InteresseAdapter extends ArrayAdapter<Interesse> {
 
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
 
-            String interesse = interesses.get(position).getNome();
+            String interesse = "#";
+
+            for(int i=0; i<interesses.get(position).getTags().size(); i++){
+                interesse = interesse + " " + interesses.get(position).getTags().get(i);
+            }
 
             if(interesses.get(position) != null) {
                 view = inflater.inflate(R.layout.item_interesse_usuario, parent, false);

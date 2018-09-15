@@ -63,7 +63,7 @@ public class ConfigProfileFragment extends Fragment {
         fbUser = mFirebaseAuth.getCurrentUser();
         startFirebase();
 
-        deleteButton = rootView.findViewById(R.id.deleteButton);
+        deleteButton = itemView.findViewById(R.id.deleteButton);
         interesse = itemView.findViewById(R.id.interesse);
         seekBarDistancia = itemView.findViewById(R.id.seekBarDistancia);
         seekBarIdade = itemView.findViewById(R.id.seekBarIdade);
@@ -129,7 +129,7 @@ public class ConfigProfileFragment extends Fragment {
     }
 
     private void eventoDatabase() {
-
+        listaInteresses.clear();
         Query query = mDatabaseReference.child("user").child(fbUser.getUid()).child("interessesList");
 
         query.addListenerForSingleValueEvent(new ValueEventListener() {
