@@ -12,3 +12,11 @@ return new GhostHeaderViewHolder(v);
 }`
 
 Please add an empty layout to onCreateGhostHeaderViewHolder
+
+
+Also...change the layout to any other
+
+@Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_edit_profile, container, false);
