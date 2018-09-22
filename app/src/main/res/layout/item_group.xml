@@ -4,7 +4,8 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:elevation="12dp">
 
     <TextView
         android:id="@+id/nameGroup"
@@ -86,6 +87,30 @@
             app:fontFamily="@font/quattrocento" />
         <TextView
             android:id="@+id/interesse4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textAlignment="center"
+            android:textSize="12sp"
+            app:fontFamily="@font/quattrocento" />
+        <TextView
+            android:id="@+id/interesse5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textAlignment="center"
+            android:textSize="12sp"
+            app:fontFamily="@font/quattrocento" />
+        <TextView
+            android:id="@+id/interesse6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textAlignment="center"
+            android:textSize="12sp"
+            app:fontFamily="@font/quattrocento" />
+        <TextView
+            android:id="@+id/interesse7"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text=""

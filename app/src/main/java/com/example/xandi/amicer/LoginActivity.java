@@ -37,12 +37,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private GoogleApiClient googleApiClient;
     private SignInButton signInButton;
     public static final int SIGN_IN_CODE = 777;
-    private FirebaseAuth firebaseAuth;
+    private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener firebaseAuthListener;
     private ProgressBar progressBar;
 
     private LoginButton loginButton;
-    private CallbackManager callbackManager;
+    private CallbackManager mCallbackManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,14 +50,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         setContentView(R.layout.activity_login);
 
         progressBar = findViewById(R.id.progressBar);
-
-        callbackManager = CallbackManager.Factory.create();
-
+        mCallbackManager = CallbackManager.Factory.create();
         loginButton = findViewById(R.id.loginButton);
+        loginButton.setReadPermissions(Arrays.asList("email", "public_profile"));
 
-        loginButton.setReadPermissions(Arrays.asList("email"));
-
-        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+        //Initialize Facebook Login Button
+        loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 handleFacebookAccessToken(loginResult.getAccessToken());
@@ -98,8 +96,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             }
         });
 
-
-        firebaseAuth = FirebaseAuth.getInstance();
+        //Initialize Firebase Auth
+        mFirebaseAuth = FirebaseAuth.getInstance();
         firebaseAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -118,11 +116,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         loginButton.setVisibility(View.GONE);
 
         AuthCredential credential = FacebookAuthProvider.getCredential(accessToken.getToken());
-        firebaseAuth.signInWithCredential(credential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+        mFirebaseAuth.signInWithCredential(credential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (!task.isSuccessful()) {
                     Toast.makeText(getApplicationContext(), "Falha ao efetuar login", Toast.LENGTH_LONG).show();
+                    FirebaseUser firebaseUser = mFirebaseAuth.getCurrentUser();
                 }
                 progressBar.setVisibility(View.GONE);
                 loginButton.setVisibility(View.VISIBLE);
@@ -134,7 +133,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     protected void onStart() {
         super.onStart();
 
-        firebaseAuth.addAuthStateListener(firebaseAuthListener);
+        mFirebaseAuth.addAuthStateListener(firebaseAuthListener);
     }
 
     @Override
@@ -150,7 +149,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             handleSignInResult(result);
         }
-        callbackManager.onActivityResult(requestCode, resultCode, data);
+
+        //Pass the activity result back to the Facebook SDK
+        mCallbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
     private void handleSignInResult(GoogleSignInResult result) {
@@ -167,7 +168,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         signInButton.setVisibility(View.GONE);
 
         AuthCredential credential = GoogleAuthProvider.getCredential(signInAccount.getIdToken(), null);
-        firebaseAuth.signInWithCredential(credential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+        mFirebaseAuth.signInWithCredential(credential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
 
@@ -192,7 +193,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         super.onStop();
 
         if (firebaseAuthListener != null) {
-            firebaseAuth.removeAuthStateListener(firebaseAuthListener);
+            mFirebaseAuth.removeAuthStateListener(firebaseAuthListener);
         }
     }
 }

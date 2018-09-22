@@ -38,10 +38,10 @@ public class CreateGroupFragment extends Fragment {
     public CreateGroupFragment() {
     }
 
-    private EditText editNomeGrupo, editDescrGrupo, editInteresses;
+    private EditText editNomeGrupo, editDescrGrupo;
     private TextView participantes;
     private FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference mGroupsDatabaseRef, mUserDatabaseRef;
+    private DatabaseReference mGroupsDatabaseRef, mUserDatabaseRef, mTagsDatabaseRef;
     private Button btCriarGrupo;
     private FirebaseAuth firebaseAuth;
     private FirebaseUser fbUser;
@@ -51,6 +51,10 @@ public class CreateGroupFragment extends Fragment {
     private ChipsInput mChipsInput;
     private List<String> listaCategorias;
     private Spinner spinnerTags;
+    private List<Chip> tagsSugestoes = new ArrayList<>();
+    private List<Chip> tagsSugestoes2;
+    private List<String> tagsStr;
+    private List<Chip> saveTags = new ArrayList<Chip>();
 
     @Nullable
     @Override
@@ -107,22 +111,28 @@ public class CreateGroupFragment extends Fragment {
                     user.setListGroups(map);
                 }else{
                     user.setListGroups(map);
-                    //map = user.getListGroups();
                     map.put(grupo.getUid(), true);
                 }
 
                 HashMap<String, List<Chip>> interesses = new HashMap<String, List<Chip>>();
 
-                    if(mChipsInput.equals("")) {
-                    }else {
-                        List<Chip> lista = (List<Chip>) mChipsInput.getSelectedChipList();
-                        interesses.put(spinnerTags.getSelectedItem().toString(), lista);
-                        if(!spinnerTags.getSelectedItem().equals("Selecione uma categoria"))
+                if(mChipsInput.equals("")) {
+                }else {
+                    List<Chip> lista = (List<Chip>) mChipsInput.getSelectedChipList();
+                    interesses.put(spinnerTags.getSelectedItem().toString(), lista);
+                    if(!spinnerTags.getSelectedItem().equals("Selecione uma categoria"))
                         grupo.setInteresses(interesses);
+
+                    for(int j=0; j<lista.size(); j++){
+                        if(!tagsSugestoes.contains(lista.get(j))){
+                            tagsSugestoes.add(lista.get(j));
+                        }
                     }
+                }
 
                 mGroupsDatabaseRef.child("group").child(grupo.getUid()).setValue(grupo);
                 mUserDatabaseRef.child("user").child(fbUser.getUid()).child("listGroups").setValue(map);
+                addTags();
                 limparCampos();
                 Intent intent = new Intent(getActivity(), InsideGroup.class);
                 intent.putExtra("uid", grupo.getUid());
@@ -132,30 +142,61 @@ public class CreateGroupFragment extends Fragment {
             }
         });
 
+        getTags();
         mChipsInput.addChipsListener(new ChipsInput.ChipsListener() {
-                @Override
-                public void onChipAdded(ChipInterface chip, int newSize) {
-                    // get the list
-                    List<Chip> tagsSelected = (List<Chip>) mChipsInput.getSelectedChipList();
-                }
+            @Override
+            public void onChipAdded(ChipInterface chip, int newSize) {
+                // get the list
+                List<Chip> tagsSelected = (List<Chip>) mChipsInput.getSelectedChipList();
+                saveTags.addAll(tagsSelected);
+            }
 
-                @Override
-                public void onChipRemoved(ChipInterface chip, int newSize) {
-                }
+            @Override
+            public void onChipRemoved(ChipInterface chip, int newSize) {
+            }
 
-                @Override
-                public void onTextChanged(CharSequence text) {
-                    if(text.length()>0){
-                        if(text.charAt(text.length()-1) == ' '){
-                            mChipsInput.addChip(text.toString(), null);
-                            text = "";
-                        }}
-                }
-            });
+            @Override
+            public void onTextChanged(CharSequence text) {
+                if(text.length()>0){
+                    if(text.charAt(text.length()-1) == ' '){
+                        String texto = text.toString();
+                        if(!texto.trim().isEmpty())
+                        mChipsInput.addChip(texto.trim(), null);
+                        text = "";
+                    }}
+            }
+        });
 
         setSpinner();
 
         return rootView;
+    }
+
+    private void addTags() {
+        mTagsDatabaseRef.child("tagsSuggestions").setValue(tagsSugestoes);
+    }
+
+    private void getTags(){
+        tagsSugestoes = new ArrayList<Chip>();
+        mTagsDatabaseRef.child("tagsSuggestions").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snap : dataSnapshot.getChildren()){
+                    Chip chip = snap.getValue(Chip.class);
+                    tagsSugestoes.add(chip);
+                    mChipsInput.setFilterableList(tagsSugestoes);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        if(mChipsInput!=null)
+            mChipsInput.setFilterableList(tagsSugestoes);
     }
 
     private void setSpinner() {
@@ -191,7 +232,8 @@ public class CreateGroupFragment extends Fragment {
         FirebaseApp.initializeApp(getActivity());
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mGroupsDatabaseRef = mFirebaseDatabase.getReference();
-        mUserDatabaseRef =mFirebaseDatabase.getReference();
+        mUserDatabaseRef = mFirebaseDatabase.getReference();
+        mTagsDatabaseRef = mFirebaseDatabase.getReference();
     }
 
     private void getUser(){

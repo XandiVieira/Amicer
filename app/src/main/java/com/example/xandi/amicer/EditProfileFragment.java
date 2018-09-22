@@ -20,6 +20,8 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.xandi.amicer.modelo.Interesse;
 import com.example.xandi.amicer.modelo.User;
+import com.example.xandi.amicer.modelo.Util;
+import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -50,25 +52,17 @@ public class EditProfileFragment extends Fragment implements GoogleApiClient.OnC
     private ImageView photoImageView;
     private TextView nameTextView;
     private EditText editDescr;
-    //private EditText editFrase;
+    private Util util;
+    private User user;
+    private FirebaseUser fbUser = Util.fbUser;
 
     //private List<EditText> editInteresses= new ArrayList<EditText>();
     private List<String> listaCategorias;
     private List<Spinner> spinners = new ArrayList<Spinner>();
-
-    private FirebaseUser fbUser;
-    public User user;
-    private Interesse interesse;
-
-    private DatabaseReference mUserDatabaseRef;
-
-    private GoogleApiClient googleApiClient;
-
-    private FirebaseAuth firebaseAuth;
-    private FirebaseAuth.AuthStateListener firebaseAuthListener;
+    //public User user;
 
     private List<List<Chip>> listaTags = new ArrayList<>();
-    private List<List<Chip>> tagsSugestoes = new ArrayList<>();
+    private List<Chip> tagsSugestoes = new ArrayList<>();
 
     private List<ChipsInput> mChipsInputList;
     private List<String> categories;
@@ -83,68 +77,76 @@ public class EditProfileFragment extends Fragment implements GoogleApiClient.OnC
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_edit_profile, container, false);
 
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-
-        if(googleApiClient == null){
-            googleApiClient = new GoogleApiClient.Builder(getApplicationContext())
-                    .enableAutoManage(getActivity(), this)
-                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                    .build();}
-
-        firebaseAuth = FirebaseAuth.getInstance();
-
-        user = new User();
-
-        startFirebase();
-
+        //Fill the Chip's list with 4 chipsInput
         mChipsInputList = new ArrayList<ChipsInput>();
         mChipsInputList.add((ChipsInput) rootView.findViewById(R.id.chipsInput1));
         mChipsInputList.add((ChipsInput) rootView.findViewById(R.id.chipsInput2));
         mChipsInputList.add((ChipsInput) rootView.findViewById(R.id.chipsInput3));
         mChipsInputList.add((ChipsInput) rootView.findViewById(R.id.chipsInput4));
-        //mChipsInputList.add((ChipsInput) rootView.findViewById(R.id.chipsInput5));
-        //mChipsInputList.add((ChipsInput) rootView.findViewById(R.id.chipsInput6));
-
-        if(mChipsInputList!=null)
-        for(int i=0; i<mChipsInputList.size(); i++){
-            //if(mChipsInputList.get(i)!=null)
-           // mChipsInputList.get(i).setFilterableList(tagsSugestoes.get(i));
-        }
 
         photoImageView = rootView.findViewById(R.id.photoImageView);
         nameTextView = rootView.findViewById(R.id.nameTextView);
         Button btLogout = rootView.findViewById(R.id.btLogout);
         editDescr = rootView.findViewById(R.id.editDescricao);
-       //editFrase = rootView.findViewById(R.id.editFrasePerfil);
 
+        //Set the spinner's list with 4 spinners
         spinners.add((Spinner) rootView.findViewById(R.id.spinner1));
         spinners.add((Spinner) rootView.findViewById(R.id.spinner2));
         spinners.add((Spinner) rootView.findViewById(R.id.spinner3));
         spinners.add((Spinner) rootView.findViewById(R.id.spinner4));
-        //spinners.add((Spinner) rootView.findViewById(R.id.spinner5));
-        //spinners.add((Spinner) rootView.findViewById(R.id.spinner6));
 
-        setSpinner();
+        getUserFromFB();
 
-        Button btUpdate = rootView.findViewById(R.id.btUpdate);
+        //Initialize Firebase Auth
+        Util.mFirebaseAuth = FirebaseAuth.getInstance();
 
-        firebaseAuthListener = new FirebaseAuth.AuthStateListener() {
+        Util.mDatabaseRef.child("tagsSuggestions").addValueEventListener(new ValueEventListener() {
             @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                fbUser = firebaseAuth.getCurrentUser();
-                if (fbUser != null) {
-                    setUserData(fbUser);
-                    for (int i=0; i<mChipsInputList.size(); i++){
-                        //mChipsInputList.set(i, user.getCategoriaTag().get(i).get())
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                tagsSugestoes = new ArrayList<Chip>();
+                    for (DataSnapshot snap : dataSnapshot.getChildren()){
+                        Chip chip = snap.getValue(Chip.class);
+                        tagsSugestoes.add(chip);
+                        for(int i=0; i<mChipsInputList.size(); i++){
+                            mChipsInputList.get(i).setFilterableList(tagsSugestoes);
+                        }
                     }
-                    //listaTags = user.getListaTags();
-                } else {
-                    goLogInScreen();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        listaCategorias = new ArrayList<String>();
+
+        //Fill spinners with categories and set if the user already has it set
+        Util.mDatabaseRef.child("categories").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                listaCategorias.add("Selecione uma categoria");
+                for (DataSnapshot snap : dataSnapshot.getChildren()){
+                    listaCategorias.add(snap.getKey());
+                }
+                for (int i=0; i<spinners.size(); i++){
+                    if(user.getCategorias() != null && user.getCategorias().size() > i)
+                        spinners.get(i).setSelection(4);
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, listaCategorias);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinners.get(i).setAdapter(adapter);
+                    if(user.getCategorias() != null && user.getCategorias().size() > i)
+                        spinners.get(i).setSelection(adapter.getPosition(user.getCategorias().get(i)));
                 }
             }
-        };
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        Button btUpdate = rootView.findViewById(R.id.btUpdate);
 
         for(int i=0; i<mChipsInputList.size(); i++){
             final int finalI = i;
@@ -163,7 +165,9 @@ public class EditProfileFragment extends Fragment implements GoogleApiClient.OnC
                 public void onTextChanged(CharSequence text) {
                     if(text.length()>0){
                         if(text.charAt(text.length()-1) == ' '){
-                            mChipsInputList.get(finalI).addChip(text.toString(), null);
+                            String texto = text.toString();
+                            if(!texto.trim().isEmpty())
+                            mChipsInputList.get(finalI).addChip(texto.trim(), null);
                             text = "";
                         }}
                 }
@@ -175,24 +179,25 @@ public class EditProfileFragment extends Fragment implements GoogleApiClient.OnC
             @Override
             public void onClick(View view) {
 
-                    List<List<Chip>> listChip = new ArrayList<List<Chip>>();
-                    user.setTags(listChip);
+                List<List<Chip>> listChip = new ArrayList<List<Chip>>();
+                //user = new User();
+                user.setTags(listChip);
 
-                    List<String> listCategories = new ArrayList<String>();
-                    user.setCategorias(listCategories);
-
-
-                    for (int i=0; i<mChipsInputList.size(); i++){
-                        if(mChipsInputList.get(i).equals("")) {
-                        }else {
-                            List<Chip> lista = (List<Chip>) mChipsInputList.get(i).getSelectedChipList();
-                            listChip.add(lista);
-
-                            if(!spinners.get(i).getSelectedItem().equals("Selecione uma categoria"))
-                                listCategories.add(spinners.get(i).getSelectedItem().toString());
+                for (int i=0; i<mChipsInputList.size(); i++){
+                    if(mChipsInputList.get(i).equals("")) {
+                    }else {
+                        List<Chip> lista = (List<Chip>) mChipsInputList.get(i).getSelectedChipList();
+                        listChip.add(lista);
+                        for(int j=0; j<lista.size(); j++){
+                            if(!tagsSugestoes.contains(lista.get(j))){
+                                tagsSugestoes.add(lista.get(j));
+                            }
                         }
+                        Util.mDatabaseRef.child("tagsSuggestions").setValue(tagsSugestoes);
+                        if(!spinners.get(i).getSelectedItem().equals("Selecione uma categoria"))
+                            user.getCategorias().set(i, spinners.get(i).getSelectedItem().toString());
+                    }
                 }
-                user.setCategorias(listCategories);
                 user.setTags(listChip);
                 updateProfile();
             }
@@ -208,24 +213,27 @@ public class EditProfileFragment extends Fragment implements GoogleApiClient.OnC
         return rootView;
     }
 
-    private void setSpinner() {
-        listaCategorias = new ArrayList<String>();
-
-        mUserDatabaseRef.child("categories").addValueEventListener(new ValueEventListener() {
+    //Get user from Firebase Database
+    private void getUserFromFB() {
+        Util.mUserDatabaseRef.child(Util.fbUser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                listaCategorias.add("Selecione uma categoria");
-                for (DataSnapshot snap : dataSnapshot.getChildren()){
-                    listaCategorias.add(snap.getKey());
-                }
-                for (int i=0; i<spinners.size(); i++){
-                    if(user.getCategorias()!= null && user.getCategorias().size() > i)
-                    spinners.get(i).setSelection(4);
-                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, listaCategorias);
-                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    spinners.get(i).setAdapter(adapter);
-                    if(user.getCategorias() != null && user.getCategorias().size() > i)
-                    spinners.get(i).setSelection(adapter.getPosition(user.getCategorias().get(i)));
+
+                user = dataSnapshot.getValue(User.class);
+                if(user == null){
+                    user = new User();
+                    user.setNome(Util.fbUser.getDisplayName());
+                    user.setUid(Util.fbUser.getUid());
+                    List<String> listaCategorias = new ArrayList<String>();
+                    listaCategorias.add("Selecione uma categoria");
+                    listaCategorias.add("Selecione uma categoria");
+                    listaCategorias.add("Selecione uma categoria");
+                    listaCategorias.add("Selecione uma categoria");
+                    user.setCategorias(listaCategorias);
+                    user.setFotoPerfil(Util.fbUser.getPhotoUrl().toString());
+                    Util.mUserDatabaseRef.child(Util.fbUser.getUid()).setValue(user);
+                }else{
+                    getUserProfile();
                 }
             }
 
@@ -240,14 +248,14 @@ public class EditProfileFragment extends Fragment implements GoogleApiClient.OnC
     public void onStart() {
         super.onStart();
 
-        firebaseAuth.addAuthStateListener(firebaseAuthListener);
+        Util.mFirebaseAuth.addAuthStateListener(Util.mFirebaseAuthListener);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        googleApiClient.stopAutoManage(getActivity());
-        googleApiClient.disconnect();
+        Util.googleApiClient.stopAutoManage(getActivity());
+        Util.googleApiClient.disconnect();
     }
 
     public void goLogInScreen() {
@@ -265,8 +273,8 @@ public class EditProfileFragment extends Fragment implements GoogleApiClient.OnC
     public void onStop() {
         super.onStop();
 
-        if (firebaseAuthListener != null) {
-            firebaseAuth.removeAuthStateListener(firebaseAuthListener);
+        if (Util.mFirebaseAuthListener != null) {
+            Util.mFirebaseAuth.removeAuthStateListener(Util.mFirebaseAuthListener);
         }
     }
 
@@ -276,33 +284,56 @@ public class EditProfileFragment extends Fragment implements GoogleApiClient.OnC
     }
 
     public void logOut() {
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseAuth.signOut();
-        LoginManager.getInstance().logOut();
 
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        //Logout Facebook
+        Util.mFirebaseAuth.signOut();
+        LoginManager.getInstance().logOut();
+        goLogInScreen();
+
+        /*Util.gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
 
-        if(googleApiClient == null){
-            googleApiClient = new GoogleApiClient.Builder(getApplicationContext())
+        if(Util.googleApiClient == null){
+            Util.googleApiClient = new GoogleApiClient.Builder(getApplicationContext())
                     .enableAutoManage(getActivity(), this)
-                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                    .addApi(Auth.GOOGLE_SIGN_IN_API, Util.gso)
                     .build();}
 
-        Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(new ResultCallback<Status>() {
+        Util.googleApiClient.connect();
+        Auth.GoogleSignInApi.signOut(Util.googleApiClient).setResultCallback(new ResultCallback<Status>() {
             @Override
             public void onResult(@NonNull Status status) {
                 if (status.isSuccess()) {
+                    Util.googleApiClient.disconnect();
                     goLogInScreen();
                 } else {
                     Toast.makeText(getApplicationContext(), R.string.log_out, Toast.LENGTH_SHORT).show();
                 }
             }
-        });
+        });*/
     }
 
-    private void setUserData(FirebaseUser fbUser) {
+    //Get, if there is, spinners and chips data
+    private void getUserProfile(){
+        setBasicInfo();
+            if (user.getCategorias() != null) {
+                for (int i = 0; i < user.getCategorias().size(); i++) {
+                    spinners.get(i).setSelection(listaCategorias.indexOf(user.getCategorias().get(i)));
+                }
+            }
+
+            editDescr.setText(user.getDescricao(), TextView.BufferType.EDITABLE);
+            if(user.getTags() != null){
+                for (int i=0; i<user.getTags().size(); i++){
+                    for (int j=0; j<user.getTags().get(i).size(); j++){
+                        mChipsInputList.get(i).addChip(user.getTags().get(i).get(j).getLabel(), null);
+                    }
+                }}
+    }
+
+    //Set Basic Info -- Age, Name and Photo
+    private void setBasicInfo() {
         if(user.getIdade() > 0){
             if(user.getNome()!=null){
                 nameTextView.setText(user.getNome() + ", " + user.getIdade());
@@ -310,57 +341,10 @@ public class EditProfileFragment extends Fragment implements GoogleApiClient.OnC
                 nameTextView.setText(fbUser.getDisplayName() + ", " + user.getIdade());
             }
         }else{
-            nameTextView.setText(fbUser.getDisplayName());
+            nameTextView.setText(Util.fbUser.getDisplayName());
         }
-        getUser();
-        Glide.with(getApplicationContext()).load(fbUser.getPhotoUrl()).into(photoImageView);
-    }
 
-    private void startFirebase() {
-        FirebaseApp.initializeApp(getActivity());
-        FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mUserDatabaseRef = mFirebaseDatabase.getReference();
-    }
-
-    private void getUser(){
-        mUserDatabaseRef.child("user").child(fbUser.getUid()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                user = dataSnapshot.getValue(User.class);
-
-                if(user == null){
-                    user = new User();
-                    user.setNome(fbUser.getDisplayName());
-                    user.setUid(fbUser.getUid());
-                    mUserDatabaseRef.child("user").child(fbUser.getUid()).setValue(user);
-                }else{
-                   /* for (int i=0; i < editInteresses.size(); i++){
-                        if(user.getInteressesList()!=null && user.getInteressesList().size()>i)
-                            for(int j=0; j<user.getInteressesList().get(i).getTags().size(); j++) {
-                                editInteresses.get(i).setText(editInteresses.get(i) + " " + user.getInteressesList().get(i).getTags().get(j));
-                            }
-                    }*/
-                   if (user.getCategorias() != null)
-                   for(int i=0; i<user.getCategorias().size(); i++){
-                       spinners.get(i).setSelection(listaCategorias.indexOf(user.getCategorias().get(i)));
-                   }
-
-                    editDescr.setText(user.getDescricao(), TextView.BufferType.EDITABLE);
-                    //editFrase.setText(user.getFrase(), TextView.BufferType.EDITABLE);
-                    if(user.getTags() != null)
-                    for (int i=0; i<user.getTags().size(); i++){
-                        for (int j=0; j<user.getTags().get(i).size(); j++){
-                            mChipsInputList.get(i).addChip(user.getTags().get(i).get(j).getLabel(), null);
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        Glide.with(getApplicationContext()).load(user.getFotoPerfil()).into(photoImageView);
     }
 
     @Override
@@ -369,14 +353,12 @@ public class EditProfileFragment extends Fragment implements GoogleApiClient.OnC
     }
 
     private void updateProfile(){
-        //if(!editFrase.getText().toString().equals(""))
-            //user.setFrase(editFrase.getText().toString());
         if(!editDescr.getText().toString().equals(""))
             user.setDescricao(editDescr.getText().toString());
         //user.setFotoPerfil();
         //user.setListaTags(listaTags);
 
-        mUserDatabaseRef.child("user").child(user.getUid()).setValue(user);
+        Util.mUserDatabaseRef.child(Util.fbUser.getUid()).setValue(user);
         Toast.makeText(getApplicationContext(), "Perfil atualizado",Toast.LENGTH_SHORT).show();
         listaTags.clear();
     }

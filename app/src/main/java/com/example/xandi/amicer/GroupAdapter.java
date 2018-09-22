@@ -11,15 +11,13 @@ import android.widget.TextView;
 import com.example.xandi.amicer.modelo.Group;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 public class GroupAdapter extends ArrayAdapter {
 
     private final Context context;
     private final ArrayList<Group> elementos;
+    private List<Chip> chipList;
     private List<TextView> interesses = new ArrayList<TextView>();
 
     public GroupAdapter(@NonNull Context context, ArrayList<Group> elementos) {
@@ -41,17 +39,22 @@ public class GroupAdapter extends ArrayAdapter {
         interesses.add((TextView) rowView.findViewById(R.id.interesse2));
         interesses.add((TextView) rowView.findViewById(R.id.interesse3));
         interesses.add((TextView) rowView.findViewById(R.id.interesse4));
+        interesses.add((TextView) rowView.findViewById(R.id.interesse5));
+        interesses.add((TextView) rowView.findViewById(R.id.interesse6));
+        interesses.add((TextView) rowView.findViewById(R.id.interesse7));
 
         nomeGrupo.setText(elementos.get(position).getNome());
         creatorGroup.setText(elementos.get(position).getCriadorGrupo());
         descrGroup.setText(elementos.get(position).getDescricao());
 
-        for(List<Chip> chip : elementos.get(position).getInteresses().values()){
-            for (int i=0; i<chip.size(); i++){
-                interesses.get(i).setText(chip.get(i).label);
-            }
+        for(List<Chip> chip : elementos.get(position).getInteresses().values()) {
+            chipList = chip;
         }
 
+        for (int i = 0; i < chipList.size(); i++) {
+            interesses.get(i).setText(chipList.get(i).getLabel());
+        }
+        interesses.clear();
         return rowView;
     }
 }

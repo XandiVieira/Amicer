@@ -1,6 +1,5 @@
 package com.example.xandi.amicer.modelo;
 
-import android.media.Image;
 import android.net.Uri;
 
 import com.example.xandi.amicer.Chip;
@@ -17,7 +16,7 @@ public class User {
     private List<List<Chip>> tags;
     private List<String> categorias;
     private HashMap<String, Boolean> listGroups;
-    private Uri fotoPerfil;
+    private String fotoPerfil;
     private String frase;
     private String descricao;
 
@@ -56,11 +55,11 @@ public class User {
         this.categorias = categorias;
     }
 
-    public Uri getFotoPerfil() {
+    public String getFotoPerfil() {
         return fotoPerfil;
     }
 
-    public void setFotoPerfil(Uri fotoPerfil) {
+    public void setFotoPerfil(String fotoPerfil) {
         this.fotoPerfil = fotoPerfil;
     }
 
