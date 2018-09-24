@@ -144,7 +144,7 @@
                         android:id="@+id/chipsInput1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:chip_backgroundColor="@color/colorAccent"
+                        app:chip_backgroundColor="@color/colorPrimaryDark"
                         app:chip_deletable="true"
                         app:chip_detailed_deleteIconColor="@color/colorAccent"
                         app:chip_hasAvatarIcon="false"

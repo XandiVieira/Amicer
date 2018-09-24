@@ -2,21 +2,23 @@ package com.example.xandi.amicer.modelo;
 
 import android.support.annotation.Nullable;
 
+import com.example.xandi.amicer.Chip;
+
 import java.util.List;
 
 public class Interesse {
 
-    List<String> tags;
+    private List<Chip> tags;
     String categoria;
     Boolean ativado;
-    Boolean distanciaAtivada;
-    Boolean idadeAtivada;
+    Boolean distanciaAtivada = false;
+    Boolean idadeAtivada = false;
     int distancia;
     int idade;
 
     public Interesse(){}
 
-    public Interesse(List<String> tags, String categoria, Boolean ativado, Boolean distanciaAtivada, Boolean idadeAtivada, @Nullable int distancia, @Nullable int idade) {
+    public Interesse(List<Chip> tags, String categoria, Boolean ativado, Boolean distanciaAtivada, Boolean idadeAtivada, @Nullable int distancia, @Nullable int idade) {
         this.tags = tags;
         this.categoria = categoria;
         this.ativado = ativado;
@@ -26,16 +28,16 @@ public class Interesse {
         this.idade = idade;
     }
 
-    public Interesse(List<String> tags, String categoria) {
+    public Interesse(List<Chip> tags, String categoria) {
         this.tags = tags;
         this.categoria = categoria;
     }
 
-    public List<String> getTags() {
+    public List<Chip> getTags() {
         return tags;
     }
 
-    public void setTags(List<String> tags) {
+    public void setTags(List<Chip> tags) {
         this.tags = tags;
     }
 

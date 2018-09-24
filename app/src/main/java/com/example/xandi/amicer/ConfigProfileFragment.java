@@ -31,14 +31,6 @@ import java.util.ArrayList;
 
 public class ConfigProfileFragment extends Fragment {
 
-    private TextView interesse;
-    private TextView txtDistancia;
-    private TextView txtIdade;
-    private SeekBar seekBarDistancia;
-    private SeekBar seekBarIdade;
-    private Switch switchDistancia;
-    private Switch switchIdade;
-    private Switch switchAtivado;
     private ListView listViewInteresses;
     private ArrayList<Interesse> listaInteresses = new ArrayList<Interesse>();
     private FirebaseUser fbUser;
@@ -46,9 +38,6 @@ public class ConfigProfileFragment extends Fragment {
     private DatabaseReference mDatabaseReference;
     private FirebaseAuth mFirebaseAuth;
     private ArrayAdapter adapter;
-    private int idade;
-    private int distancia;
-    private Button deleteButton;
 
     public ConfigProfileFragment() {
     }
@@ -63,61 +52,9 @@ public class ConfigProfileFragment extends Fragment {
         fbUser = mFirebaseAuth.getCurrentUser();
         startFirebase();
 
-        deleteButton = itemView.findViewById(R.id.deleteButton);
-        interesse = itemView.findViewById(R.id.interesse);
-        seekBarDistancia = itemView.findViewById(R.id.seekBarDistancia);
-        seekBarIdade = itemView.findViewById(R.id.seekBarIdade);
-        switchDistancia = itemView.findViewById(R.id.switchDistancia);
-        switchIdade = itemView.findViewById(R.id.switchIdade);
-        switchAtivado = itemView.findViewById(R.id.switchAtivado);
         listViewInteresses = rootView.findViewById(R.id.listaInteresses);
-        txtDistancia = itemView.findViewById(R.id.txtDistancia);
-        txtIdade = itemView.findViewById(R.id.txtIdade);
-
-        if(!switchIdade.isChecked()){
-            seekBarIdade.setVisibility(View.GONE);
-        }
-        if(switchDistancia.isChecked()){
-            seekBarDistancia.setVisibility(View.GONE);
-        }
 
         eventoDatabase();
-
-        seekBarDistancia.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                txtDistancia.setText((i+2)+"km");
-                distancia = (i+2);
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
-
-        seekBarIdade.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                txtIdade.setText((i+2));
-                idade = (i+2);
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
 
         return rootView;
     }
@@ -130,7 +67,7 @@ public class ConfigProfileFragment extends Fragment {
 
     private void eventoDatabase() {
         listaInteresses.clear();
-        Query query = mDatabaseReference.child("user").child(fbUser.getUid()).child("interessesList");
+        Query query = mDatabaseReference.child("user").child(fbUser.getUid()).child("categorias");
 
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -139,12 +76,11 @@ public class ConfigProfileFragment extends Fragment {
                 for (DataSnapshot snap : dataSnapshot.getChildren()){
                     Interesse interesse = snap.getValue(Interesse.class);
                         listaInteresses.add(interesse);
-
-                        if (getActivity() != null) {
-                            adapter = new InteresseAdapter(getActivity(), listaInteresses);
-                            listViewInteresses.setAdapter(adapter);
-                        }
                     }
+                if (getActivity() != null) {
+                    adapter = new InteresseAdapter(getActivity(), listaInteresses);
+                    listViewInteresses.setAdapter(adapter);
+                }
             }
 
             @Override

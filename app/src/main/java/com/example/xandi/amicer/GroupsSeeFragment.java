@@ -83,9 +83,10 @@ public class GroupsSeeFragment extends Fragment {
                         @Override
                         public void onDataChange(DataSnapshot dataSnap) {
                             Group group = dataSnap.getValue(Group.class);
+                            if(group!=null)
                             groupList.add(group);
 
-                            if (getActivity() != null) {
+                            if (getActivity() != null && !groupList.isEmpty()) {
                                 adapter = new GroupAdapter(getActivity(), groupList);
                                 listaGrupos.setAdapter(adapter);
                             }

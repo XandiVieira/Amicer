@@ -16,6 +16,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.xandi.amicer.modelo.Group;
+import com.example.xandi.amicer.modelo.Interesse;
 import com.example.xandi.amicer.modelo.User;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
@@ -114,18 +115,26 @@ public class CreateGroupFragment extends Fragment {
                     map.put(grupo.getUid(), true);
                 }
 
-                HashMap<String, List<Chip>> interesses = new HashMap<String, List<Chip>>();
+                Interesse interesse;
 
                 if(mChipsInput.equals("")) {
                 }else {
                     List<Chip> lista = (List<Chip>) mChipsInput.getSelectedChipList();
-                    interesses.put(spinnerTags.getSelectedItem().toString(), lista);
+                    interesse = new Interesse(lista, spinnerTags.getSelectedItem().toString());
                     if(!spinnerTags.getSelectedItem().equals("Selecione uma categoria"))
-                        grupo.setInteresses(interesses);
+                        grupo.setCategoria(interesse);
 
-                    for(int j=0; j<lista.size(); j++){
-                        if(!tagsSugestoes.contains(lista.get(j))){
-                            tagsSugestoes.add(lista.get(j));
+                    List<String> listaSTR = new ArrayList<String>();
+                    List<String> tagsSugestoesSTR = new ArrayList<String>();
+                    for(int i=0; i<lista.size(); i++){
+                        listaSTR.add(lista.get(i).getLabel());
+                    }
+                    for(int i=0; i<tagsSugestoes.size(); i++){
+                        listaSTR.add(tagsSugestoes.get(i).getLabel());
+                    }
+                    for(int j=0; j<listaSTR.size(); j++){
+                        if(!tagsSugestoesSTR.contains(listaSTR.get(j).trim())){
+                            tagsSugestoesSTR.add(listaSTR.get(j).trim());
                         }
                     }
                 }
@@ -139,6 +148,7 @@ public class CreateGroupFragment extends Fragment {
                 intent.putExtra("nome", grupo.getNome());
                 intent.putExtra("userUid", fbUser.getUid());
                 startActivity(intent);
+                getTags();
             }
         });
 
@@ -248,5 +258,10 @@ public class CreateGroupFragment extends Fragment {
 
             }
         });
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
     }
 }

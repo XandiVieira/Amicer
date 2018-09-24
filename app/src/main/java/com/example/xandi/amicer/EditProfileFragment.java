@@ -136,7 +136,7 @@ public class EditProfileFragment extends Fragment implements GoogleApiClient.OnC
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinners.get(i).setAdapter(adapter);
                     if(user.getCategorias() != null && user.getCategorias().size() > i)
-                        spinners.get(i).setSelection(adapter.getPosition(user.getCategorias().get(i)));
+                        spinners.get(i).setSelection(adapter.getPosition(user.getCategorias().get(i).getCategoria()));
                 }
             }
 
@@ -179,13 +179,41 @@ public class EditProfileFragment extends Fragment implements GoogleApiClient.OnC
             @Override
             public void onClick(View view) {
 
-                List<List<Chip>> listChip = new ArrayList<List<Chip>>();
+                List<Chip> listChip;
                 //user = new User();
-                user.setTags(listChip);
+                List<Interesse> interesse = new ArrayList<Interesse>();
+                user.setCategorias(interesse);
+                user.getCategorias();
 
-                for (int i=0; i<mChipsInputList.size(); i++){
+                for(int i=0; i<spinners.size(); i++){
+                    listChip = new ArrayList<Chip>();
+                    if(!spinners.get(i).getSelectedItem().equals("Selecione uma categoria")){
+                        if(mChipsInputList.get(i).getSelectedChipList().size()>0)
+                            for(int j=0; j<mChipsInputList.get(i).getSelectedChipList().size(); j++){
+                                listChip.add(new Chip(mChipsInputList.get(i).getSelectedChipList().get(j).getLabel()));
+                            }
+                            user.getCategorias().add(new Interesse(listChip, spinners.get(i).getSelectedItem().toString()));
+
+                        List<String> listaSTR = new ArrayList<String>();
+                        List<String> tagsSugestoesSTR = new ArrayList<String>();
+                        for(int j=0; j<listChip.size(); j++){
+                            listaSTR.add(listChip.get(j).getLabel());
+                        }
+                        for(int j=0; j<tagsSugestoes.size(); j++){
+                            listaSTR.add(tagsSugestoes.get(j).getLabel());
+                        }
+                        for(int j=0; j<listaSTR.size(); j++){
+                            if(!tagsSugestoesSTR.contains(listaSTR.get(j).trim())){
+                                tagsSugestoesSTR.add(listaSTR.get(j).trim());
+                            }
+                        }
+                    }
+                }
+
+                /*for (int i=0; i<mChipsInputList.size(); i++){
                     if(mChipsInputList.get(i).equals("")) {
                     }else {
+
                         List<Chip> lista = (List<Chip>) mChipsInputList.get(i).getSelectedChipList();
                         listChip.add(lista);
                         for(int j=0; j<lista.size(); j++){
@@ -198,7 +226,7 @@ public class EditProfileFragment extends Fragment implements GoogleApiClient.OnC
                             user.getCategorias().set(i, spinners.get(i).getSelectedItem().toString());
                     }
                 }
-                user.setTags(listChip);
+                user.setTags(listChip);*/
                 updateProfile();
             }
         });
@@ -224,11 +252,12 @@ public class EditProfileFragment extends Fragment implements GoogleApiClient.OnC
                     user = new User();
                     user.setNome(Util.fbUser.getDisplayName());
                     user.setUid(Util.fbUser.getUid());
-                    List<String> listaCategorias = new ArrayList<String>();
-                    listaCategorias.add("Selecione uma categoria");
-                    listaCategorias.add("Selecione uma categoria");
-                    listaCategorias.add("Selecione uma categoria");
-                    listaCategorias.add("Selecione uma categoria");
+                    List<Interesse> listaCategorias = new ArrayList<Interesse>();
+                    List<Chip> chipList = new ArrayList<Chip>();
+                    listaCategorias.add(new Interesse(chipList, "Selecione uma categoria"));
+                    listaCategorias.add(new Interesse(chipList, "Selecione uma categoria"));
+                    listaCategorias.add(new Interesse(chipList, "Selecione uma categoria"));
+                    listaCategorias.add(new Interesse(chipList, "Selecione uma categoria"));
                     user.setCategorias(listaCategorias);
                     user.setFotoPerfil(Util.fbUser.getPhotoUrl().toString());
                     Util.mUserDatabaseRef.child(Util.fbUser.getUid()).setValue(user);
@@ -319,17 +348,20 @@ public class EditProfileFragment extends Fragment implements GoogleApiClient.OnC
         setBasicInfo();
             if (user.getCategorias() != null) {
                 for (int i = 0; i < user.getCategorias().size(); i++) {
-                    spinners.get(i).setSelection(listaCategorias.indexOf(user.getCategorias().get(i)));
+                    spinners.get(i).setSelection(listaCategorias.indexOf(user.getCategorias().get(i).getCategoria()));
+                    for(int j=0; j<user.getCategorias().get(i).getTags().size(); j++){
+                        mChipsInputList.get(i).addChip(user.getCategorias().get(i).getTags().get(j));
+                    }
                 }
             }
 
             editDescr.setText(user.getDescricao(), TextView.BufferType.EDITABLE);
-            if(user.getTags() != null){
+            /*if(user.getTags() != null){
                 for (int i=0; i<user.getTags().size(); i++){
                     for (int j=0; j<user.getTags().get(i).size(); j++){
                         mChipsInputList.get(i).addChip(user.getTags().get(i).get(j).getLabel(), null);
                     }
-                }}
+                }}*/
     }
 
     //Set Basic Info -- Age, Name and Photo

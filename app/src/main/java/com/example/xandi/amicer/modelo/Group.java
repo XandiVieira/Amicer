@@ -11,18 +11,14 @@ public class Group {
     private String nome;
     private String descricao;
     private int numParticipante;
-    private HashMap<String, List<Chip>> interesses;
+    private Interesse categoria;
     private String criadorGrupo;
     private String userUID;
 
-    public void Group(String nome, String descricao, HashMap<String, List<Chip>> interesses){
+    public void Group(String nome, String descricao, Interesse categoria){
         this.nome = nome;
         this.descricao = descricao;
-        this.interesses = interesses;
-    }
-
-    public HashMap<String, List<Chip>> getInteresses() {
-        return interesses;
+        this.categoria = categoria;
     }
 
     public String getUserUID() {
@@ -73,8 +69,12 @@ public class Group {
         this.criadorGrupo = criadorGrupo;
     }
 
-    public void setInteresses(HashMap<String, List<Chip>> interesses) {
-        this.interesses = interesses;
+    public Interesse getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Interesse categoria) {
+        this.categoria = categoria;
     }
 
     @Override

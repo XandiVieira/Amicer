@@ -6,7 +6,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Util {
+
+    public static List<Integer> distancia = new ArrayList<Integer>();
+    public static List<Integer> idade = new ArrayList<Integer>();
 
     public static FirebaseUser fbUser;
     public static DatabaseReference mDatabaseRef;
@@ -26,6 +32,30 @@ public class Util {
         this.googleApiClient = googleApiClient;
         this.mFirebaseAuth = mFirebaseAuth;
         this.mFirebaseAuthListener = mFirebaseAuthListener;
+        distancia.add(0);
+        distancia.add(0);
+        distancia.add(0);
+        distancia.add(0);
+        idade.add(0);
+        idade.add(0);
+        idade.add(0);
+        idade.add(0);
+    }
+
+    public static List<Integer> getDistancia() {
+        return distancia;
+    }
+
+    public static void setDistancia(List<Integer> distancia) {
+        Util.distancia = distancia;
+    }
+
+    public static List<Integer> getIdade() {
+        return idade;
+    }
+
+    public static void setIdade(List<Integer> idade) {
+        Util.idade = idade;
     }
 
     public static FirebaseUser getFbUser() {

@@ -17,7 +17,7 @@ public class GroupAdapter extends ArrayAdapter {
 
     private final Context context;
     private final ArrayList<Group> elementos;
-    private List<Chip> chipList;
+    private List<Chip> chipList = new ArrayList<Chip>();
     private List<TextView> interesses = new ArrayList<TextView>();
 
     public GroupAdapter(@NonNull Context context, ArrayList<Group> elementos) {
@@ -47,14 +47,15 @@ public class GroupAdapter extends ArrayAdapter {
         creatorGroup.setText(elementos.get(position).getCriadorGrupo());
         descrGroup.setText(elementos.get(position).getDescricao());
 
-        for(List<Chip> chip : elementos.get(position).getInteresses().values()) {
-            chipList = chip;
+        for(int i=0; i<elementos.get(position).getCategoria().getTags().size(); i++){
+            chipList.add(elementos.get(position).getCategoria().getTags().get(i));
         }
 
         for (int i = 0; i < chipList.size(); i++) {
             interesses.get(i).setText(chipList.get(i).getLabel());
         }
         interesses.clear();
+        chipList.clear();
         return rowView;
     }
 }

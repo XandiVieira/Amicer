@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@color/colorPrimary">
+    android:background="@color/colorPrimary"
+    android:elevation="12dp">
 
 
     <LinearLayout
@@ -17,18 +18,7 @@
             android:layout_height="wrap_content"
             android:text=""
             android:id="@+id/interesse"
-            android:textSize="30sp"
-            android:layout_marginRight="20dp"
-            android:layout_weight="2"/>
-
-        <Button
-            android:id="@+id/deleteButton"
-            android:layout_width="200dp"
-            android:text="X"
-            android:textColor="@color/white"
-            android:layout_height="match_parent"
-            android:layout_weight="8"
-            android:background="@drawable/baseline_delete_black_18dp"/>
+            android:textSize="30sp" />
 
     </LinearLayout>
 

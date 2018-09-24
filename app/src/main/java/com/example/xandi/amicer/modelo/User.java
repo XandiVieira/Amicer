@@ -13,8 +13,7 @@ public class User {
     private String nome;
     private String email;
     private int idade;
-    private List<List<Chip>> tags;
-    private List<String> categorias;
+    private List<Interesse> categorias;
     private HashMap<String, Boolean> listGroups;
     private String fotoPerfil;
     private String frase;
@@ -39,19 +38,11 @@ public class User {
         this.idade = idade;
     }
 
-    public List<List<Chip>> getTags() {
-        return tags;
-    }
-
-    public void setTags(List<List<Chip>> tags) {
-        this.tags = tags;
-    }
-
-    public List<String> getCategorias() {
+    public List<Interesse> getCategorias() {
         return categorias;
     }
 
-    public void setCategorias(List<String> categorias) {
+    public void setCategorias(List<Interesse> categorias) {
         this.categorias = categorias;
     }
 
