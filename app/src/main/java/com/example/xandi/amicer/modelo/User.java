@@ -1,8 +1,6 @@
 package com.example.xandi.amicer.modelo;
 
-import android.net.Uri;
-
-import com.example.xandi.amicer.Chip;
+import com.example.xandi.amicer.Localizacao;
 
 import java.util.HashMap;
 import java.util.List;
@@ -18,16 +16,33 @@ public class User {
     private String fotoPerfil;
     private String frase;
     private String descricao;
+    private Localizacao localizacao;
 
     public User(){
     }
 
-    public HashMap<String, Boolean> getListGroups() {
-        return listGroups;
+    public String getUid() {
+        return uid;
     }
 
-    public void setListGroups(HashMap<String, Boolean> listGroups) {
-        this.listGroups = listGroups;
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public int getIdade() {
@@ -44,6 +59,14 @@ public class User {
 
     public void setCategorias(List<Interesse> categorias) {
         this.categorias = categorias;
+    }
+
+    public HashMap<String, Boolean> getListGroups() {
+        return listGroups;
+    }
+
+    public void setListGroups(HashMap<String, Boolean> listGroups) {
+        this.listGroups = listGroups;
     }
 
     public String getFotoPerfil() {
@@ -70,27 +93,11 @@ public class User {
         this.descricao = descricao;
     }
 
-    public String getUid() {
-        return uid;
+    public Localizacao getLocalizacao() {
+        return localizacao;
     }
 
-    public void setUid(String uid) {
-        this.uid = uid;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public void setLocalizacao(Localizacao localizacao) {
+        this.localizacao = localizacao;
     }
 }

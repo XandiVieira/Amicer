@@ -3,6 +3,7 @@ package com.example.xandi.amicer.modelo;
 import android.support.annotation.Nullable;
 
 import com.example.xandi.amicer.Chip;
+import com.example.xandi.amicer.Localizacao;
 
 import java.util.List;
 
@@ -13,8 +14,21 @@ public class Interesse {
     Boolean ativado;
     Boolean distanciaAtivada = false;
     Boolean idadeAtivada = false;
-    int distancia;
+    int distanciaMax;
     int idade;
+    int idadeFinal;
+    Localizacao distancia;
+
+    public Interesse(List<Chip> tags, String categoria, Boolean ativado, Boolean distanciaAtivada, Boolean idadeAtivada, int distancia, int idade, int idadeFinal) {
+        this.tags = tags;
+        this.categoria = categoria;
+        this.ativado = ativado;
+        this.distanciaAtivada = distanciaAtivada;
+        this.idadeAtivada = idadeAtivada;
+        this.distanciaMax = distancia;
+        this.idade = idade;
+        this.idadeFinal = idadeFinal;
+    }
 
     public Interesse(){}
 
@@ -24,13 +38,19 @@ public class Interesse {
         this.ativado = ativado;
         this.distanciaAtivada = distanciaAtivada;
         this.idadeAtivada = idadeAtivada;
-        this.distancia = distancia;
+        this.distanciaMax = distancia;
         this.idade = idade;
     }
 
     public Interesse(List<Chip> tags, String categoria) {
         this.tags = tags;
         this.categoria = categoria;
+    }
+
+    public Interesse(List<Chip> tags, String categoria, Localizacao distancia) {
+        this.tags = tags;
+        this.categoria = categoria;
+        this.distancia = distancia;
     }
 
     public List<Chip> getTags() {
@@ -73,11 +93,19 @@ public class Interesse {
         this.idadeAtivada = idadeAtivada;
     }
 
-    public int getDistancia() {
+    public int getDistanciaMax() {
+        return distanciaMax;
+    }
+
+    public void setDistanciaMax(int distanciaMax) {
+        this.distanciaMax = distanciaMax;
+    }
+
+    public Localizacao getDistancia() {
         return distancia;
     }
 
-    public void setDistancia(int distancia) {
+    public void setDistancia(Localizacao distancia) {
         this.distancia = distancia;
     }
 
@@ -87,5 +115,13 @@ public class Interesse {
 
     public void setIdade(int idade) {
         this.idade = idade;
+    }
+
+    public int getIdadeFinal() {
+        return idadeFinal;
+    }
+
+    public void setIdadeFinal(int idadeFinal) {
+        this.idadeFinal = idadeFinal;
     }
 }

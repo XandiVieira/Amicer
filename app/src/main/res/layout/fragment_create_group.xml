@@ -1,20 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ScrollView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:fitsSystemWindows="true">
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:elevation="12dp"
+            android:layout_margin="10dp">
 
             <TextView
                 android:id="@+id/txtConfig"
+                android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
@@ -25,67 +30,42 @@
                 app:fontFamily="@font/quattrocento" />
 
             <EditText
-                android:id="@+id/editNomeGrupo"
-                android:layout_width="200dp"
-                android:layout_height="25dp"
-                android:layout_alignEnd="@+id/txtConfig"
-                android:layout_alignRight="@+id/txtConfig"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="39dp"
-                android:layout_marginEnd="-28dp"
-                android:layout_marginRight="-28dp"
-                android:background="@color/white"
-                android:ems="10"
                 android:focusable="true"
-                android:focusableInTouchMode="true"
+                android:background="@color/contraste"
+                android:layout_gravity="center"
+                android:id="@+id/editNomeGrupo"
+                android:layout_width="250dp"
+                android:layout_height="25dp"
+                android:layout_marginTop="5dp"
                 android:hint="CookNow"
                 android:inputType="text" />
 
             <TextView
                 android:id="@+id/txtDescrGrupo"
+                android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignStart="@+id/txtConfig"
-                android:layout_alignLeft="@+id/txtConfig"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginStart="29dp"
-                android:layout_marginLeft="29dp"
-                android:layout_marginTop="80dp"
+                android:layout_marginTop="25dp"
                 android:text="Descrição"
                 android:textSize="20dp"
                 app:fontFamily="@font/quattrocento" />
 
             <EditText
+                android:background="@color/contraste"
+                android:layout_gravity="center"
                 android:id="@+id/editDescrGrupo"
-                android:layout_width="200dp"
+                android:layout_width="250dp"
                 android:layout_height="65dp"
-                android:layout_alignEnd="@+id/txtDescrGrupo"
-                android:layout_alignRight="@+id/txtInteresses"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="112dp"
-                android:layout_marginEnd="-57dp"
-                android:layout_marginRight="-37dp"
-                android:background="@color/white"
-                android:ems="10"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
+                android:layout_marginTop="5dp"
                 android:hint="Grupos para compartilhar receitas"
                 android:inputType="text" />
 
             <TextView
                 android:id="@+id/txtNumParticipantes"
+                android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignEnd="@+id/txtConfig"
-                android:layout_alignRight="@+id/txtConfig"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="188dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
+                android:layout_marginTop="25dp"
                 android:text="Participantes"
                 android:textSize="20dp"
                 app:fontFamily="@font/quattrocento" />
@@ -95,8 +75,8 @@
                 android:id="@+id/seekBar"
                 android:layout_width="150dp"
                 android:layout_height="20dp"
-                android:layout_below="@+id/txtNumParticipantes"
-                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
                 android:background="@drawable/rounded_rect_bg"
                 android:max="10"
                 android:progress="1" />
@@ -105,32 +85,24 @@
                 android:id="@+id/progresso"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/seekBar"
-                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
                 android:text="2"
                 android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/interesses"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="25dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/progresso"
-                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
                 android:text="Interesses"
                 android:textSize="20dp"
                 app:fontFamily="@font/quattrocento"/>
 
-            <LinearLayout
-                android:layout_below="@+id/interesses"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:id="@+id/interessesLayout">
-
                 <Spinner
+                    android:background="@color/contraste"
                     android:layout_marginTop="3dp"
+                    android:layout_margin="5dp"
                     android:id="@+id/spinner1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
@@ -138,10 +110,14 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white">
+                    android:background="@color/white"
+                    android:layout_margin="5dp">
 
                     <com.pchmn.materialchips.ChipsInput
+                        android:focusable="false"
+                        android:background="@color/contraste"
                         android:id="@+id/chipsInput1"
+                        android:elevation="3dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:chip_backgroundColor="@color/colorPrimaryDark"
@@ -149,24 +125,23 @@
                         app:chip_detailed_deleteIconColor="@color/colorAccent"
                         app:chip_hasAvatarIcon="false"
                         app:hint="#"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
                         app:textColor="@color/black" />
                 </LinearLayout>
 
                 <Button
                     android:id="@+id/button3"
                     android:layout_gravity="center"
+                    android:layout_margin="5dp"
                     android:layout_below="@+id/interessesLayout"
                     android:layout_width="70dp"
                     android:layout_height="35dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="164dp"
                     android:background="@color/colorPrimary"
                     android:text="Criar" />
 
             </LinearLayout>
-
-        </RelativeLayout>
 
     </ScrollView>
 

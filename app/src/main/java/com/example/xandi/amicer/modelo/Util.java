@@ -23,8 +23,10 @@ public class Util {
     public static FirebaseAuth mFirebaseAuth;
     public static FirebaseAuth.AuthStateListener mFirebaseAuthListener;
     public static GoogleSignInOptions gso;
+    public static double longitude;
+    public static double latitude;
 
-    public Util(GoogleSignInOptions gso, FirebaseUser fbUser, DatabaseReference mDatabaseRef, DatabaseReference mUserDatabaseRef, GoogleApiClient googleApiClient, FirebaseAuth mFirebaseAuth, FirebaseAuth.AuthStateListener mFirebaseAuthListener) {
+    public Util(GoogleSignInOptions gso, FirebaseUser fbUser, DatabaseReference mDatabaseRef, DatabaseReference mUserDatabaseRef, GoogleApiClient googleApiClient, FirebaseAuth mFirebaseAuth, FirebaseAuth.AuthStateListener mFirebaseAuthListener, double latitude, double longitude) {
         this.gso = gso;
         this.fbUser = fbUser;
         this.mDatabaseRef = mDatabaseRef;
@@ -40,6 +42,8 @@ public class Util {
         idade.add(0);
         idade.add(0);
         idade.add(0);
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public static List<Integer> getDistancia() {
@@ -112,5 +116,21 @@ public class Util {
 
     public static void setGso(GoogleSignInOptions gso) {
         Util.gso = gso;
+    }
+
+    public static double getLongitude() {
+        return longitude;
+    }
+
+    public static void setLongitude(double longitude) {
+        Util.longitude = longitude;
+    }
+
+    public static double getLatitude() {
+        return latitude;
+    }
+
+    public static void setLatitude(double latitude) {
+        Util.latitude = latitude;
     }
 }

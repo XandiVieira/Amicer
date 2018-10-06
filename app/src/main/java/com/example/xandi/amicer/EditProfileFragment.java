@@ -21,51 +21,37 @@ import com.bumptech.glide.Glide;
 import com.example.xandi.amicer.modelo.Interesse;
 import com.example.xandi.amicer.modelo.User;
 import com.example.xandi.amicer.modelo.Util;
-import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.pchmn.materialchips.ChipsInput;
 import com.pchmn.materialchips.model.ChipInterface;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class EditProfileFragment extends Fragment implements GoogleApiClient.OnConnectionFailedListener {
 
+    //Screen elements
     private ImageView photoImageView;
     private TextView nameTextView;
     private EditText editDescr;
-    private Util util;
-    private User user;
-    private FirebaseUser fbUser = Util.fbUser;
-
-    //private List<EditText> editInteresses= new ArrayList<EditText>();
-    private List<String> listaCategorias;
     private List<Spinner> spinners = new ArrayList<Spinner>();
-    //public User user;
-
-    private List<List<Chip>> listaTags = new ArrayList<>();
     private List<Chip> tagsSugestoes = new ArrayList<>();
-
     private List<ChipsInput> mChipsInputList;
-    private List<String> categories;
+
+    private User user;
+    private List<List<Chip>> listaTags = new ArrayList<>();
+    private List<String> listaCategorias;
+
+    private FirebaseUser fbUser = Util.fbUser;
 
     @Override
     public void onAttach(final Activity activity) {
@@ -79,21 +65,22 @@ public class EditProfileFragment extends Fragment implements GoogleApiClient.OnC
 
         //Fill the Chip's list with 4 chipsInput
         mChipsInputList = new ArrayList<ChipsInput>();
-        mChipsInputList.add((ChipsInput) rootView.findViewById(R.id.chipsInput1));
-        mChipsInputList.add((ChipsInput) rootView.findViewById(R.id.chipsInput2));
-        mChipsInputList.add((ChipsInput) rootView.findViewById(R.id.chipsInput3));
-        mChipsInputList.add((ChipsInput) rootView.findViewById(R.id.chipsInput4));
+        mChipsInputList.add(rootView.findViewById(R.id.chipsInput1));
+        mChipsInputList.add(rootView.findViewById(R.id.chipsInput2));
+        mChipsInputList.add(rootView.findViewById(R.id.chipsInput3));
+        mChipsInputList.add(rootView.findViewById(R.id.chipsInput4));
 
+        //Setting elements
         photoImageView = rootView.findViewById(R.id.photoImageView);
         nameTextView = rootView.findViewById(R.id.nameTextView);
         Button btLogout = rootView.findViewById(R.id.btLogout);
         editDescr = rootView.findViewById(R.id.editDescricao);
 
         //Set the spinner's list with 4 spinners
-        spinners.add((Spinner) rootView.findViewById(R.id.spinner1));
-        spinners.add((Spinner) rootView.findViewById(R.id.spinner2));
-        spinners.add((Spinner) rootView.findViewById(R.id.spinner3));
-        spinners.add((Spinner) rootView.findViewById(R.id.spinner4));
+        spinners.add(rootView.findViewById(R.id.spinner1));
+        spinners.add(rootView.findViewById(R.id.spinner2));
+        spinners.add(rootView.findViewById(R.id.spinner3));
+        spinners.add(rootView.findViewById(R.id.spinner4));
 
         getUserFromFB();
 
@@ -146,15 +133,13 @@ public class EditProfileFragment extends Fragment implements GoogleApiClient.OnC
             }
         });
 
-        Button btUpdate = rootView.findViewById(R.id.btUpdate);
-
+        //Handle input chips
         for(int i=0; i<mChipsInputList.size(); i++){
             final int finalI = i;
             mChipsInputList.get(i).addChipsListener(new ChipsInput.ChipsListener() {
                 @Override
                 public void onChipAdded(ChipInterface chip, int newSize) {
-                    // get the list
-                    List<Chip> tagsSelected = (List<Chip>) mChipsInputList.get(finalI).getSelectedChipList();
+
                 }
 
                 @Override
@@ -167,13 +152,15 @@ public class EditProfileFragment extends Fragment implements GoogleApiClient.OnC
                         if(text.charAt(text.length()-1) == ' '){
                             String texto = text.toString();
                             if(!texto.trim().isEmpty())
-                            mChipsInputList.get(finalI).addChip(texto.trim(), null);
+                                mChipsInputList.get(finalI).addChip(texto.trim(), null);
                             text = "";
                         }}
                 }
             });
         }
 
+
+        Button btUpdate = rootView.findViewById(R.id.btUpdate);
 
         btUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -183,50 +170,40 @@ public class EditProfileFragment extends Fragment implements GoogleApiClient.OnC
                 //user = new User();
                 List<Interesse> interesse = new ArrayList<Interesse>();
                 user.setCategorias(interesse);
-                user.getCategorias();
 
+                //Adding tags Suggestions to a helping String list
+                List<String> tagsSugestoesSTR = new ArrayList<String>();
+                for(int i=0; i<tagsSugestoes.size(); i++){
+                    tagsSugestoesSTR.add(tagsSugestoes.get(i).getLabel().trim());
+                }
+
+                //Handle chips and spinners by each spinner
                 for(int i=0; i<spinners.size(); i++){
                     listChip = new ArrayList<Chip>();
                     if(!spinners.get(i).getSelectedItem().equals("Selecione uma categoria")){
-                        if(mChipsInputList.get(i).getSelectedChipList().size()>0)
+                        if(mChipsInputList.get(i).getSelectedChipList().size()>0 && mChipsInputList.get(i) !=null)
                             for(int j=0; j<mChipsInputList.get(i).getSelectedChipList().size(); j++){
                                 listChip.add(new Chip(mChipsInputList.get(i).getSelectedChipList().get(j).getLabel()));
                             }
                             user.getCategorias().add(new Interesse(listChip, spinners.get(i).getSelectedItem().toString()));
 
                         List<String> listaSTR = new ArrayList<String>();
-                        List<String> tagsSugestoesSTR = new ArrayList<String>();
+                        //Add Chips texts to helping String list
                         for(int j=0; j<listChip.size(); j++){
-                            listaSTR.add(listChip.get(j).getLabel());
+                            listaSTR.add(listChip.get(j).getLabel().trim());
                         }
-                        for(int j=0; j<tagsSugestoes.size(); j++){
-                            listaSTR.add(tagsSugestoes.get(j).getLabel());
-                        }
+                        //Verify if suggestion is already on database (if it's not then add)
                         for(int j=0; j<listaSTR.size(); j++){
                             if(!tagsSugestoesSTR.contains(listaSTR.get(j).trim())){
-                                tagsSugestoesSTR.add(listaSTR.get(j).trim());
+                                tagsSugestoes.add(listChip.get(j));
                             }
                         }
                     }
+
                 }
 
-                /*for (int i=0; i<mChipsInputList.size(); i++){
-                    if(mChipsInputList.get(i).equals("")) {
-                    }else {
+                Util.mDatabaseRef.child("tagsSuggestions").setValue(tagsSugestoes);
 
-                        List<Chip> lista = (List<Chip>) mChipsInputList.get(i).getSelectedChipList();
-                        listChip.add(lista);
-                        for(int j=0; j<lista.size(); j++){
-                            if(!tagsSugestoes.contains(lista.get(j))){
-                                tagsSugestoes.add(lista.get(j));
-                            }
-                        }
-                        Util.mDatabaseRef.child("tagsSuggestions").setValue(tagsSugestoes);
-                        if(!spinners.get(i).getSelectedItem().equals("Selecione uma categoria"))
-                            user.getCategorias().set(i, spinners.get(i).getSelectedItem().toString());
-                    }
-                }
-                user.setTags(listChip);*/
                 updateProfile();
             }
         });
@@ -246,12 +223,13 @@ public class EditProfileFragment extends Fragment implements GoogleApiClient.OnC
         Util.mUserDatabaseRef.child(Util.fbUser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
                 user = dataSnapshot.getValue(User.class);
                 if(user == null){
                     user = new User();
                     user.setNome(Util.fbUser.getDisplayName());
                     user.setUid(Util.fbUser.getUid());
+                    Localizacao localizacao = new Localizacao(Util.getLatitude(), Util.getLongitude());
+                    user.setLocalizacao(localizacao);
                     List<Interesse> listaCategorias = new ArrayList<Interesse>();
                     List<Chip> chipList = new ArrayList<Chip>();
                     listaCategorias.add(new Interesse(chipList, "Selecione uma categoria"));
@@ -346,9 +324,12 @@ public class EditProfileFragment extends Fragment implements GoogleApiClient.OnC
     //Get, if there is, spinners and chips data
     private void getUserProfile(){
         setBasicInfo();
+        Localizacao localizacao = new Localizacao(Util.getLatitude(), Util.getLongitude());
+        Util.getmUserDatabaseRef().child(Util.getFbUser().getUid()).child("localizacao").setValue(localizacao);
             if (user.getCategorias() != null) {
                 for (int i = 0; i < user.getCategorias().size(); i++) {
                     spinners.get(i).setSelection(listaCategorias.indexOf(user.getCategorias().get(i).getCategoria()));
+                    if(user.getCategorias().get(i).getTags()!=null)
                     for(int j=0; j<user.getCategorias().get(i).getTags().size(); j++){
                         mChipsInputList.get(i).addChip(user.getCategorias().get(i).getTags().get(j));
                     }

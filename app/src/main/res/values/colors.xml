@@ -9,4 +9,5 @@
     <color name="vermelho">#E65100</color>
     <color name="verde">#2E7D32</color>
     <color name="colorTitle">#ffffff</color>
+    <color name="contraste">#EEEEEE</color>
 </resources>

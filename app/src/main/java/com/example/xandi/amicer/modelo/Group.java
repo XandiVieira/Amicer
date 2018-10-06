@@ -1,9 +1,6 @@
 package com.example.xandi.amicer.modelo;
 
-import com.example.xandi.amicer.Chip;
-
-import java.util.HashMap;
-import java.util.List;
+import com.example.xandi.amicer.Localizacao;
 
 public class Group {
 
@@ -14,6 +11,7 @@ public class Group {
     private Interesse categoria;
     private String criadorGrupo;
     private String userUID;
+    private Localizacao localizacao;
 
     public void Group(String nome, String descricao, Interesse categoria){
         this.nome = nome;
@@ -80,5 +78,13 @@ public class Group {
     @Override
     public String toString() {
         return nome;
+    }
+
+    public Localizacao getLocalizacao() {
+        return localizacao;
+    }
+
+    public void setLocalizacao(Localizacao localizacao) {
+        this.localizacao = localizacao;
     }
 }

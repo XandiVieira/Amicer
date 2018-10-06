@@ -52,7 +52,7 @@ public class ConfigProfileFragment extends Fragment {
         fbUser = mFirebaseAuth.getCurrentUser();
         startFirebase();
 
-        listViewInteresses = rootView.findViewById(R.id.listaInteresses);
+        listViewInteresses = rootView.findViewById(R.id.listaInteresseUser);
 
         eventoDatabase();
 

@@ -64,7 +64,7 @@ public class InteresseAdapter extends ArrayAdapter<Interesse> {
                 txtDistancia = view.findViewById(R.id.txtDistancia);
                 txtIdade = view.findViewById(R.id.txtIdade);
                 posicao = position;
-                seekBarDistancia.setProgress(interesses.get(posicao).getDistancia());
+                seekBarDistancia.setProgress(interesses.get(posicao).getDistanciaMax());
                 seekBarIdade.setProgress(interesses.get(posicao).getIdade());
                 if(interesses.get(posicao).getDistanciaAtivada()){
                     switchDistancia.setChecked(true);

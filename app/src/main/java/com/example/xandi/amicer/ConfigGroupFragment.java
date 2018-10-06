@@ -7,8 +7,28 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import com.example.xandi.amicer.modelo.Group;
+import com.example.xandi.amicer.modelo.Interesse;
+import com.example.xandi.amicer.modelo.Util;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 public class ConfigGroupFragment extends Fragment {
+
+    private ArrayList<Group> listaInteresses = new ArrayList<Group>();
+    private ArrayAdapter adapter;
+    private ListView listViewInteresseGroup;
 
     public ConfigGroupFragment() {
     }
@@ -18,6 +38,46 @@ public class ConfigGroupFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_config_group, container, false);
+        listViewInteresseGroup = rootView.findViewById(R.id.listaInteressesGroup);
+
+        Query query = Util.mDatabaseRef.child("user").child(Util.fbUser.getUid()).child("listGroups");
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                listaInteresses.clear();
+                for (DataSnapshot snap : dataSnapshot.getChildren()){
+                    String groupUID = snap.getKey();
+                    Util.mDatabaseRef.child("group").child(groupUID).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnap) {
+                            Group group = dataSnap.getValue(Group.class);
+                            if(group!=null)
+                                listaInteresses.add(group);
+                            if (getActivity() != null && !listaInteresses.isEmpty()) {
+                                adapter = new InteresseGroupAdapter(getActivity(), listaInteresses);
+                                listViewInteresseGroup.setAdapter(adapter);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError error) {
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
         return rootView;
+    }
+
+    private void eventoDatabase() {
+
     }
 }

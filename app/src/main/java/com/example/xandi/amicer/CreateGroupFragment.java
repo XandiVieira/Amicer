@@ -14,10 +14,12 @@ import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.xandi.amicer.modelo.Group;
 import com.example.xandi.amicer.modelo.Interesse;
 import com.example.xandi.amicer.modelo.User;
+import com.example.xandi.amicer.modelo.Util;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -39,22 +41,27 @@ public class CreateGroupFragment extends Fragment {
     public CreateGroupFragment() {
     }
 
+    //Screen elements
     private EditText editNomeGrupo, editDescrGrupo;
-    private TextView participantes;
+    private TextView participantesTV;
+    private Button btCriarGrupo;
+    private Spinner spinnerTags;
+    private ChipsInput mChipsInput;
+    private SeekBar seekBarParticipantes;
+
+    //Database Settings
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mGroupsDatabaseRef, mUserDatabaseRef, mTagsDatabaseRef;
-    private Button btCriarGrupo;
     private FirebaseAuth firebaseAuth;
     private FirebaseUser fbUser;
+
     private User user;
     private int numParticpantes = 2;
-    private List<List<Chip>> listaTags = new ArrayList<>();
-    private ChipsInput mChipsInput;
+
     private List<String> listaCategorias;
-    private Spinner spinnerTags;
+
+    //Tags settings
     private List<Chip> tagsSugestoes = new ArrayList<>();
-    private List<Chip> tagsSugestoes2;
-    private List<String> tagsStr;
     private List<Chip> saveTags = new ArrayList<Chip>();
 
     @Nullable
@@ -63,18 +70,20 @@ public class CreateGroupFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_create_group, container, false);
 
-        participantes = (TextView) rootView.findViewById(R.id.progresso);
-        editNomeGrupo = (EditText) rootView.findViewById(R.id.editNomeGrupo);
-        editDescrGrupo = (EditText) rootView.findViewById(R.id.editDescrGrupo);
-        btCriarGrupo = (Button) rootView.findViewById(R.id.button3);
-        SeekBar seekBar = (SeekBar) rootView.findViewById(R.id.seekBar);
-        spinnerTags = (Spinner) rootView.findViewById(R.id.spinner1);
-        mChipsInput = (ChipsInput) rootView.findViewById(R.id.chipsInput1);
+        //Setting elements
+        participantesTV = rootView.findViewById(R.id.progresso);
+        editNomeGrupo = rootView.findViewById(R.id.editNomeGrupo);
+        editDescrGrupo = rootView.findViewById(R.id.editDescrGrupo);
+        btCriarGrupo = rootView.findViewById(R.id.button3);
+        seekBarParticipantes = rootView.findViewById(R.id.seekBar);
+        spinnerTags = rootView.findViewById(R.id.spinner1);
+        mChipsInput = rootView.findViewById(R.id.chipsInput1);
 
-        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        //Handling Number of participants seekbar
+        seekBarParticipantes.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                participantes.setText(""+(i+2));
+                participantesTV.setText(""+(i+2));
                 numParticpantes = (i+2);
             }
 
@@ -89,70 +98,16 @@ public class CreateGroupFragment extends Fragment {
             }
         });
 
+        //initialize Firebase and get fb User
         firebaseAuth = FirebaseAuth.getInstance();
         fbUser = firebaseAuth.getCurrentUser();
 
         startFirebase();
         getUser();
 
-        btCriarGrupo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Group grupo = new Group();
-                grupo.setUid(UUID.randomUUID().toString());
-                grupo.setCriadorGrupo(fbUser.getDisplayName());
-                grupo.setDescricao(editDescrGrupo.getText().toString());
-                //grupo.setInteresses(listaInteresses);
-                grupo.setNome(editNomeGrupo.getText().toString());
-                grupo.setNumParticipante(numParticpantes);
-                HashMap<String, Boolean> map = new HashMap<>();
-                if(user.getListGroups()!=null){
-                    map = user.getListGroups();
-                    map.put(grupo.getUid(), true);
-                    user.setListGroups(map);
-                }else{
-                    user.setListGroups(map);
-                    map.put(grupo.getUid(), true);
-                }
-
-                Interesse interesse;
-
-                if(mChipsInput.equals("")) {
-                }else {
-                    List<Chip> lista = (List<Chip>) mChipsInput.getSelectedChipList();
-                    interesse = new Interesse(lista, spinnerTags.getSelectedItem().toString());
-                    if(!spinnerTags.getSelectedItem().equals("Selecione uma categoria"))
-                        grupo.setCategoria(interesse);
-
-                    List<String> listaSTR = new ArrayList<String>();
-                    List<String> tagsSugestoesSTR = new ArrayList<String>();
-                    for(int i=0; i<lista.size(); i++){
-                        listaSTR.add(lista.get(i).getLabel());
-                    }
-                    for(int i=0; i<tagsSugestoes.size(); i++){
-                        listaSTR.add(tagsSugestoes.get(i).getLabel());
-                    }
-                    for(int j=0; j<listaSTR.size(); j++){
-                        if(!tagsSugestoesSTR.contains(listaSTR.get(j).trim())){
-                            tagsSugestoesSTR.add(listaSTR.get(j).trim());
-                        }
-                    }
-                }
-
-                mGroupsDatabaseRef.child("group").child(grupo.getUid()).setValue(grupo);
-                mUserDatabaseRef.child("user").child(fbUser.getUid()).child("listGroups").setValue(map);
-                addTags();
-                limparCampos();
-                Intent intent = new Intent(getActivity(), InsideGroup.class);
-                intent.putExtra("uid", grupo.getUid());
-                intent.putExtra("nome", grupo.getNome());
-                intent.putExtra("userUid", fbUser.getUid());
-                startActivity(intent);
-                getTags();
-            }
-        });
-
+        //get TagsSuggestions from database
         getTags();
+        //Handle input chips
         mChipsInput.addChipsListener(new ChipsInput.ChipsListener() {
             @Override
             public void onChipAdded(ChipInterface chip, int newSize) {
@@ -171,15 +126,109 @@ public class CreateGroupFragment extends Fragment {
                     if(text.charAt(text.length()-1) == ' '){
                         String texto = text.toString();
                         if(!texto.trim().isEmpty())
-                        mChipsInput.addChip(texto.trim(), null);
+                            mChipsInput.addChip(texto.trim(), null);
                         text = "";
                     }}
             }
         });
 
+        //get Spinner itens from db
         setSpinner();
 
+        btCriarGrupo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Verify if the inputs are valid
+                if(valida()){
+                Group grupo = new Group();
+                //Setting group Info
+                grupo.setUid(UUID.randomUUID().toString());
+                grupo.setCriadorGrupo(fbUser.getDisplayName());
+                grupo.setDescricao(editDescrGrupo.getText().toString());
+                grupo.setNome(editNomeGrupo.getText().toString());
+                grupo.setNumParticipante(numParticpantes);
+                //Add created group to the userGroups List
+                HashMap<String, Boolean> mapUserGroups = new HashMap<>();
+                if(user.getListGroups()!=null){
+                    mapUserGroups = user.getListGroups();
+                    mapUserGroups.put(grupo.getUid(), true);
+                    user.setListGroups(mapUserGroups);
+                }else{
+                    user.setListGroups(mapUserGroups);
+                    mapUserGroups.put(grupo.getUid(), true);
+                }
+
+                    //Get Chips
+                    List<com.pchmn.materialchips.model.Chip> listaDeChips = (List<com.pchmn.materialchips.model.Chip>) mChipsInput.getSelectedChipList();
+                List<Chip> chipList = new ArrayList<Chip>();
+                for(int i=0; i<listaDeChips.size(); i++){
+                    chipList.add(new Chip(listaDeChips.get(i).getLabel()));
+                }
+                //get Group's owner Localization
+                    Localizacao localizacao = new Localizacao(Util.latitude, Util.getLongitude());
+                    Interesse interesse = new Interesse(chipList, spinnerTags.getSelectedItem().toString(), localizacao);
+                    // Group Interests
+                    grupo.setCategoria(interesse);
+
+                    //Adding tags Suggestions to a helping String list
+                    List<String> tagsSugestoesSTR = new ArrayList<String>();
+                    for(int i=0; i<tagsSugestoes.size(); i++){
+                        tagsSugestoesSTR.add(tagsSugestoes.get(i).getLabel().trim());
+                    }
+
+                    //add chips to the tagsSuggestions list (if not repeated)
+                    for(int i=0; i<chipList.size(); i++){
+                        if(!tagsSugestoesSTR.contains(chipList.get(i).getLabel().trim())){
+                            tagsSugestoes.add(chipList.get(i));
+                        }
+                    }
+
+                    //save Group
+                mGroupsDatabaseRef.child("group").child(grupo.getUid()).setValue(grupo);
+                    //save User's groupList
+                mUserDatabaseRef.child("user").child(fbUser.getUid()).child("listGroups").setValue(mapUserGroups);
+                //Save tags Suggestions
+                addTags();
+                limparCampos();
+                //Open New Group created screen
+                Intent intent = new Intent(getActivity(), InsideGroup.class);
+                intent.putExtra("uid", grupo.getUid());
+                intent.putExtra("nome", grupo.getNome());
+                intent.putExtra("userUid", fbUser.getUid());
+                startActivity(intent);
+            }}
+        });
+
         return rootView;
+    }
+
+    private boolean valida() {
+        if((!spinnerTags.getSelectedItem().equals("Selecione uma categoria") && spinnerTags != null) && !mChipsInput.getSelectedChipList().isEmpty()){
+            if(!editNomeGrupo.getText().equals("")){
+                if(editDescrGrupo.getText().toString().trim().length()>0){
+                    if(mChipsInput.getSelectedChipList().size()<=7) {
+                        if(!mChipsInput.equals("")){
+                            return true;
+                        }else{
+                            Toast.makeText(getActivity(), "Adicione pelo menos 2 tags!", Toast.LENGTH_SHORT).show();
+                            return false;
+                        }
+                    }else{
+                        Toast.makeText(getActivity(), "Adicione até 7 interesses!", Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+                }else{
+                    Toast.makeText(getActivity(), "Descrição não pode estar vazia!", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+            }else{
+                Toast.makeText(getActivity(), "Nome do grupo não pode estar vazio!", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        }else{
+            Toast.makeText(getActivity(), "Selecione uma categoria e adicione pelo menos 2 tags!", Toast.LENGTH_SHORT).show();
+            return false;
+        }
     }
 
     private void addTags() {
@@ -263,5 +312,10 @@ public class CreateGroupFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
     }
 }

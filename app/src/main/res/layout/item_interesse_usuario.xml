@@ -18,7 +18,8 @@
             android:layout_height="wrap_content"
             android:text=""
             android:id="@+id/interesse"
-            android:textSize="30sp" />
+            android:textSize="30sp"
+            android:layout_marginLeft="10dp"/>
 
     </LinearLayout>
 
