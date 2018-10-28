@@ -17,7 +17,7 @@ public class Interesse {
     int distanciaMax;
     int idade;
     int idadeFinal;
-    Localizacao distancia;
+    int distancia;
 
     public Interesse(List<Chip> tags, String categoria, Boolean ativado, Boolean distanciaAtivada, Boolean idadeAtivada, int distancia, int idade, int idadeFinal) {
         this.tags = tags;
@@ -47,7 +47,7 @@ public class Interesse {
         this.categoria = categoria;
     }
 
-    public Interesse(List<Chip> tags, String categoria, Localizacao distancia) {
+    public Interesse(List<Chip> tags, String categoria, int distancia) {
         this.tags = tags;
         this.categoria = categoria;
         this.distancia = distancia;
@@ -101,11 +101,11 @@ public class Interesse {
         this.distanciaMax = distanciaMax;
     }
 
-    public Localizacao getDistancia() {
+    public int getDistancia() {
         return distancia;
     }
 
-    public void setDistancia(Localizacao distancia) {
+    public void setDistancia(int distancia) {
         this.distancia = distancia;
     }
 

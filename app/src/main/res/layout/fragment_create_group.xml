@@ -45,7 +45,7 @@
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="15dp"
                 android:text="Descrição"
                 android:textSize="20dp"
                 app:fontFamily="@font/quattrocento" />
@@ -65,7 +65,7 @@
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="15dp"
                 android:text="Participantes"
                 android:textSize="20dp"
                 app:fontFamily="@font/quattrocento" />
@@ -91,7 +91,7 @@
 
             <TextView
                 android:id="@+id/interesses"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -100,7 +100,6 @@
                 app:fontFamily="@font/quattrocento"/>
 
                 <Spinner
-                    android:background="@color/contraste"
                     android:layout_marginTop="3dp"
                     android:layout_margin="5dp"
                     android:id="@+id/spinner1"

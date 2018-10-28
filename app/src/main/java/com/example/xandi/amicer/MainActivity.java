@@ -1,8 +1,10 @@
 package com.example.xandi.amicer;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -14,10 +16,13 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import com.example.xandi.amicer.modelo.Interesse;
 import com.example.xandi.amicer.modelo.User;
 import com.example.xandi.amicer.modelo.Util;
 import com.facebook.login.LoginManager;
@@ -30,27 +35,49 @@ import com.google.android.gms.common.api.Status;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     private FirebaseUser fbUser;
     private User user;
-    private DatabaseReference mDatabaseRef;
-    private DatabaseReference mUserDatabaseRef;
+    private DatabaseReference mDatabaseRef, mUserDatabaseRef;
     private GoogleApiClient googleApiClient;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mFirebaseAuthListener;
     public Util util;
     private GoogleSignInOptions gso;
-    private double longitude;
-    private double latitude;
+    private double longitude, latitude;
+    private List<Chip> tagsSugestoes = new ArrayList<>();
+    private List<String> listaCategorias;
+    private BroadcastReceiver broadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                //SharePrefManager.getmInstance(MainActivity.this).getToken();
+            }
+        };
+
+        registerReceiver(broadcastReceiver, new IntentFilter(MyFirebaseInstanceIDService.TOKEN_BROADCAST));
+
+        if(SharePrefManager.getmInstance(this).getToken() != null){
+            Log.d("myfcmtokenshared", SharePrefManager.getmInstance(this).getToken());
+        }
 
          gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -68,12 +95,16 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
         fbUser = mFirebaseAuth.getCurrentUser();
 
+       getUserFromFB();
+        getTagsSuggestions();
+        fillSpinners();
+
         mFirebaseAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if (fbUser != null) {
                     location();
-                    util = new Util(gso, fbUser, mDatabaseRef, mUserDatabaseRef, googleApiClient, mFirebaseAuth, mFirebaseAuthListener, latitude, longitude);
+                    util = new Util(gso, fbUser, mDatabaseRef, mUserDatabaseRef, googleApiClient, mFirebaseAuth, mFirebaseAuthListener, latitude, longitude, user, tagsSugestoes, listaCategorias);
                 } else {
                     goLogInScreen();
                 }
@@ -95,12 +126,52 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         }
     }
 
+    private void fillSpinners() {
+        listaCategorias = new ArrayList<String>();
+        //Fill spinners with categories and set if the user already has it set
+        mDatabaseRef.child("categories").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                listaCategorias.add("Selecione uma categoria");
+                for (DataSnapshot snap : dataSnapshot.getChildren()){
+                    listaCategorias.add(snap.getKey());
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void getTagsSuggestions() {
+        mDatabaseRef.child("tagsSuggestions").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                tagsSugestoes = new ArrayList<Chip>();
+                for (DataSnapshot snap : dataSnapshot.getChildren()){
+                    Chip chip = snap.getValue(Chip.class);
+                    tagsSugestoes.add(chip);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     public void location(){
         LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED) {
             Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            longitude = location.getLongitude();
-            latitude = location.getLatitude();
+            if(location!=null) {
+                longitude = location.getLongitude();
+                latitude = location.getLatitude();
+            }
             lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10, locationListener);
         }else{
             ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
@@ -227,4 +298,37 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             mFirebaseAuth.removeAuthStateListener(mFirebaseAuthListener);
         }
     }
+
+    //Get user from Firebase Database
+    private void getUserFromFB() {
+        mUserDatabaseRef.child(fbUser.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                user = dataSnapshot.getValue(User.class);
+                if(user == null){
+                    user = new User();
+                    user.setNome(fbUser.getDisplayName());
+                    user.setUid(fbUser.getUid());
+                    Localizacao localizacao = new Localizacao(latitude, longitude);
+                    user.setLocalizacao(localizacao);
+                    List<Interesse> listaCategorias = new ArrayList<Interesse>();
+                    List<Chip> chipList = new ArrayList<Chip>();
+                    listaCategorias.add(new Interesse(chipList, "Selecione uma categoria"));
+                    listaCategorias.add(new Interesse(chipList, "Selecione uma categoria"));
+                    listaCategorias.add(new Interesse(chipList, "Selecione uma categoria"));
+                    listaCategorias.add(new Interesse(chipList, "Selecione uma categoria"));
+                    user.setCategorias(listaCategorias);
+                    user.setFotoPerfil(fbUser.getPhotoUrl().toString());
+                    mUserDatabaseRef.child(fbUser.getUid()).setValue(user);
+                }
+                util.setUser(user);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
 }

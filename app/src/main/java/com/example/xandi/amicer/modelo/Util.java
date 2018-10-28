@@ -1,5 +1,6 @@
 package com.example.xandi.amicer.modelo;
 
+import com.example.xandi.amicer.Chip;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,8 +26,11 @@ public class Util {
     public static GoogleSignInOptions gso;
     public static double longitude;
     public static double latitude;
+    public static User user;
+    public static List<Chip> tagsSugestoes;
+    public static List<String> listaCategorias;
 
-    public Util(GoogleSignInOptions gso, FirebaseUser fbUser, DatabaseReference mDatabaseRef, DatabaseReference mUserDatabaseRef, GoogleApiClient googleApiClient, FirebaseAuth mFirebaseAuth, FirebaseAuth.AuthStateListener mFirebaseAuthListener, double latitude, double longitude) {
+    public Util(GoogleSignInOptions gso, FirebaseUser fbUser, DatabaseReference mDatabaseRef, DatabaseReference mUserDatabaseRef, GoogleApiClient googleApiClient, FirebaseAuth mFirebaseAuth, FirebaseAuth.AuthStateListener mFirebaseAuthListener, double latitude, double longitude, User user, List<Chip> tagsSugestoes, List<String> listaCategorias) {
         this.gso = gso;
         this.fbUser = fbUser;
         this.mDatabaseRef = mDatabaseRef;
@@ -44,6 +48,9 @@ public class Util {
         idade.add(0);
         this.latitude = latitude;
         this.longitude = longitude;
+        this.user = user;
+        this.tagsSugestoes = tagsSugestoes;
+        this.listaCategorias = listaCategorias;
     }
 
     public static List<Integer> getDistancia() {
@@ -132,5 +139,29 @@ public class Util {
 
     public static void setLatitude(double latitude) {
         Util.latitude = latitude;
+    }
+
+    public static User getUser() {
+        return user;
+    }
+
+    public static void setUser(User user) {
+        Util.user = user;
+    }
+
+    public static List<Chip> getTagsSugestoes() {
+        return tagsSugestoes;
+    }
+
+    public static void setTagsSugestoes(List<Chip> tagsSugestoes) {
+        Util.tagsSugestoes = tagsSugestoes;
+    }
+
+    public static List<String> getListaCategorias() {
+        return listaCategorias;
+    }
+
+    public static void setListaCategorias(List<String> listaCategorias) {
+        Util.listaCategorias = listaCategorias;
     }
 }

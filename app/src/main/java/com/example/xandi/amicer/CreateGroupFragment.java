@@ -109,11 +109,12 @@ public class CreateGroupFragment extends Fragment {
         getTags();
         //Handle input chips
         mChipsInput.addChipsListener(new ChipsInput.ChipsListener() {
+            List<Chip> tagsSelected;
             @Override
             public void onChipAdded(ChipInterface chip, int newSize) {
                 // get the list
-                List<Chip> tagsSelected = (List<Chip>) mChipsInput.getSelectedChipList();
-                saveTags.addAll(tagsSelected);
+                //tagsSelected = (List<Chip>) mChipsInput.getSelectedChipList();
+                saveTags.add(new Chip(chip.getLabel()));
             }
 
             @Override
@@ -127,6 +128,7 @@ public class CreateGroupFragment extends Fragment {
                         String texto = text.toString();
                         if(!texto.trim().isEmpty())
                             mChipsInput.addChip(texto.trim(), null);
+                        saveTags.add(new Chip(texto));
                         text = "";
                     }}
             }
@@ -158,17 +160,12 @@ public class CreateGroupFragment extends Fragment {
                     mapUserGroups.put(grupo.getUid(), true);
                 }
 
-                    //Get Chips
-                    List<com.pchmn.materialchips.model.Chip> listaDeChips = (List<com.pchmn.materialchips.model.Chip>) mChipsInput.getSelectedChipList();
-                List<Chip> chipList = new ArrayList<Chip>();
-                for(int i=0; i<listaDeChips.size(); i++){
-                    chipList.add(new Chip(listaDeChips.get(i).getLabel()));
-                }
                 //get Group's owner Localization
                     Localizacao localizacao = new Localizacao(Util.latitude, Util.getLongitude());
-                    Interesse interesse = new Interesse(chipList, spinnerTags.getSelectedItem().toString(), localizacao);
+                    Interesse interesse = new Interesse(saveTags, spinnerTags.getSelectedItem().toString());
                     // Group Interests
                     grupo.setCategoria(interesse);
+                    grupo.setLocalizacao(localizacao);
 
                     //Adding tags Suggestions to a helping String list
                     List<String> tagsSugestoesSTR = new ArrayList<String>();
@@ -177,9 +174,9 @@ public class CreateGroupFragment extends Fragment {
                     }
 
                     //add chips to the tagsSuggestions list (if not repeated)
-                    for(int i=0; i<chipList.size(); i++){
-                        if(!tagsSugestoesSTR.contains(chipList.get(i).getLabel().trim())){
-                            tagsSugestoes.add(chipList.get(i));
+                    for(int i=0; i<saveTags.size(); i++){
+                        if(!tagsSugestoesSTR.contains(saveTags.get(i).getLabel().trim())){
+                            tagsSugestoes.add(saveTags.get(i));
                         }
                     }
 
