@@ -6,4 +6,6 @@
     android:layout_height="wrap_content"
     android:id="@+id/toolbar_principal"
     android:background="@color/colorPrimary"
-    android:elevation="12dp"/>
+    android:elevation="12dp">
+
+</android.support.v7.widget.Toolbar>

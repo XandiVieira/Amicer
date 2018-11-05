@@ -1,14 +1,18 @@
 package com.example.xandi.amicer;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.xandi.amicer.modelo.Group;
+import com.example.xandi.amicer.modelo.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +39,7 @@ public class GroupAdapter extends ArrayAdapter {
         TextView nomeGrupo = (TextView) rowView.findViewById(R.id.nameGroup);
         TextView creatorGroup = (TextView) rowView.findViewById(R.id.creatorGroup);
         TextView descrGroup = (TextView) rowView.findViewById(R.id.descrGroup);
+        TextView category = (TextView) rowView.findViewById(R.id.category);
         interesses.add((TextView) rowView.findViewById(R.id.interesse1));
         interesses.add((TextView) rowView.findViewById(R.id.interesse2));
         interesses.add((TextView) rowView.findViewById(R.id.interesse3));
@@ -46,6 +51,7 @@ public class GroupAdapter extends ArrayAdapter {
         nomeGrupo.setText(elementos.get(position).getNome());
         creatorGroup.setText(elementos.get(position).getCriadorGrupo());
         descrGroup.setText(elementos.get(position).getDescricao());
+        category.setText(elementos.get(position).getCategoria().getCategoria());
 
         for(int i=0; i<elementos.get(position).getCategoria().getTags().size(); i++){
             chipList.add(elementos.get(position).getCategoria().getTags().get(i));

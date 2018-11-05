@@ -128,7 +128,7 @@ public class CreateGroupFragment extends Fragment {
                         String texto = text.toString();
                         if(!texto.trim().isEmpty())
                             mChipsInput.addChip(texto.trim(), null);
-                        saveTags.add(new Chip(texto));
+                        //saveTags.add(new Chip(texto));
                         text = "";
                     }}
             }
@@ -149,6 +149,7 @@ public class CreateGroupFragment extends Fragment {
                 grupo.setDescricao(editDescrGrupo.getText().toString());
                 grupo.setNome(editNomeGrupo.getText().toString());
                 grupo.setNumParticipante(numParticpantes);
+                grupo.setUserUID(fbUser.getUid());
                 //Add created group to the userGroups List
                 HashMap<String, Boolean> mapUserGroups = new HashMap<>();
                 if(user.getListGroups()!=null){

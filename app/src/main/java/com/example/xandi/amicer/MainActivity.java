@@ -126,6 +126,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         }
     }
 
+    private void sendTokenToServer(){
+
+    }
+
     private void fillSpinners() {
         listaCategorias = new ArrayList<String>();
         //Fill spinners with categories and set if the user already has it set

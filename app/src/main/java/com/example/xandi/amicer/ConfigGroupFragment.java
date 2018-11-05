@@ -52,8 +52,11 @@ public class ConfigGroupFragment extends Fragment {
                         @Override
                         public void onDataChange(DataSnapshot dataSnap) {
                             Group group = dataSnap.getValue(Group.class);
-                            if(group!=null)
-                                listaInteresses.add(group);
+                            if(group!=null && group.getUserUID()!=null) {
+                                if (group.getUserUID().equals(Util.getUser().getUid())) {
+                                    listaInteresses.add(group);
+                                }
+                            }
                             if (getActivity() != null && !listaInteresses.isEmpty()) {
                                 adapter = new InteresseGroupAdapter(getActivity(), listaInteresses);
                                 listViewInteresseGroup.setAdapter(adapter);

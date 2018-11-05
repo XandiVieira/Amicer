@@ -1,5 +1,7 @@
 package com.example.xandi.amicer;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,6 +13,7 @@ import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -21,6 +24,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.xandi.amicer.modelo.Message;
+import com.example.xandi.amicer.modelo.Util;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -46,6 +50,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.example.xandi.amicer.R.menu.menu_grupo;
+
 public class InsideGroup extends AppCompatActivity {
 
     private static final String TAG = "InsideGroup";
@@ -70,6 +76,8 @@ public class InsideGroup extends AppCompatActivity {
     private StorageReference mChatPhotoStorageReference;
     private FirebaseRemoteConfig mFirebaseRemoteConfig;
     private String userUid;
+    private AlertDialog alerta;
+    private String groupUID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +89,7 @@ public class InsideGroup extends AppCompatActivity {
         Bundle bundleUid = getIntent().getExtras();
         bundleUid.getString("uid");
         String uid = bundleUid.getString("uid");
+        groupUID = uid;
 
         Bundle bundleNome = getIntent().getExtras();
         bundleNome.getString("nome");
@@ -94,6 +103,16 @@ public class InsideGroup extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbarId);
         toolbar.setTitle(nome);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+       setTitle(nome);
 
         //Initialize Firebase Components
         FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -205,24 +224,62 @@ public class InsideGroup extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_grupo, menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_grupo, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        int id = item.getItemId();
-        if(id==R.id.menuConfig){
-            // Intent intent = new Intent(this, InsideGroup.class);
-            // startActivity(intent);
-        }
+        switch (item.getItemId()){
+            case R.id.menuConfig:
+                // Intent intent = new Intent(this, InsideGroup.class);
+                // startActivity(intent);
+                return true;
 
-        if(id==R.id.menuInfos){
-            // Intent intent = new Intent(this, InsideGroup.class);
-            // startActivity(intent);
+            case R.id.menuInfos:
+                // Intent intent = new Intent(this, InsideGroup.class);
+                // startActivity(intent);
+                return true;
+
+            case R.id.menuSair:
+                dialog();
+                return true ;
+
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
+    }
+
+    private void dialog() {
+        //Cria o gerador do AlertDialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        //define o titulo
+        builder.setTitle("Sair do Grupo!");
+        //define a mensagem
+        builder.setMessage("Tem certeza que deseja deixar permanentemente o grupo?");
+        //define um botão como positivo
+        builder.setPositiveButton("Sair", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface arg0, int arg1) {
+
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+
+                Util.mDatabaseRef.child("user").child(Util.fbUser.getUid()).child("listGroups").child(groupUID).removeValue();
+                startActivity(intent);
+                alerta.closeOptionsMenu();
+            }
+        });
+        //define um botão como negativo.
+        builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface arg0, int arg1) {
+                alerta.closeOptionsMenu();
+            }
+        });
+        //cria o AlertDialog
+        alerta = builder.create();
+        //Exibe
+        alerta.show();
     }
 
     @Override

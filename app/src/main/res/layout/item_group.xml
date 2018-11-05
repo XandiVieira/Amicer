@@ -8,15 +8,36 @@
     android:elevation="12dp"
     android:padding="5dp">
 
-    <TextView
-        android:id="@+id/nameGroup"
+
+    <LinearLayout
+        android:id="@+id/nameGroupLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
-        android:text="Nome do Grupo"
-        android:textSize="20dp"
-        android:textStyle="bold"
-        app:fontFamily="@font/quattrocento" />
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/nameGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Nome do Grupo"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            app:fontFamily="@font/quattrocento" />
+
+        <TextView
+            android:id="@+id/category"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Categoria"
+            android:textSize="15dp"
+            app:fontFamily="@font/quattrocento"
+            android:layout_marginTop="5dp"/>
+
+    </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
