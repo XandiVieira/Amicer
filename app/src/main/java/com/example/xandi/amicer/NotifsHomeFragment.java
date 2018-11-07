@@ -72,7 +72,7 @@ public class NotifsHomeFragment extends Fragment {
         listaGrupos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                dialog(groupList.get(i).getUid(), groupList.get(i).getNome());
+                dialog(groupListAux.get(i).getUid(), groupListAux.get(i).getNome());
             }
         });
 
@@ -115,9 +115,15 @@ public class NotifsHomeFragment extends Fragment {
                         listaTagsUser.add(listaCategoriasUser.get(j).getTags().get(l).getLabel());
                     }
                     int cont = 0;
-                    for (int m = 0; m < listaTagsGrupo.size(); m++) {
-                        if (listaTagsUser.contains(listaTagsGrupo.get(m))) {
-                            cont++;
+                    for (int m = 0; m < listaTagsUser.size(); m++) {
+                        for(int n=0; n<listaTagsGrupo.size(); n++){
+                            try {
+                                if ((checkSimilarity(listaTagsUser.get(m), listaTagsGrupo.get(n)) > 75)) {
+                                    cont++;
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                     if (!listaGruposUser.contains(groupList.get(i).getUid())) {
@@ -127,9 +133,9 @@ public class NotifsHomeFragment extends Fragment {
                             if (cont >= 3) {
                                 if (distanciaKM <= groupList.get(i).getCategoria().getDistanciaMax()) {
                                     //Dispara Notificação
-                                    HashMap<String, Boolean> mapUserGroups = new HashMap<>();
+                                   /* HashMap<String, Boolean> mapUserGroups = new HashMap<>();
                                     mapUserGroups.put(groupList.get(i).getUid(), true);
-                                    mDatabaseReference.child("user").child(fbUser.getUid()).child("listGroups").setValue(mapUserGroups);
+                                    mDatabaseReference.child("user").child(fbUser.getUid()).child("listGroups").setValue(mapUserGroups);*/
                                 }
                             } else {
                                 if (cont >= 1) {
@@ -141,10 +147,10 @@ public class NotifsHomeFragment extends Fragment {
                         } else {
                             if (cont >= 3) {
                                 //Dispara Notificação
-                                HashMap<String, Boolean> mapUserGroups = new HashMap<>();
+                                /*HashMap<String, Boolean> mapUserGroups = new HashMap<>();
                                 mapUserGroups = Util.getUser().getListGroups();
                                 mapUserGroups.put(groupList.get(i).getUid(), true);
-                                mDatabaseReference.child("user").child(fbUser.getUid()).child("listGroups").setValue(mapUserGroups);
+                                mDatabaseReference.child("user").child(fbUser.getUid()).child("listGroups").setValue(mapUserGroups);*/
                             } else {
                                 if (cont >= 1) {
                                     groupListAux.add(groupList.get(i));
@@ -163,6 +169,62 @@ public class NotifsHomeFragment extends Fragment {
         /*listaCategoriasUser.clear();
         groupList.clear();
         groupListAux.clear();*/
+    }
+
+    protected static float checkSimilarity(String sString1, String sString2) throws Exception {
+
+        // Se as strings têm tamanho distinto, obtêm a similaridade de todas as
+        // combinações em que tantos caracteres quanto a diferença entre elas são
+        // inseridos na string de menor tamanho. Retorna a similaridade máxima
+        // entre todas as combinações, descontando um percentual que representa
+        // a diferença em número de caracteres.
+        sString1 = sString1.toUpperCase();
+        sString2 = sString2.toUpperCase();
+        if(sString1.length() != sString2.length()) {
+            int iDiff = Math.abs(sString1.length() - sString2.length());
+            int iLen = Math.max(sString1.length(), sString2.length());
+            String sBigger, sSmaller, sAux;
+
+            if(iLen == sString1.length()) {
+                sBigger = sString1;
+                sSmaller = sString2;
+            }
+            else {
+                sBigger = sString2;
+                sSmaller = sString1;
+            }
+
+            float fSim, fMaxSimilarity = Float.MIN_VALUE;
+            for(int i = 0; i <= sSmaller.length(); i++) {
+                sAux = sSmaller.substring(0, i) + sBigger.substring(i, i+iDiff) + sSmaller.substring(i);
+                fSim = checkSimilaritySameSize(sBigger,  sAux);
+                if(fSim > fMaxSimilarity)
+                    fMaxSimilarity = fSim;
+            }
+            return (fMaxSimilarity - (1f * iDiff) / iLen);
+
+            // Se as strings têm o mesmo tamanho, simplesmente compara-as caractere
+            // a caractere. A similaridade advém das diferenças em cada posição.
+        } else
+            return checkSimilaritySameSize(sString1, sString2);
+    }
+
+    protected static float checkSimilaritySameSize(String sString1, String sString2) throws Exception {
+
+        if(sString1.length() != sString2.length())
+            throw new Exception("Strings devem ter o mesmo tamanho!");
+
+        int iLen = sString1.length();
+        int iDiffs = 0;
+
+        // Conta as diferenças entre as strings
+        for(int i = 0; i < iLen; i++)
+            if(sString1.charAt(i) != sString2.charAt(i))
+                iDiffs++;
+
+        // Calcula um percentual entre 0 e 1, sendo 0 completamente diferente e
+        // 1 completamente igual
+        return (1f - (float) iDiffs / iLen) * 100;
     }
 
     private double distance(double lat1, double lat2, double lon1, double lon2,

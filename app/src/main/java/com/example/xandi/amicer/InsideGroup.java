@@ -103,6 +103,7 @@ public class InsideGroup extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbarId);
         toolbar.setTitle(nome);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
+        setSupportActionBar(toolbar);
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -224,8 +225,7 @@ public class InsideGroup extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_grupo, menu);
+        getMenuInflater().inflate(R.menu.menu_grupo, menu);
         return true;
     }
 

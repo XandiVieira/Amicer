@@ -95,7 +95,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
         fbUser = mFirebaseAuth.getCurrentUser();
 
-       getUserFromFB();
+        if(fbUser != null)
+        getUserFromFB();
         getTagsSuggestions();
         fillSpinners();
 

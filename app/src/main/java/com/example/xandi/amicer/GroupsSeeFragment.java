@@ -27,7 +27,7 @@ import java.util.ArrayList;
 
 public class GroupsSeeFragment extends Fragment {
 
-    private ArrayList<Group> groupList = new ArrayList<Group>();
+    private ArrayList<Group> groupLista = new ArrayList<Group>();
 
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDatabaseReference;
@@ -54,8 +54,8 @@ public class GroupsSeeFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(getActivity(), InsideGroup.class);
-                intent.putExtra("uid", groupList.get(i).getUid());
-                intent.putExtra("nome", groupList.get(i).getNome());
+                intent.putExtra("uid", groupLista.get(i).getUid());
+                intent.putExtra("nome", groupLista.get(i).getNome());
                 intent.putExtra("userUid", fbUser.getUid());
                 startActivity(intent);
             }
@@ -84,10 +84,10 @@ public class GroupsSeeFragment extends Fragment {
                         public void onDataChange(DataSnapshot dataSnap) {
                             Group group = dataSnap.getValue(Group.class);
                             if(group!=null)
-                            groupList.add(group);
+                            groupLista.add(group);
 
-                            if (getActivity() != null && !groupList.isEmpty()) {
-                                adapter = new GroupAdapter(getActivity(), groupList);
+                            if (getActivity() != null && !groupLista.isEmpty()) {
+                                adapter = new GroupAdapter(getActivity(), groupLista);
                                 listaGrupos.setAdapter(adapter);
                             }
                         }
