@@ -226,6 +226,13 @@ public class InsideGroup extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_grupo, menu);
+
+        if(Util.getUser().getUid().equals(userUid)){
+            menu.getItem(1).setVisible(true);
+        }else{
+            menu.getItem(1).setVisible(false);
+        }
+
         return true;
     }
 
@@ -238,13 +245,12 @@ public class InsideGroup extends AppCompatActivity {
                 // startActivity(intent);
                 return true;
 
-            case R.id.menuInfos:
-                // Intent intent = new Intent(this, InsideGroup.class);
-                // startActivity(intent);
+            case R.id.menuDelete:
+                dialog("Excluir");
                 return true;
 
             case R.id.menuSair:
-                dialog();
+                dialog("Deixar");
                 return true ;
 
             default:
@@ -252,22 +258,32 @@ public class InsideGroup extends AppCompatActivity {
         }
     }
 
-    private void dialog() {
+    private void dialog(String action) {
         //Cria o gerador do AlertDialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         //define o titulo
-        builder.setTitle("Sair do Grupo!");
+        builder.setTitle(action + " Grupo!");
         //define a mensagem
-        builder.setMessage("Tem certeza que deseja deixar permanentemente o grupo?");
+        builder.setMessage("Tem certeza que deseja " + action.toLowerCase() + " permanentemente o grupo?");
         //define um botão como positivo
-        builder.setPositiveButton("Sair", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(action, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface arg0, int arg1) {
 
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                if(action.equals("Excluir")) {
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
 
-                Util.mDatabaseRef.child("user").child(Util.fbUser.getUid()).child("listGroups").child(groupUID).removeValue();
-                startActivity(intent);
-                alerta.closeOptionsMenu();
+                    Util.mDatabaseRef.child("group").child(groupUID).removeValue();
+                    startActivity(intent);
+                    alerta.closeOptionsMenu();
+                }else if(action.equals("Deixar")){
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+
+                    Util.mDatabaseRef.child("user").child(Util.fbUser.getUid()).child("listGroups").child(groupUID).removeValue();
+                    startActivity(intent);
+                    alerta.closeOptionsMenu();
+                }else{
+                    alerta.closeOptionsMenu();
+                }
             }
         });
         //define um botão como negativo.

@@ -6,8 +6,8 @@
         android:id="@+id/menuConfig"
         android:title="Configurações" />
     <item
-        android:id="@+id/menuInfos"
-        android:title="Informações" />
+        android:id="@+id/menuDelete"
+        android:title="Excluir Grupo" />
     <item
         android:id="@+id/menuSair"
         android:title="Deixar Grupo" />

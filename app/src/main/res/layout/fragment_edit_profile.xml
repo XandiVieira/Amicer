@@ -40,20 +40,18 @@
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/photoImageView"
             android:text="Nome"
-            android:textSize="20sp"/>
+            android:textSize="17sp"/>
 
-        <Button
-            android:layout_marginLeft="30dp"
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/baseline_arrow_right_alt_black_18dp"
             android:id="@+id/btUpdate"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
             android:layout_alignTop="@+id/photoImageView"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="-2dp"
-            android:layout_marginEnd="19dp"
-            android:layout_marginRight="19dp"
-            android:text="Ok" />
+            android:background="@color/white"
+            android:layout_marginLeft="3dp"
+            android:layout_gravity="right"/>
     </LinearLayout>
 
 

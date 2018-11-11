@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.example.xandi.amicer.modelo.Group;
+import com.example.xandi.amicer.modelo.Util;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -56,7 +57,7 @@ public class GroupsSeeFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), InsideGroup.class);
                 intent.putExtra("uid", groupLista.get(i).getUid());
                 intent.putExtra("nome", groupLista.get(i).getNome());
-                intent.putExtra("userUid", fbUser.getUid());
+                intent.putExtra("userUid", groupLista.get(i).getUserUID());
                 startActivity(intent);
             }
         });
@@ -83,8 +84,11 @@ public class GroupsSeeFragment extends Fragment {
                         @Override
                         public void onDataChange(DataSnapshot dataSnap) {
                             Group group = dataSnap.getValue(Group.class);
-                            if(group!=null)
-                            groupLista.add(group);
+                            if(group!=null) {
+                                groupLista.add(group);
+                            }else{
+                                Util.mDatabaseRef.child("user").child(Util.fbUser.getUid()).child("listGroups").child(groupUID).removeValue();
+                            }
 
                             if (getActivity() != null && !groupLista.isEmpty()) {
                                 adapter = new GroupAdapter(getActivity(), groupLista);

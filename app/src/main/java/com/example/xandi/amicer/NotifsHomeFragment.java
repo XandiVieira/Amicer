@@ -72,7 +72,7 @@ public class NotifsHomeFragment extends Fragment {
         listaGrupos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                dialog(groupListAux.get(i).getUid(), groupListAux.get(i).getNome());
+                dialog(groupListAux.get(i).getUid(), groupListAux.get(i).getNome(), groupListAux.get(i).getUserUID());
             }
         });
 
@@ -133,9 +133,9 @@ public class NotifsHomeFragment extends Fragment {
                             if (cont >= 3) {
                                 if (distanciaKM <= groupList.get(i).getCategoria().getDistanciaMax()) {
                                     //Dispara Notificação
-                                   /* HashMap<String, Boolean> mapUserGroups = new HashMap<>();
+                                    HashMap<String, Boolean> mapUserGroups = new HashMap<>();
                                     mapUserGroups.put(groupList.get(i).getUid(), true);
-                                    mDatabaseReference.child("user").child(fbUser.getUid()).child("listGroups").setValue(mapUserGroups);*/
+                                    mDatabaseReference.child("user").child(fbUser.getUid()).child("listGroups").setValue(mapUserGroups);
                                 }
                             } else {
                                 if (cont >= 1) {
@@ -147,10 +147,10 @@ public class NotifsHomeFragment extends Fragment {
                         } else {
                             if (cont >= 3) {
                                 //Dispara Notificação
-                                /*HashMap<String, Boolean> mapUserGroups = new HashMap<>();
+                                HashMap<String, Boolean> mapUserGroups = new HashMap<>();
                                 mapUserGroups = Util.getUser().getListGroups();
                                 mapUserGroups.put(groupList.get(i).getUid(), true);
-                                mDatabaseReference.child("user").child(fbUser.getUid()).child("listGroups").setValue(mapUserGroups);*/
+                                mDatabaseReference.child("user").child(fbUser.getUid()).child("listGroups").setValue(mapUserGroups);
                             } else {
                                 if (cont >= 1) {
                                     groupListAux.add(groupList.get(i));
@@ -300,7 +300,7 @@ public class NotifsHomeFragment extends Fragment {
         });
     }
 
-    private void dialog(String uid, String nome) {
+    private void dialog(String grupoUID, String nome, String userUID) {
         //Cria o gerador do AlertDialog
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         //define o titulo
@@ -312,13 +312,13 @@ public class NotifsHomeFragment extends Fragment {
             public void onClick(DialogInterface arg0, int arg1) {
 
                 Intent intent = new Intent(getActivity(), InsideGroup.class);
-                intent.putExtra("uid", uid);
+                intent.putExtra("uid", grupoUID);
                 intent.putExtra("nome", nome);
-                intent.putExtra("userUid", fbUser.getUid());
+                intent.putExtra("userUid", userUID);
 
                 HashMap<String, Boolean> mapUserGroups = new HashMap<>();
                 mapUserGroups = Util.getUser().getListGroups();
-                mapUserGroups.put(uid, true);
+                mapUserGroups.put(grupoUID, true);
                 mDatabaseReference.child("user").child(fbUser.getUid()).child("listGroups").setValue(mapUserGroups);
                 startActivity(intent);
                 alerta.closeOptionsMenu();

@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -132,7 +133,7 @@ public class EditProfileFragment extends Fragment implements GoogleApiClient.OnC
        /*/////////////////////////////////////////*/
 
 
-        Button btUpdate = rootView.findViewById(R.id.btUpdate);
+        ImageButton btUpdate = rootView.findViewById(R.id.btUpdate);
 
         btUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
