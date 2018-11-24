@@ -229,8 +229,10 @@ public class InsideGroup extends AppCompatActivity {
 
         if(Util.getUser().getUid().equals(userUid)){
             menu.getItem(1).setVisible(true);
+            menu.getItem(2).setVisible(false);
         }else{
             menu.getItem(1).setVisible(false);
+            menu.getItem(2).setVisible(true);
         }
 
         return true;

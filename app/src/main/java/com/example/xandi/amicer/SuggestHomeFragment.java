@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class NotifsHomeFragment extends Fragment {
+public class SuggestHomeFragment extends Fragment {
 
     private ArrayList<Group> groupList = new ArrayList<Group>();
 
@@ -44,13 +44,13 @@ public class NotifsHomeFragment extends Fragment {
     private ArrayList<Group> groupListAux;
     private AlertDialog alerta;
 
-    public NotifsHomeFragment() {
+    public SuggestHomeFragment() {
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_notifs_home, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_suggest_home, container, false);
 
         listaGrupos = rootView.findViewById(R.id.listViewGruposSugeridos);
         startFirebase();
@@ -104,6 +104,7 @@ public class NotifsHomeFragment extends Fragment {
         }
 
         for (int i = 0; i < groupList.size(); i++) {
+            int compat = 0;
             for (int j = 0; j < listaCategoriasUser.size(); j++) {
                 if (groupList.get(i).getCategoria().getCategoria().equals(listaCategoriasUser.get(j).getCategoria())) {
                     List<String> listaTagsGrupo = new ArrayList<String>();
@@ -118,7 +119,8 @@ public class NotifsHomeFragment extends Fragment {
                     for (int m = 0; m < listaTagsUser.size(); m++) {
                         for(int n=0; n<listaTagsGrupo.size(); n++){
                             try {
-                                if ((checkSimilarity(listaTagsUser.get(m), listaTagsGrupo.get(n)) > 75)) {
+                                int similarity = (int) checkSimilarity(listaTagsUser.get(m), listaTagsGrupo.get(n));
+                                if (similarity > 75) {
                                     cont++;
                                 }
                             } catch (Exception e) {
@@ -166,9 +168,6 @@ public class NotifsHomeFragment extends Fragment {
                 listaGrupos.setAdapter(adapter);
             }
         }
-        /*listaCategoriasUser.clear();
-        groupList.clear();
-        groupListAux.clear();*/
     }
 
     protected static float checkSimilarity(String sString1, String sString2) throws Exception {

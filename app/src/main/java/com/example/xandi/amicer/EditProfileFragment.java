@@ -85,50 +85,7 @@ public class EditProfileFragment extends Fragment implements GoogleApiClient.OnC
 
        /*/////////////////////////////////////////*/
 
-        getUserFromFB();
 
-        for(int i=0; i<mChipsInputList.size(); i++){
-            mChipsInputList.get(i).setFilterableList(tagsSugestoes);
-        }
-
-            user = Util.getUser();
-        if (user!=null) {
-            for (int i = 0; i < spinners.size(); i++) {
-                if (user.getCategorias() != null && user.getCategorias().size() > i)
-                    spinners.get(i).setSelection(4);
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, listaCategorias);
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                spinners.get(i).setAdapter(adapter);
-                if (user.getCategorias() != null && user.getCategorias().size() > i)
-                    spinners.get(i).setSelection(adapter.getPosition(user.getCategorias().get(i).getCategoria()));
-            }
-        }
-        getUserFromFB();
-
-        //Handle input chips
-        for(int i=0; i<mChipsInputList.size(); i++){
-            final int finalI = i;
-            mChipsInputList.get(i).addChipsListener(new ChipsInput.ChipsListener() {
-                @Override
-                public void onChipAdded(ChipInterface chip, int newSize) {
-                }
-
-                @Override
-                public void onChipRemoved(ChipInterface chip, int newSize) {
-                }
-
-                @Override
-                public void onTextChanged(CharSequence text) {
-                    if(text.length()>0){
-                        if(text.charAt(text.length()-1) == ' '){
-                            String texto = text.toString();
-                            if(!texto.trim().isEmpty())
-                                mChipsInputList.get(finalI).addChip(texto.trim(), null);
-                            text = "";
-                        }}
-                }
-            });
-        }
 
        /*/////////////////////////////////////////*/
 
@@ -203,6 +160,51 @@ public class EditProfileFragment extends Fragment implements GoogleApiClient.OnC
         super.onStart();
 
         Util.mFirebaseAuth.addAuthStateListener(Util.mFirebaseAuthListener);
+
+        getUserFromFB();
+
+        for(int i=0; i<mChipsInputList.size(); i++){
+            mChipsInputList.get(i).setFilterableList(tagsSugestoes);
+        }
+
+        user = Util.getUser();
+        if (user!=null) {
+            for (int i = 0; i < spinners.size(); i++) {
+                if (user.getCategorias() != null && user.getCategorias().size() > i)
+                    spinners.get(i).setSelection(4);
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, listaCategorias);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinners.get(i).setAdapter(adapter);
+                if (user.getCategorias() != null && user.getCategorias().size() > i)
+                    spinners.get(i).setSelection(adapter.getPosition(user.getCategorias().get(i).getCategoria()));
+            }
+        }
+        getUserFromFB();
+
+        //Handle input chips
+        for(int i=0; i<mChipsInputList.size(); i++){
+            final int finalI = i;
+            mChipsInputList.get(i).addChipsListener(new ChipsInput.ChipsListener() {
+                @Override
+                public void onChipAdded(ChipInterface chip, int newSize) {
+                }
+
+                @Override
+                public void onChipRemoved(ChipInterface chip, int newSize) {
+                }
+
+                @Override
+                public void onTextChanged(CharSequence text) {
+                    if(text.length()>0){
+                        if(text.charAt(text.length()-1) == ' '){
+                            String texto = text.toString();
+                            if(!texto.trim().isEmpty())
+                                mChipsInputList.get(finalI).addChip(texto.trim(), null);
+                            text = "";
+                        }}
+                }
+            });
+        }
     }
 
     @Override

@@ -7,28 +7,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.support.v4.app.Fragment;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.facebook.login.LoginManager;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
@@ -39,7 +25,7 @@ public class TabPerfil extends Fragment {
     private FrameLayout mFramePerfil;
 
     private EditProfileFragment editProfileFragment;
-    private ConfigProfileFragment configGroupFragment;
+    private FilterProfileFragment filterProfileFragment;
 
     private Context mContext;
     public FirebaseUser user;
@@ -56,7 +42,7 @@ public class TabPerfil extends Fragment {
         View rootView = inflater.inflate(R.layout.tab_perfil, container, false);
 
         editProfileFragment = new EditProfileFragment();
-        configGroupFragment = new ConfigProfileFragment();
+        filterProfileFragment = new FilterProfileFragment();
 
         setFragment(editProfileFragment);
 
@@ -85,9 +71,9 @@ public class TabPerfil extends Fragment {
                         setFragment(editProfileFragment);
                         return true;
 
-                    case R.id.item_config_perfil :
+                    case R.id.item_filtros_perfil :
                         mPerfilNav.setItemBackgroundResource(R.color.colorPrimary);
-                        setFragment(configGroupFragment);
+                        setFragment(filterProfileFragment);
                         return true;
 
                     default:

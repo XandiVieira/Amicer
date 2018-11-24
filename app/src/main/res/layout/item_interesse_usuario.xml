@@ -20,7 +20,6 @@
             android:id="@+id/interesse"
             android:textSize="30sp"
             android:layout_marginLeft="10dp"/>
-
     </LinearLayout>
 
     <LinearLayout
@@ -75,7 +74,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginRight="20dp"
-            android:layout_weight="1">
+            android:layout_weight="3">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -106,30 +105,6 @@
                 android:layout_height="wrap_content"
                 android:text="0"
                 android:textSize="12sp"
-                android:layout_gravity="center"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_marginRight="20dp"
-            android:layout_weight="1">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Off/On"
-                android:id="@+id/onOff"
-                android:textSize="15sp"
-                android:layout_gravity="center"/>
-
-            <Switch
-                android:id="@+id/switchAtivado"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
                 android:layout_gravity="center"/>
 
         </LinearLayout>

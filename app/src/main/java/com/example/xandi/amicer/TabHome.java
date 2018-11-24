@@ -19,7 +19,7 @@ public class TabHome extends Fragment {
     private BottomNavigationView mHomeNav;
     private FrameLayout mFrameHome;
 
-    private NotifsHomeFragment notifsHomeFragment;
+    private SuggestHomeFragment suggestHomeFragment;
     private StatsHomeFragment statsHomeFragment;
 
     @Override
@@ -27,10 +27,10 @@ public class TabHome extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.tab_home, container, false);
 
-        statsHomeFragment = new StatsHomeFragment();
-        notifsHomeFragment = new NotifsHomeFragment();
+        //statsHomeFragment = new StatsHomeFragment();
+        suggestHomeFragment = new SuggestHomeFragment();
 
-        setFragment(statsHomeFragment);
+        setFragment(suggestHomeFragment);
 
         return rootView;
     }
@@ -46,14 +46,14 @@ public class TabHome extends Fragment {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
-                    case R.id.item_dados :
+                    /*case R.id.item_dados :
                         mHomeNav.setItemBackgroundResource(R.color.colorAccent);
                         setFragment(statsHomeFragment);
-                        return true;
+                        return true;*/
 
-                    case R.id.item_notificacoes :
+                    case R.id.item_sugestoes:
                         mHomeNav.setItemBackgroundResource(R.color.colorPrimary);
-                        setFragment(notifsHomeFragment);
+                        setFragment(suggestHomeFragment);
                         return true;
 
                     default:
@@ -66,7 +66,7 @@ public class TabHome extends Fragment {
     private void setFragment(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frameHome, fragment);
-        fragmentTransaction.commit();
+        fragmentTransaction.commitAllowingStateLoss();
     }
 
 }

@@ -8,15 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.SeekBar;
-import android.widget.Switch;
-import android.widget.TextView;
 
-import com.example.xandi.amicer.modelo.Group;
 import com.example.xandi.amicer.modelo.Interesse;
-import com.example.xandi.amicer.modelo.User;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -29,7 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class ConfigProfileFragment extends Fragment {
+public class FilterProfileFragment extends Fragment {
 
     private ListView listViewInteresses;
     private ArrayList<Interesse> listaInteresses = new ArrayList<Interesse>();
@@ -39,13 +33,13 @@ public class ConfigProfileFragment extends Fragment {
     private FirebaseAuth mFirebaseAuth;
     private ArrayAdapter adapter;
 
-    public ConfigProfileFragment() {
+    public FilterProfileFragment() {
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_config_profile, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_filter_profile, container, false);
         View itemView = inflater.inflate(R.layout.item_interesse_usuario, container, false);
 
         mFirebaseAuth = FirebaseAuth.getInstance();

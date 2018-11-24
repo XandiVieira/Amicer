@@ -11,11 +11,7 @@ import android.support.v4.app.Fragment;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.Toast;
-
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 
 public class TabGrupos extends Fragment {
@@ -24,7 +20,7 @@ public class TabGrupos extends Fragment {
     private FrameLayout mFrameGrupos;
 
     private GroupsSeeFragment groupsSeeFragment;
-    private ConfigGroupFragment configGroupFragment;
+    private FilterGroupFragment filterGroupFragment;
     private CreateGroupFragment createGroupFragment;
 
     @Override
@@ -33,7 +29,7 @@ public class TabGrupos extends Fragment {
         View rootView = inflater.inflate(R.layout.tab_grupos, container, false);
 
         groupsSeeFragment = new GroupsSeeFragment();
-        configGroupFragment = new ConfigGroupFragment();
+        filterGroupFragment = new FilterGroupFragment();
         createGroupFragment = new CreateGroupFragment();
 
         setFragment(groupsSeeFragment);
@@ -52,10 +48,10 @@ public class TabGrupos extends Fragment {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
-                    case R.id.item_config :
+                    case R.id.item_filtros:
                         mGruposNav.setItemBackgroundResource(R.color.colorAccent);
-                        ConfigGroupFragment configGroupFragment = new ConfigGroupFragment();
-                        setFragment(configGroupFragment);
+                        FilterGroupFragment filterGroupFragment = new FilterGroupFragment();
+                        setFragment(filterGroupFragment);
                         return true;
 
                     case R.id.item_criar :

@@ -65,6 +65,18 @@
             android:text="Descrição do Grupo"
             app:fontFamily="@font/quattrocento"/>
 
+        <TextView
+            android:id="@+id/compat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_marginTop="20px"
+            android:text=""
+            android:textStyle="bold"
+            app:fontFamily="@font/quattrocento"/>
+
     </LinearLayout>
 
     <LinearLayout
