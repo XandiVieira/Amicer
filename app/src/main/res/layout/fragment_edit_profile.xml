@@ -24,9 +24,10 @@
             android:id="@+id/btLogout"
             style="@style/Widget.AppCompat.Button.Borderless.Colored"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:onClick="logOut"
-            android:text="@string/log_out" />
+            android:text="@string/log_out"
+            android:layout_weight="1"/>
 
         <ImageView
             android:id="@+id/photoImageView"
@@ -40,18 +41,18 @@
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/photoImageView"
             android:text="Nome"
-            android:textSize="17sp"/>
+            android:textSize="17sp"
+            android:layout_weight="6"
+            android:layout_marginLeft="3dp"/>
 
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@drawable/baseline_arrow_right_alt_black_18dp"
+        <Button
             android:id="@+id/btUpdate"
-            android:layout_alignTop="@+id/photoImageView"
-            android:background="@color/white"
-            android:layout_marginLeft="3dp"
-            android:layout_gravity="right"/>
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:onClick="logOut"
+            android:text="SALVAR"
+            android:layout_weight="1"/>
     </LinearLayout>
 
 

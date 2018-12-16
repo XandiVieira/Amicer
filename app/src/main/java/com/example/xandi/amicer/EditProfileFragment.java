@@ -90,7 +90,7 @@ public class EditProfileFragment extends Fragment implements GoogleApiClient.OnC
        /*/////////////////////////////////////////*/
 
 
-        ImageButton btUpdate = rootView.findViewById(R.id.btUpdate);
+        Button btUpdate = rootView.findViewById(R.id.btUpdate);
 
         btUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -245,29 +245,6 @@ public class EditProfileFragment extends Fragment implements GoogleApiClient.OnC
         Util.mFirebaseAuth.signOut();
         LoginManager.getInstance().logOut();
         goLogInScreen();
-
-        /*Util.gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-
-        if(Util.googleApiClient == null){
-            Util.googleApiClient = new GoogleApiClient.Builder(getApplicationContext())
-                    .enableAutoManage(getActivity(), this)
-                    .addApi(Auth.GOOGLE_SIGN_IN_API, Util.gso)
-                    .build();}
-
-        Util.googleApiClient.connect();
-        Auth.GoogleSignInApi.signOut(Util.googleApiClient).setResultCallback(new ResultCallback<Status>() {
-            @Override
-            public void onResult(@NonNull Status status) {
-                if (status.isSuccess()) {
-                    Util.googleApiClient.disconnect();
-                    goLogInScreen();
-                } else {
-                    Toast.makeText(getApplicationContext(), R.string.log_out, Toast.LENGTH_SHORT).show();
-                }
-            }
-        });*/
     }
 
     //Get, if there is, spinners and chips data
@@ -286,12 +263,6 @@ public class EditProfileFragment extends Fragment implements GoogleApiClient.OnC
             }
 
             editDescr.setText(user.getDescricao(), TextView.BufferType.EDITABLE);
-            /*if(user.getTags() != null){
-                for (int i=0; i<user.getTags().size(); i++){
-                    for (int j=0; j<user.getTags().get(i).size(); j++){
-                        mChipsInputList.get(i).addChip(user.getTags().get(i).get(j).getLabel(), null);
-                    }
-                }}*/
     }
 
     //Set Basic Info -- Age, Name and Photo
@@ -317,8 +288,6 @@ public class EditProfileFragment extends Fragment implements GoogleApiClient.OnC
     private void updateProfile(){
         if(!editDescr.getText().toString().equals(""))
             user.setDescricao(editDescr.getText().toString());
-        //user.setFotoPerfil();
-        //user.setListaTags(listaTags);
 
         Util.mUserDatabaseRef.child(Util.fbUser.getUid()).setValue(user);
         Toast.makeText(getApplicationContext(), "Perfil atualizado",Toast.LENGTH_SHORT).show();

@@ -13,20 +13,16 @@ import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
 import com.example.xandi.amicer.modelo.Message;
 import com.example.xandi.amicer.modelo.Util;
 import com.firebase.ui.auth.AuthUI;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -40,8 +36,6 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -49,8 +43,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
-import static com.example.xandi.amicer.R.menu.menu_grupo;
 
 public class InsideGroup extends AppCompatActivity {
 
@@ -87,7 +79,6 @@ public class InsideGroup extends AppCompatActivity {
         mUsername = ANONYMOUS;
 
         Bundle bundleUid = getIntent().getExtras();
-        bundleUid.getString("uid");
         String uid = bundleUid.getString("uid");
         groupUID = uid;
 
@@ -105,12 +96,9 @@ public class InsideGroup extends AppCompatActivity {
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         setSupportActionBar(toolbar);
 
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
-            }
+        toolbar.setNavigationOnClickListener(view -> {
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
         });
 
        setTitle(nome);
@@ -140,15 +128,12 @@ public class InsideGroup extends AppCompatActivity {
         mProgressBar.setVisibility(ProgressBar.INVISIBLE);
 
         // ImagePickerButton shows an image picker to upload a image for a message
-        mPhotoPickerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("image/jpeg");
-                intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
-                startActivityForResult(Intent.createChooser(intent, "Complete action using"), RC_PHOTO_PICKER);
+        mPhotoPickerButton.setOnClickListener(view -> {
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("image/jpeg");
+            intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+            startActivityForResult(Intent.createChooser(intent, "Complete action using"), RC_PHOTO_PICKER);
 
-            }
         });
 
         // Enable Send button when there's text to send
@@ -173,48 +158,43 @@ public class InsideGroup extends AppCompatActivity {
         mMessageEditText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(DEFAULT_MSG_LENGTH_LIMIT)});
 
         // Send button sends a message and clears the EditText
-        mSendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SimpleDateFormat dateFormat_hora = new SimpleDateFormat("HH:mm:ss");
+        mSendButton.setOnClickListener(view -> {
+            SimpleDateFormat dateFormat_hora = new SimpleDateFormat("HH:mm:ss");
 
-                Date data = new Date();
+            Date data = new Date();
 
-                Calendar  cal = Calendar.getInstance();
-                cal.setTime(data);
-                Date data_atual = cal.getTime();
+            Calendar  cal = Calendar.getInstance();
+            cal.setTime(data);
+            Date data_atual = cal.getTime();
 
-                String hora_atual = dateFormat_hora.format(data_atual);
-                Message message = new Message(mMessageEditText.getText().toString(), mUsername, null, hora_atual, userUid);
-                mMessagesDatabaseReference.push().setValue(message);
-                // Clear input box
-                mMessageEditText.setText("");
-            }
+            String hora_atual = dateFormat_hora.format(data_atual);
+            Message message = new Message(mMessageEditText.getText().toString(), mUsername, null, hora_atual, userUid);
+            mMessagesDatabaseReference.push().setValue(message);
+            // Clear input box
+            mMessageEditText.setText("");
         });
 
         attachDatabaseReadListener();
 
-        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    onSignedInInitialize(user.getDisplayName());
-                    //Toast.makeText(MainActivity.this, "You are now signed in. Welcome to FriendlyChat!", Toast.LENGTH_SHORT).show();
-                } else {
-                    onSignedOutCleanup();
-                    startActivityForResult(
-                            AuthUI.getInstance()
-                                    .createSignInIntentBuilder()
-                                    .setIsSmartLockEnabled(false)
-                                    .setAvailableProviders(Arrays.asList(
-                                            new AuthUI.IdpConfig.EmailBuilder().build(),
-                                            new AuthUI.IdpConfig.GoogleBuilder().build(),
-                                            new AuthUI.IdpConfig.FacebookBuilder().build()))
-                                    .build(),
-                            RC_SIGN_IN);
-                }
-            }};
+        mAuthStateListener = firebaseAuth -> {
+            FirebaseUser user = firebaseAuth.getCurrentUser();
+            if (user != null) {
+                onSignedInInitialize(user.getDisplayName());
+                //Toast.makeText(MainActivity.this, "You are now signed in. Welcome to FriendlyChat!", Toast.LENGTH_SHORT).show();
+            } else {
+                onSignedOutCleanup();
+                startActivityForResult(
+                        AuthUI.getInstance()
+                                .createSignInIntentBuilder()
+                                .setIsSmartLockEnabled(false)
+                                .setAvailableProviders(Arrays.asList(
+                                        new AuthUI.IdpConfig.EmailBuilder().build(),
+                                        new AuthUI.IdpConfig.GoogleBuilder().build(),
+                                        new AuthUI.IdpConfig.FacebookBuilder().build()))
+                                .build(),
+                        RC_SIGN_IN);
+            }
+        };
         FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder().setDeveloperModeEnabled(BuildConfig.DEBUG).build();
         mFirebaseRemoteConfig.setConfigSettings(configSettings);
         Map<String, Object> defaultConfigMap = new HashMap<>();
@@ -268,32 +248,26 @@ public class InsideGroup extends AppCompatActivity {
         //define a mensagem
         builder.setMessage("Tem certeza que deseja " + action.toLowerCase() + " permanentemente o grupo?");
         //define um botão como positivo
-        builder.setPositiveButton(action, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface arg0, int arg1) {
+        builder.setPositiveButton(action, (arg0, arg1) -> {
 
-                if(action.equals("Excluir")) {
-                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            if("Excluir".equals(action)) {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
 
-                    Util.mDatabaseRef.child("group").child(groupUID).removeValue();
-                    startActivity(intent);
-                    alerta.closeOptionsMenu();
-                }else if(action.equals("Deixar")){
-                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                Util.mDatabaseRef.child("group").child(groupUID).removeValue();
+                startActivity(intent);
+                alerta.closeOptionsMenu();
+            }else if("Deixar".equals(action)){
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
 
-                    Util.mDatabaseRef.child("user").child(Util.fbUser.getUid()).child("listGroups").child(groupUID).removeValue();
-                    startActivity(intent);
-                    alerta.closeOptionsMenu();
-                }else{
-                    alerta.closeOptionsMenu();
-                }
-            }
-        });
-        //define um botão como negativo.
-        builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface arg0, int arg1) {
+                Util.mDatabaseRef.child("user").child(Util.fbUser.getUid()).child("listGroups").child(groupUID).removeValue();
+                startActivity(intent);
+                alerta.closeOptionsMenu();
+            }else{
                 alerta.closeOptionsMenu();
             }
         });
+        //define um botão como negativo.
+        builder.setNegativeButton("Cancelar", (arg0, arg1) -> alerta.closeOptionsMenu());
         //cria o AlertDialog
         alerta = builder.create();
         //Exibe
@@ -316,23 +290,20 @@ public class InsideGroup extends AppCompatActivity {
                 final StorageReference photoRef = mChatPhotoStorageReference.child(selectedImageUri.getLastPathSegment());
 
                 //Upload file to Firebase Storage
-                photoRef.putFile(selectedImageUri).addOnSuccessListener(this, new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        Task<Uri> downloadUrl = photoRef.getDownloadUrl();
-                        // OU
-                        SimpleDateFormat dateFormat_hora = new SimpleDateFormat("HH:mm:ss");
+                photoRef.putFile(selectedImageUri).addOnSuccessListener(this, taskSnapshot -> {
+                    Task<Uri> downloadUrl = photoRef.getDownloadUrl();
+                    // OU
+                    SimpleDateFormat dateFormat_hora = new SimpleDateFormat("HH:mm:ss");
 
-                        Date data = new Date();
+                    Date data1 = new Date();
 
-                        Calendar  cal = Calendar.getInstance();
-                        cal.setTime(data);
-                        Date data_atual = cal.getTime();
+                    Calendar  cal = Calendar.getInstance();
+                    cal.setTime(data1);
+                    Date data_atual = cal.getTime();
 
-                        String hora_atual = dateFormat_hora.format(data_atual);
-                        Message message = new Message(null, mUsername, downloadUrl.toString(), hora_atual, userUid);
-                        mMessagesDatabaseReference.push().setValue(message);
-                    }
+                    String hora_atual = dateFormat_hora.format(data_atual);
+                    Message message = new Message(null, mUsername, downloadUrl.toString(), hora_atual, userUid);
+                    mMessagesDatabaseReference.push().setValue(message);
                 });
             }
         }
@@ -376,25 +347,25 @@ public class InsideGroup extends AppCompatActivity {
         if(mChildEventListener == null) {
             mChildEventListener = new ChildEventListener() {
                 @Override
-                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String s) {
                     Message message = dataSnapshot.getValue(Message.class);
                     mMessageAdapter.add(message);
                 }
 
                 @Override
-                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, String s) {
                 }
 
                 @Override
-                public void onChildRemoved(DataSnapshot dataSnapshot) {
+                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
                 }
 
                 @Override
-                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, String s) {
                 }
 
                 @Override
-                public void onCancelled(DatabaseError databaseError) {
+                public void onCancelled(@NonNull DatabaseError databaseError) {
                 }
             };
             mMessagesDatabaseReference.addChildEventListener(mChildEventListener);
@@ -411,12 +382,9 @@ public class InsideGroup extends AppCompatActivity {
                 mFirebaseRemoteConfig.activateFetched();
                 applyRetrievedLengthLimit();
             }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.w(TAG, "Error fetching config", e);
-                applyRetrievedLengthLimit();
-            }
+        }).addOnFailureListener(e -> {
+            Log.w(TAG, "Error fetching config", e);
+            applyRetrievedLengthLimit();
         });
     }
 
@@ -425,10 +393,6 @@ public class InsideGroup extends AppCompatActivity {
 
         mMessageEditText.setFilters(new InputFilter[]{new InputFilter.LengthFilter((int) friendly_msg_length)});
         Log.d(TAG, FRIENDLY_MSG_LENGTH_KEY + " = " + friendly_msg_length);
-    }
-
-    public boolean onCreateMenuOptions(Menu menu){
-        return super.onCreateOptionsMenu(menu);
     }
 
 }
