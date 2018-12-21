@@ -80,8 +80,6 @@
                 app:fontFamily="@font/quattrocento" />
 
             <EditText
-                android:focusable="true"
-                android:focusedByDefault="true"
                 android:background="@color/contraste"
                 android:id="@+id/editDescricao"
                 android:layout_width="match_parent"
@@ -124,8 +122,6 @@
                         android:background="@color/white">
 
                         <com.pchmn.materialchips.ChipsInput
-                            android:focusable="false"
-                            android:focusedByDefault="false"
                             android:background="@color/contraste"
                             android:id="@+id/chipsInput1"
                             android:elevation="3dp"
@@ -154,8 +150,6 @@
                         android:background="@color/white">
 
                         <com.pchmn.materialchips.ChipsInput
-                            android:focusable="false"
-                            android:focusedByDefault="false"
                             android:background="@color/contraste"
                             android:elevation="3dp"
                             android:id="@+id/chipsInput2"
@@ -183,8 +177,6 @@
                         android:background="@color/white">
 
                         <com.pchmn.materialchips.ChipsInput
-                            android:focusable="false"
-                            android:focusedByDefault="false"
                             android:background="@color/contraste"
                             android:elevation="3dp"
                             android:id="@+id/chipsInput3"
@@ -210,8 +202,6 @@
                         android:background="@color/white">
 
                         <com.pchmn.materialchips.ChipsInput
-                            android:focusable="false"
-                            android:focusedByDefault="false"
                             android:background="@color/contraste"
                             android:elevation="3dp"
                             android:id="@+id/chipsInput4"

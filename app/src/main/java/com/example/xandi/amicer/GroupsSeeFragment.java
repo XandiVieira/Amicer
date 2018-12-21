@@ -57,7 +57,7 @@ public class GroupsSeeFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), InsideGroup.class);
                 intent.putExtra("uid", groupLista.get(i).getUid());
                 intent.putExtra("nome", groupLista.get(i).getNome());
-                intent.putExtra("userUid", groupLista.get(i).getUserUID());
+                intent.putExtra("userUid", Util.getUser().getUid());
                 startActivity(intent);
             }
         });

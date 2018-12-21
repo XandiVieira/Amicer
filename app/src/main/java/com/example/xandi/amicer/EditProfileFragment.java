@@ -163,8 +163,10 @@ public class EditProfileFragment extends Fragment implements GoogleApiClient.OnC
 
         getUserFromFB();
 
-        for(int i=0; i<mChipsInputList.size(); i++){
-            mChipsInputList.get(i).setFilterableList(tagsSugestoes);
+        if(mChipsInputList!=null) {
+            for (int i = 0; i < mChipsInputList.size(); i++) {
+                mChipsInputList.get(i).setFilterableList(tagsSugestoes);
+            }
         }
 
         user = Util.getUser();

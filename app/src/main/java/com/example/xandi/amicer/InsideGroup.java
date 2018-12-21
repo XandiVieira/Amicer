@@ -168,7 +168,7 @@ public class InsideGroup extends AppCompatActivity {
             Date data_atual = cal.getTime();
 
             String hora_atual = dateFormat_hora.format(data_atual);
-            Message message = new Message(mMessageEditText.getText().toString(), mUsername, null, hora_atual, userUid);
+            Message message = new Message(mMessageEditText.getText().toString(), mUsername, null, hora_atual, Util.getUser().getUid());
             mMessagesDatabaseReference.push().setValue(message);
             // Clear input box
             mMessageEditText.setText("");

@@ -51,17 +51,21 @@ public class SuggestHomeFragment extends Fragment {
         FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
         fbUser = mFirebaseAuth.getCurrentUser();
         readData();
-        listaGrupos.setOnItemClickListener((adapterView, view, i, l) -> dialog(groupListAux.get(i).getUid(), groupListAux.get(i).getNome(), groupListAux.get(i).getUserUID()));
+        listaGrupos.setOnItemClickListener((adapterView, view, i, l) -> dialog(groupListAux.get(i).getUid(), groupListAux.get(i).getNome(), Util.getUser().getUid()));
 
         return rootView;
     }
 
     private void filtrar() {
-
+        List<String> listaGruposUser = new ArrayList<>();
+        List<Interesse> listaCategoriasUser = new ArrayList<>();
         //lista categorias usuário
-        List<Interesse> listaCategoriasUser = Util.getUser().getCategorias();
+        if(Util.getUser() != null && Util.getUser().getCategorias() != null)
+        listaCategoriasUser = Util.getUser().getCategorias();
         //lista de grupos do usuário
-        List<String> listaGruposUser = new ArrayList<>(Util.getUser().getListGroups().keySet());
+
+        if(Util.getUser() != null && Util.getUser().getListGroups()!=null)
+         listaGruposUser = new ArrayList<>(Util.getUser().getListGroups().keySet());
         groupListAux = new ArrayList<>();
 
         //Remove grupos que não são das categorias do usuário
@@ -124,7 +128,11 @@ public class SuggestHomeFragment extends Fragment {
                             if (cont >= 3) {
                                 //Dispara Notificação
                                 HashMap<String, Boolean> mapUserGroups;
-                                mapUserGroups = Util.getUser().getListGroups();
+                                if(Util.getUser().getListGroups()!=null) {
+                                    mapUserGroups = Util.getUser().getListGroups();
+                                }else{
+                                    mapUserGroups = new HashMap<>();
+                                }
                                 mapUserGroups.put(groupList.get(i).getUid(), true);
                                 mDatabaseReference.child("user").child(fbUser.getUid()).child("listGroups").setValue(mapUserGroups);
                             } else {

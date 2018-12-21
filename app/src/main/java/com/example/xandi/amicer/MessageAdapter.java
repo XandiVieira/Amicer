@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.xandi.amicer.modelo.Message;
+import com.example.xandi.amicer.modelo.Util;
 
 import org.w3c.dom.Text;
 
@@ -42,7 +43,7 @@ public class MessageAdapter extends ArrayAdapter<Message> {
 
             Message message = mensagens.get(position);
 
-            if(mensagens.get(position).getUserUid().equals(userUid)){
+            if(mensagens.get(position).getUserUid().equals(Util.getUser().getUid())){
                 view = inflater.inflate(R.layout.item_message_sent, parent, false);
             }else{
                 view = inflater.inflate(R.layout.item_message, parent, false);
