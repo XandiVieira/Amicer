@@ -10,4 +10,5 @@
 
     <dimen name="margin_min">4dp</dimen>
     <dimen name="margin_small">8dp</dimen>
+    <dimen name="appbar_padding">16dp</dimen>
 </resources>

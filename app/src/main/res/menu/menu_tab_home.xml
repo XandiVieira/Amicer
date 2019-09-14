@@ -1,8 +1,0 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.xandi.amicer.TabHome">
-
-    <!--<item android:title="Dados" android:id="@+id/item_dados" android:icon="@drawable/baseline_graphic_eq_black_18dp"/>-->
-    <item android:title="Sugestões" android:id="@+id/item_sugestoes" android:icon="@drawable/baseline_notifications_black_18dp"/>
-</menu>

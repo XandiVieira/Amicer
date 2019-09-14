@@ -1,9 +1,0 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.xandi.amicer.TabGrupos">
-
-    <item android:title="Grupos" android:id="@+id/item_grupos" android:icon="@drawable/baseline_chat_black_18dp"/>
-    <item android:title="Criar" android:id="@+id/item_criar" android:icon="@drawable/baseline_add_circle_black_18dp"/>
-    <item android:title="Filtros" android:id="@+id/item_filtros" android:icon="@drawable/baseline_settings_black_18dp"/>
-</menu>

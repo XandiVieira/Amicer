@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="categories">
+        <item>Selecione uma categoria</item>
+        <item>Animais e Pets</item>
+        <item>Artes</item>
+        <item>Moda e Beleza</item>
+        <item>Artes</item>
+        <item>Automóveis</item>
+        <item>Casa e Decoração</item>
+        <item>Ciências Humanas</item>
+        <item>Comidas e Bebidas</item>
+        <item>Tecnologia</item>
+        <item>Ciências exatas</item>
+        <item>Ecologia e Meio ambiente</item>
+        <item>Educação e Aprendizado</item>
+        <item>Games e Eletrônicos</item>
+        <item>Esportes</item>
+        <item>Séries e Músicas</item>
+        <item>Família e Relacionamentos</item>
+        <item>Política, Sociedade e Economia</item>
+        <item>Notícias e Eventos</item>
+        <item>Viagens e Cultura</item>
+        <item>Outra categoria</item>
+        <item>Variados</item>
+    </array>
+</resources>
